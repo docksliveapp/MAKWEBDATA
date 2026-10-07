@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TRADE_CORRIDORS } from '../data/consortium';
-import { Globe2, Navigation, Clock, ShieldCheck, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { Globe2, Navigation, Clock, ArrowRight, ShieldCheck, MapPin } from 'lucide-react';
 
 interface CorridorRoutesProps {
   onQuoteCorridor: (corridorName: string) => void;
@@ -12,28 +12,25 @@ export const CorridorRoutes: React.FC<CorridorRoutesProps> = ({ onQuoteCorridor 
   const selectedCorridor = TRADE_CORRIDORS.find(c => c.id === selectedCorridorId) || TRADE_CORRIDORS[0];
 
   return (
-    <section id="corridors" className="py-20 bg-slate-950 text-white border-b border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
-          <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-800/80 text-cyan-400 text-xs font-semibold mb-3">
-              <Globe2 className="w-3.5 h-3.5" />
-              CROSS-BORDER LOGISTICS ARTERIES
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold font-serif-luxury text-white">
-              Strategic Trade Corridors
-            </h2>
-            <p className="mt-2 text-slate-400 text-sm max-w-2xl">
-              From Arabian Gulf maritime feeder routes to the high mountain passes of Torkham, Chaman, and Central Asia under TIR convention.
-            </p>
-          </div>
-          <div className="text-xs font-mono text-slate-400">
-            Active Routes: <span className="text-amber-400 font-bold">18+ Bonded Corridors</span>
-          </div>
+    <section id="corridors" className="py-16 bg-[#ECEEF3] text-slate-900 border-b border-slate-300/80">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        
+        {/* Section Header */}
+        <div className="text-center max-w-3xl mx-auto space-y-2">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-[#A0522D] block font-mono">
+            TRANSCONTINENTAL ARTERIES & STATUTORY GATES
+          </span>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-serif-luxury text-slate-900">
+            Strategic Cross-Border Trade Corridors
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-600">
+            Direct bonded multimodal passage from Pakistan deep-sea terminals across Afghanistan (Torkham & Chaman), regional Gulf feeders, and transcontinental TIR routes to Central Asia.
+          </p>
         </div>
 
-        {/* Corridor Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Corridor Selection & Details */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
           {/* Left: Corridor List Selector */}
           <div className="lg:col-span-5 space-y-3">
             {TRADE_CORRIDORS.map((corridor) => {
@@ -44,32 +41,32 @@ export const CorridorRoutes: React.FC<CorridorRoutesProps> = ({ onQuoteCorridor 
                   onClick={() => setSelectedCorridorId(corridor.id)}
                   className={`p-4 rounded-xl cursor-pointer border transition-all ${
                     isSelected
-                      ? 'bg-slate-900 border-cyan-500 shadow-md ring-1 ring-cyan-500/50'
-                      : 'bg-slate-900/40 border-slate-800 hover:border-slate-700 hover:bg-slate-900/80'
+                      ? 'bg-white border-[#B8860B] shadow-md ring-1 ring-[#B8860B]/40'
+                      : 'bg-[#F8FAFC] border-slate-300 hover:border-slate-400 hover:bg-white'
                   }`}
                 >
                   <div className="flex items-center justify-between text-xs mb-1.5">
-                    <span className="font-mono text-cyan-400 font-bold uppercase">
+                    <span className="font-mono text-[#B45309] font-bold uppercase">
                       {corridor.code}
                     </span>
                     <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
-                      corridor.category === 'Afghan Transit' ? 'bg-amber-950 text-amber-400 border border-amber-800' :
-                      corridor.category === 'TIR Corridors' ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' :
-                      corridor.category === 'Maritime' ? 'bg-blue-950 text-blue-400 border border-blue-800' :
-                      'bg-slate-800 text-slate-300'
+                      corridor.category === 'Afghan Transit' ? 'bg-amber-100 text-amber-900 border border-amber-300' :
+                      corridor.category === 'TIR Corridors' ? 'bg-emerald-100 text-emerald-900 border border-emerald-300' :
+                      corridor.category === 'Maritime' ? 'bg-blue-100 text-blue-900 border border-blue-300' :
+                      'bg-slate-200 text-slate-800'
                     }`}>
                       {corridor.category}
                     </span>
                   </div>
-                  <h3 className="text-sm font-bold text-white group-hover:text-cyan-300">
+                  <h3 className="text-sm font-bold text-slate-900">
                     {corridor.name}
                   </h3>
-                  <div className="flex items-center justify-between mt-3 text-xs text-slate-400">
-                    <span className="flex items-center gap-1">
-                      <Clock className="w-3.5 h-3.5 text-amber-400" />
+                  <div className="flex items-center justify-between mt-3 text-xs text-slate-500">
+                    <span className="flex items-center gap-1 font-medium text-slate-700">
+                      <Clock className="w-3.5 h-3.5 text-amber-700" />
                       {corridor.transitTime}
                     </span>
-                    <span className="text-slate-500 font-mono text-[11px] truncate max-w-[180px]">
+                    <span className="font-mono text-[11px] truncate max-w-[200px]">
                       {corridor.operatingEntity}
                     </span>
                   </div>
@@ -79,48 +76,48 @@ export const CorridorRoutes: React.FC<CorridorRoutesProps> = ({ onQuoteCorridor 
           </div>
 
           {/* Right: Selected Corridor Route Visualizer */}
-          <div className="lg:col-span-7 bg-slate-900 rounded-2xl border border-slate-800 p-6 sm:p-8 shadow-xl space-y-6">
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+          <div className="lg:col-span-7 bg-white rounded-2xl border border-slate-300 p-6 sm:p-8 shadow-sm space-y-6">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4">
               <div>
-                <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest font-bold">
+                <span className="text-xs font-mono text-[#B45309] uppercase tracking-widest font-bold">
                   {selectedCorridor.code} • {selectedCorridor.category}
                 </span>
-                <h3 className="text-xl sm:text-2xl font-bold font-serif-luxury text-white mt-1">
+                <h3 className="text-xl sm:text-2xl font-bold font-serif-luxury text-slate-900 mt-1">
                   {selectedCorridor.name}
                 </h3>
               </div>
-              <div className="px-3 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-right">
-                <span className="text-[10px] text-slate-400 block uppercase font-mono">Transit Est.</span>
-                <span className="text-sm font-bold text-amber-400 font-mono">{selectedCorridor.transitTime}</span>
+              <div className="px-3.5 py-1.5 rounded-lg bg-[#F8FAFC] border border-slate-200 text-right">
+                <span className="text-[10px] text-slate-500 block uppercase font-mono">Transit Est.</span>
+                <span className="text-sm font-bold text-slate-900 font-mono">{selectedCorridor.transitTime}</span>
               </div>
             </div>
 
-            <p className="text-sm text-slate-300 leading-relaxed">
+            <p className="text-sm text-slate-600 leading-relaxed">
               {selectedCorridor.description}
             </p>
 
             {/* Origin & Destination badges */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800">
-                <span className="text-[10px] font-mono uppercase text-slate-400 block mb-1">Origin Port / Point</span>
-                <span className="text-sm font-bold text-white">{selectedCorridor.origin}</span>
+              <div className="p-4 rounded-xl bg-[#F8FAFC] border border-slate-200">
+                <span className="text-[10px] font-mono uppercase text-slate-500 block mb-1">Origin Port / Point</span>
+                <span className="text-sm font-bold text-slate-900">{selectedCorridor.origin}</span>
               </div>
-              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800">
-                <span className="text-[10px] font-mono uppercase text-slate-400 block mb-1">Destination Gateway</span>
-                <span className="text-sm font-bold text-emerald-400">{selectedCorridor.destination}</span>
+              <div className="p-4 rounded-xl bg-[#F8FAFC] border border-slate-200">
+                <span className="text-[10px] font-mono uppercase text-slate-500 block mb-1">Destination Gateway</span>
+                <span className="text-sm font-bold text-emerald-800">{selectedCorridor.destination}</span>
               </div>
             </div>
 
             {/* Checkpoints Flow */}
             <div className="space-y-3">
-              <span className="text-xs font-mono uppercase text-slate-400 tracking-wider font-bold flex items-center gap-1.5">
-                <Navigation className="w-3.5 h-3.5 text-cyan-400" />
-                Transit Checkpoints & Customs Clearance Line:
+              <span className="text-xs font-mono uppercase text-slate-700 tracking-wider font-bold flex items-center gap-1.5">
+                <Navigation className="w-3.5 h-3.5 text-amber-700" />
+                Transit Checkpoints & Customs Clearance Sequence:
               </span>
-              <div className="relative pl-6 space-y-3 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-cyan-500 before:via-amber-500 before:to-emerald-500">
+              <div className="relative pl-6 space-y-3 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-gradient-to-b before:from-amber-600 before:via-blue-600 before:to-emerald-600">
                 {selectedCorridor.keyCheckpoints.map((cp, idx) => (
-                  <div key={idx} className="relative flex items-center gap-3 text-xs text-slate-200">
-                    <span className="absolute -left-6 w-3 h-3 rounded-full bg-slate-900 border-2 border-cyan-400" />
+                  <div key={idx} className="relative flex items-center gap-3 text-xs text-slate-700">
+                    <span className="absolute -left-6 w-3 h-3 rounded-full bg-white border-2 border-amber-600" />
                     <span className="font-medium">{cp}</span>
                   </div>
                 ))}
@@ -128,14 +125,14 @@ export const CorridorRoutes: React.FC<CorridorRoutesProps> = ({ onQuoteCorridor 
             </div>
 
             {/* Operating Entity & CTA */}
-            <div className="pt-4 border-t border-slate-800 flex flex-wrap items-center justify-between gap-4">
-              <div className="text-xs text-slate-400">
-                <span className="block font-medium text-slate-300">Managed By:</span>
-                <span className="font-mono text-cyan-300">{selectedCorridor.operatingEntity}</span>
+            <div className="pt-4 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+              <div className="text-xs text-slate-500">
+                <span className="block font-medium text-slate-700">Managing Consortium:</span>
+                <span className="font-mono text-slate-900 font-bold">{selectedCorridor.operatingEntity}</span>
               </div>
               <button
                 onClick={() => onQuoteCorridor(selectedCorridor.name)}
-                className="px-5 py-2.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow flex items-center gap-2"
+                className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-[#B8860B] via-[#C59B27] to-[#A37420] hover:from-[#A37420] text-white font-bold text-xs uppercase tracking-wider transition shadow-sm flex items-center gap-2 cursor-pointer"
               >
                 <span>Request Corridor Rate</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -143,6 +140,7 @@ export const CorridorRoutes: React.FC<CorridorRoutesProps> = ({ onQuoteCorridor 
             </div>
           </div>
         </div>
+
       </div>
     </section>
   );

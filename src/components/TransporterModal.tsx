@@ -72,7 +72,6 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
       return;
     }
 
-    // Check if vehicles have plates
     for (let i = 0; i < vehicles.length; i++) {
       if (!vehicles[i].plateNumber.trim()) {
         setError(`Vehicle #${i + 1} is missing a registration plate number.`);
@@ -121,21 +120,21 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-3xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl text-white my-8 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
+      <div className="relative w-full max-w-3xl bg-white border border-slate-300 rounded-2xl shadow-2xl text-slate-900 my-8 overflow-hidden">
         {/* Header */}
-        <div className="px-6 py-5 bg-gradient-to-r from-slate-950 via-slate-900 to-emerald-950/40 border-b border-slate-800 flex items-center justify-between">
+        <div className="px-6 py-5 bg-[#ECEEF3] border-b border-slate-300 flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-mono uppercase text-emerald-400 font-bold tracking-widest block">
+            <span className="text-[10px] font-mono uppercase text-[#A0522D] font-bold tracking-widest block">
               TRUCKIT & MUHIB FLEET ENROLLMENT
             </span>
-            <h3 className="text-xl font-bold font-serif-luxury text-white">
-              Transporter Vehicle Registration Manifest
+            <h3 className="text-xl font-bold font-serif-luxury text-slate-900">
+              Transporter Vehicle Registration Request
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+            className="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition"
           >
             <X className="w-5 h-5" />
           </button>
@@ -145,37 +144,37 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
         <div className="p-6 max-h-[80vh] overflow-y-auto">
           {submittedId ? (
             <div className="py-8 text-center space-y-6">
-              <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto text-emerald-400">
+              <div className="w-16 h-16 bg-emerald-100 border border-emerald-300 rounded-full flex items-center justify-center mx-auto text-emerald-700">
                 <CheckCircle className="w-8 h-8" />
               </div>
 
               <div>
-                <h4 className="text-2xl font-bold text-white font-serif-luxury">
+                <h4 className="text-2xl font-bold text-slate-900 font-serif-luxury">
                   Fleet Registration Enrolled
                 </h4>
-                <p className="text-sm text-slate-300 mt-2 max-w-md mx-auto">
-                  Your vehicles have been registered in the MAK - GROUP bonded transport network. Operations dispatch will inspect and verify your fleet credentials.
+                <p className="text-sm text-slate-600 mt-2 max-w-md mx-auto">
+                  Your vehicles have been enrolled in the MAK - GROUP bonded transport network. Operations dispatch will inspect and verify your fleet credentials.
                 </p>
               </div>
 
               {/* Reference ID */}
-              <div className="p-4 bg-slate-950 border border-emerald-500/40 rounded-xl max-w-md mx-auto">
-                <span className="text-xs font-mono text-slate-400 block uppercase">
+              <div className="p-4 bg-[#F8FAFC] border border-emerald-300 rounded-xl max-w-md mx-auto">
+                <span className="text-xs font-mono text-slate-500 block uppercase">
                   Transporter Enrolment Reference ID:
                 </span>
                 <div className="flex items-center justify-center gap-3 mt-1">
-                  <span className="text-xl font-mono font-bold text-emerald-400 tracking-wider">
+                  <span className="text-xl font-mono font-bold text-emerald-800 tracking-wider">
                     {submittedId}
                   </span>
                   <button
                     onClick={() => copyToClipboard(submittedId)}
-                    className="p-1.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 transition"
+                    className="p-1.5 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 transition"
                     title="Copy Reference ID"
                   >
                     <Copy className="w-4 h-4" />
                   </button>
                 </div>
-                {copied && <span className="text-[11px] text-emerald-400 block mt-1">Copied to clipboard!</span>}
+                {copied && <span className="text-[11px] text-emerald-600 block mt-1 font-semibold">Copied to clipboard!</span>}
               </div>
 
               <div className="pt-4 flex justify-center gap-3">
@@ -184,7 +183,7 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                     setSubmittedId(null);
                     onClose();
                   }}
-                  className="px-6 py-2.5 rounded-lg bg-emerald-500 text-slate-950 font-bold text-xs uppercase tracking-wider hover:bg-emerald-400 transition"
+                  className="px-6 py-2.5 rounded-lg bg-[#111827] text-white font-bold text-xs uppercase tracking-wider hover:bg-[#1E293B] transition"
                 >
                   Return to Network
                 </button>
@@ -193,20 +192,20 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
           ) : (
             <form onSubmit={handleSubmit} className="space-y-6">
               {error && (
-                <div className="p-3 rounded-lg bg-red-950/50 border border-red-800 text-red-200 text-xs flex items-center gap-2">
+                <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
                   <AlertCircle className="w-4 h-4 shrink-0" />
                   <span>{error}</span>
                 </div>
               )}
 
-              {/* Section 1: Fleet Operator Credentials */}
+              {/* Section 1 */}
               <div>
-                <h4 className="text-xs font-mono uppercase text-emerald-400 font-bold tracking-wider mb-3">
+                <h4 className="text-xs font-mono uppercase text-[#A0522D] font-bold tracking-wider mb-3">
                   1. Transport Firm / Syndicate Details
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs text-slate-300 font-medium block mb-1">
+                    <label className="text-xs text-slate-700 font-medium block mb-1">
                       Authorized Operator / Owner Name *
                     </label>
                     <input
@@ -215,11 +214,11 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                       value={formData.fullName}
                       onChange={e => setFormData({ ...formData, fullName: e.target.value })}
                       placeholder="e.g. Haji Gulzar Khan"
-                      className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-sm focus:border-emerald-400 focus:outline-none"
+                      className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-sm focus:border-amber-600 focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-slate-300 font-medium block mb-1">
+                    <label className="text-xs text-slate-700 font-medium block mb-1">
                       Transport Syndicate / Company Name *
                     </label>
                     <input
@@ -228,22 +227,22 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                       value={formData.companyName}
                       onChange={e => setFormData({ ...formData, companyName: e.target.value })}
                       placeholder="e.g. Khyber Bolan Goods Transport Co."
-                      className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-sm focus:border-emerald-400 focus:outline-none"
+                      className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-sm focus:border-amber-600 focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-slate-300 font-medium block mb-1">
-                      Designation / Role
+                    <label className="text-xs text-slate-700 font-medium block mb-1">
+                      Designation
                     </label>
                     <input
                       type="text"
                       value={formData.designation}
                       onChange={e => setFormData({ ...formData, designation: e.target.value })}
-                      className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-sm focus:border-emerald-400 focus:outline-none"
+                      className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-sm focus:border-amber-600 focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-slate-300 font-medium block mb-1">
+                    <label className="text-xs text-slate-700 font-medium block mb-1">
                       Email Address *
                     </label>
                     <input
@@ -252,12 +251,12 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                       value={formData.email}
                       onChange={e => setFormData({ ...formData, email: e.target.value })}
                       placeholder="operations@khyberbolan.com"
-                      className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-sm focus:border-emerald-400 focus:outline-none"
+                      className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-sm focus:border-amber-600 focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-slate-300 font-medium block mb-1">
-                      Phone / Mobile *
+                    <label className="text-xs text-slate-700 font-medium block mb-1">
+                      Phone Number *
                     </label>
                     <input
                       type="text"
@@ -265,11 +264,11 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                       value={formData.phone}
                       onChange={e => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="+92 321 9876543"
-                      className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-sm focus:border-emerald-400 focus:outline-none"
+                      className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-sm focus:border-amber-600 focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="text-xs text-slate-300 font-medium block mb-1">
+                    <label className="text-xs text-slate-700 font-medium block mb-1">
                       WhatsApp Dispatch Line
                     </label>
                     <input
@@ -277,26 +276,26 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                       value={formData.whatsapp}
                       onChange={e => setFormData({ ...formData, whatsapp: e.target.value })}
                       placeholder="+92 321 9876543"
-                      className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-sm focus:border-emerald-400 focus:outline-none"
+                      className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-sm focus:border-amber-600 focus:outline-none"
                     />
                   </div>
                 </div>
               </div>
 
-              {/* Section 2: Fleet Scope & Capacity */}
+              {/* Section 2 */}
               <div>
-                <h4 className="text-xs font-mono uppercase text-emerald-400 font-bold tracking-wider mb-3">
+                <h4 className="text-xs font-mono uppercase text-[#A0522D] font-bold tracking-wider mb-3">
                   2. Cargo Domain & Capacity
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs text-slate-300 font-medium block mb-1">
-                      Primary Cargo Operating Sector *
+                    <label className="text-xs text-slate-700 font-medium block mb-1">
+                      Primary Operating Sector *
                     </label>
                     <select
                       value={formData.primaryCargoType}
                       onChange={e => setFormData({ ...formData, primaryCargoType: e.target.value })}
-                      className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-sm focus:border-emerald-400 focus:outline-none"
+                      className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-sm focus:border-amber-600 focus:outline-none"
                     >
                       <option value="Afghan Transit Trade (ATT)">Afghan Transit Trade (ATT)</option>
                       <option value="TIR Cross-Border Central Asia">TIR Cross-Border Central Asia</option>
@@ -307,7 +306,7 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                     </select>
                   </div>
                   <div>
-                    <label className="text-xs text-slate-300 font-medium block mb-1">
+                    <label className="text-xs text-slate-700 font-medium block mb-1">
                       Max Fleet Payload Capacity (Metric Tons)
                     </label>
                     <input
@@ -315,25 +314,25 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                       min={10}
                       value={formData.maxPayloadTons}
                       onChange={e => setFormData({ ...formData, maxPayloadTons: Number(e.target.value) })}
-                      className="w-full px-3 py-2 rounded-lg bg-slate-950 border border-slate-700 text-sm focus:border-emerald-400 focus:outline-none"
+                      className="w-full px-3 py-2 rounded-lg bg-slate-50 border border-slate-300 text-sm focus:border-amber-600 focus:outline-none"
                     />
                   </div>
                 </div>
               </div>
 
-              {/* Section 3: Registered Vehicles Manifest */}
+              {/* Section 3 */}
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-xs font-mono uppercase text-emerald-400 font-bold tracking-wider">
-                    3. Commercial Fleet Manifest ({vehicles.length} Vehicles) *
+                  <h4 className="text-xs font-mono uppercase text-[#A0522D] font-bold tracking-wider">
+                    3. Commercial Fleet Manifest ({vehicles.length} Units) *
                   </h4>
                   <button
                     type="button"
                     onClick={handleAddVehicle}
-                    className="px-2.5 py-1 text-xs rounded bg-emerald-950 border border-emerald-800 text-emerald-300 hover:bg-emerald-900 transition flex items-center gap-1"
+                    className="px-2.5 py-1 text-xs rounded bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold transition flex items-center gap-1 cursor-pointer"
                   >
                     <Plus className="w-3.5 h-3.5" />
-                    <span>Add Vehicle</span>
+                    <span>Add Unit</span>
                   </button>
                 </div>
 
@@ -341,17 +340,17 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                   {vehicles.map((v, index) => (
                     <div
                       key={index}
-                      className="p-3 bg-slate-950 border border-slate-800 rounded-xl space-y-3"
+                      className="p-3 bg-slate-50 border border-slate-300 rounded-xl space-y-3"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-mono font-bold text-slate-400">
-                          Vehicle #{index + 1}
+                        <span className="text-xs font-mono font-bold text-slate-600">
+                          Unit #{index + 1}
                         </span>
                         {vehicles.length > 1 && (
                           <button
                             type="button"
                             onClick={() => handleRemoveVehicle(index)}
-                            className="text-red-400 hover:text-red-300 p-1"
+                            className="text-red-500 hover:text-red-700 p-1"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -359,23 +358,23 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
-                        <div className="sm:col-span-1">
-                          <label className="text-[11px] text-slate-400 block mb-0.5">Plate Number *</label>
+                        <div>
+                          <label className="text-[11px] text-slate-600 block mb-0.5">Plate Number *</label>
                           <input
                             type="text"
                             required
                             placeholder="TL-1234-KHI"
                             value={v.plateNumber}
                             onChange={e => handleVehicleChange(index, 'plateNumber', e.target.value)}
-                            className="w-full px-2.5 py-1.5 rounded bg-slate-900 border border-slate-700 text-xs font-mono text-white focus:border-emerald-400 focus:outline-none"
+                            className="w-full px-2.5 py-1.5 rounded bg-white border border-slate-300 text-xs font-mono text-slate-900 focus:border-amber-600 focus:outline-none"
                           />
                         </div>
-                        <div className="sm:col-span-1">
-                          <label className="text-[11px] text-slate-400 block mb-0.5">Configuration</label>
+                        <div>
+                          <label className="text-[11px] text-slate-600 block mb-0.5">Configuration</label>
                           <select
                             value={v.vehicleType}
                             onChange={e => handleVehicleChange(index, 'vehicleType', e.target.value)}
-                            className="w-full px-2 py-1.5 rounded bg-slate-900 border border-slate-700 text-xs text-white focus:border-emerald-400 focus:outline-none"
+                            className="w-full px-2 py-1.5 rounded bg-white border border-slate-300 text-xs text-slate-900 focus:border-amber-600 focus:outline-none"
                           >
                             <option value="40ft Multi-Axle Flatbed">40ft Flatbed</option>
                             <option value="20ft Container Trailer">20ft Container</option>
@@ -384,22 +383,22 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                             <option value="Bowzer / Bulk Tanker">Tanker / Bowzer</option>
                           </select>
                         </div>
-                        <div className="sm:col-span-1">
-                          <label className="text-[11px] text-slate-400 block mb-0.5">Capacity (MT)</label>
+                        <div>
+                          <label className="text-[11px] text-slate-600 block mb-0.5">Capacity (MT)</label>
                           <input
                             type="number"
                             min={5}
                             value={v.payloadCapacityTons}
                             onChange={e => handleVehicleChange(index, 'payloadCapacityTons', Number(e.target.value))}
-                            className="w-full px-2.5 py-1.5 rounded bg-slate-900 border border-slate-700 text-xs text-white focus:border-emerald-400 focus:outline-none"
+                            className="w-full px-2.5 py-1.5 rounded bg-white border border-slate-300 text-xs text-slate-900 focus:border-amber-600 focus:outline-none"
                           />
                         </div>
-                        <div className="sm:col-span-1">
-                          <label className="text-[11px] text-slate-400 block mb-0.5">Province</label>
+                        <div>
+                          <label className="text-[11px] text-slate-600 block mb-0.5">Province</label>
                           <select
                             value={v.province}
                             onChange={e => handleVehicleChange(index, 'province', e.target.value)}
-                            className="w-full px-2 py-1.5 rounded bg-slate-900 border border-slate-700 text-xs text-white focus:border-emerald-400 focus:outline-none"
+                            className="w-full px-2 py-1.5 rounded bg-white border border-slate-300 text-xs text-slate-900 focus:border-amber-600 focus:outline-none"
                           >
                             <option value="Sindh">Sindh</option>
                             <option value="Punjab">Punjab</option>
@@ -415,24 +414,24 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
               </div>
 
               {/* Submit Buttons */}
-              <div className="pt-4 border-t border-slate-800 flex items-center justify-end gap-3">
+              <div className="pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={onClose}
-                  className="px-4 py-2.5 rounded-lg text-slate-400 hover:text-white text-xs font-semibold hover:bg-slate-800 transition"
+                  className="px-4 py-2.5 rounded-lg text-slate-600 hover:text-slate-900 text-xs font-semibold hover:bg-slate-100 transition"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-6 py-2.5 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow-lg shadow-emerald-500/20 disabled:opacity-50 flex items-center gap-2"
+                  className="px-6 py-2.5 rounded-lg bg-[#111827] hover:bg-[#1E293B] text-white font-bold text-xs uppercase tracking-wider transition shadow-sm disabled:opacity-50 flex items-center gap-2 cursor-pointer"
                 >
                   {loading ? (
-                    <span>ENROLLING FLEET...</span>
+                    <span>ENROLLING...</span>
                   ) : (
                     <>
-                      <span>ENROLL VEHICLES IN NETWORK</span>
+                      <span>ENROLL VEHICLES</span>
                       <Send className="w-3.5 h-3.5" />
                     </>
                   )}

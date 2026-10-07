@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Search, Clock, CheckCircle, AlertCircle, FileText, Truck, Shield, Calendar, MapPin } from 'lucide-react';
+import { X, Search, Clock, CheckCircle, AlertCircle, FileText, Truck, Calendar } from 'lucide-react';
 import { lookupInquiry } from '../firebase';
 
 interface TrackInquiryModalProps {
@@ -40,39 +40,39 @@ export const TrackInquiryModal: React.FC<TrackInquiryModalProps> = ({ isOpen, on
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'submitted':
-        return <span className="px-2.5 py-1 rounded bg-amber-950 text-amber-400 border border-amber-800 text-xs font-semibold uppercase">Pending Operations Review</span>;
+        return <span className="px-2.5 py-1 rounded bg-amber-100 text-amber-800 border border-amber-300 text-xs font-semibold uppercase">Pending Operations Review</span>;
       case 'under_review':
-        return <span className="px-2.5 py-1 rounded bg-blue-950 text-blue-400 border border-blue-800 text-xs font-semibold uppercase">Under Active Calculation</span>;
+        return <span className="px-2.5 py-1 rounded bg-blue-100 text-blue-800 border border-blue-300 text-xs font-semibold uppercase">Under Active Calculation</span>;
       case 'quoted':
-        return <span className="px-2.5 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 text-xs font-semibold uppercase">Commercial Quote Issued</span>;
+        return <span className="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-semibold uppercase">Commercial Quote Issued</span>;
       case 'verified':
       case 'approved':
-        return <span className="px-2.5 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 text-xs font-semibold uppercase">Fleet Approved</span>;
+        return <span className="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs font-semibold uppercase">Fleet Approved</span>;
       case 'rejected':
-        return <span className="px-2.5 py-1 rounded bg-red-950 text-red-400 border border-red-800 text-xs font-semibold uppercase">Rejected</span>;
+        return <span className="px-2.5 py-1 rounded bg-red-100 text-red-800 border border-red-300 text-xs font-semibold uppercase">Rejected</span>;
       case 'archived':
-        return <span className="px-2.5 py-1 rounded bg-slate-800 text-slate-400 text-xs font-semibold uppercase">Archived</span>;
+        return <span className="px-2.5 py-1 rounded bg-slate-200 text-slate-700 text-xs font-semibold uppercase">Archived</span>;
       default:
-        return <span className="px-2.5 py-1 rounded bg-slate-800 text-slate-300 text-xs font-semibold uppercase">{status}</span>;
+        return <span className="px-2.5 py-1 rounded bg-slate-200 text-slate-800 text-xs font-semibold uppercase">{status}</span>;
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
-      <div className="relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl text-white my-8 overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
+      <div className="relative w-full max-w-2xl bg-white border border-slate-300 rounded-2xl shadow-2xl text-slate-900 my-8 overflow-hidden">
         {/* Header */}
-        <div className="px-6 py-5 bg-gradient-to-r from-slate-950 via-slate-900 to-cyan-950/40 border-b border-slate-800 flex items-center justify-between">
+        <div className="px-6 py-5 bg-[#ECEEF3] border-b border-slate-300 flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-mono uppercase text-cyan-400 font-bold tracking-widest block">
+            <span className="text-[10px] font-mono uppercase text-[#A0522D] font-bold tracking-widest block">
               STATUS VERIFICATION PORTAL
             </span>
-            <h3 className="text-xl font-bold font-serif-luxury text-white">
+            <h3 className="text-xl font-bold font-serif-luxury text-slate-900">
               Track Consortium Inquiries & Registrations
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+            className="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-200 transition cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -82,7 +82,7 @@ export const TrackInquiryModal: React.FC<TrackInquiryModalProps> = ({ isOpen, on
         <div className="p-6">
           <form onSubmit={handleSearch} className="space-y-4">
             <div>
-              <label className="text-xs text-slate-300 font-medium block mb-1">
+              <label className="text-xs text-slate-700 font-medium block mb-1">
                 Enter Consortium Reference ID (e.g. MAK-QT-... or MAK-TR-...)
               </label>
               <div className="flex gap-2">
@@ -92,12 +92,12 @@ export const TrackInquiryModal: React.FC<TrackInquiryModalProps> = ({ isOpen, on
                   value={refId}
                   onChange={e => setRefId(e.target.value)}
                   placeholder="MAK-QT-..."
-                  className="flex-1 px-3.5 py-2.5 rounded-lg bg-slate-950 border border-slate-700 text-sm font-mono text-white focus:border-cyan-400 focus:outline-none"
+                  className="flex-1 px-3.5 py-2.5 rounded-lg bg-slate-50 border border-slate-300 text-sm font-mono text-slate-900 focus:border-amber-600 focus:outline-none"
                 />
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-5 py-2.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition flex items-center gap-2"
+                  className="px-5 py-2.5 rounded-lg bg-[#111827] hover:bg-[#1E293B] text-white font-bold text-xs uppercase tracking-wider transition flex items-center gap-2 cursor-pointer"
                 >
                   <Search className="w-4 h-4" />
                   <span>{loading ? 'Searching...' : 'Lookup'}</span>
@@ -107,7 +107,7 @@ export const TrackInquiryModal: React.FC<TrackInquiryModalProps> = ({ isOpen, on
           </form>
 
           {error && (
-            <div className="mt-4 p-3 rounded-lg bg-red-950/40 border border-red-800 text-red-200 text-xs flex items-center gap-2">
+            <div className="mt-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
@@ -115,15 +115,15 @@ export const TrackInquiryModal: React.FC<TrackInquiryModalProps> = ({ isOpen, on
 
           {/* Results display */}
           {result && (
-            <div className="mt-6 p-5 rounded-xl bg-slate-950 border border-slate-800 space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div className="mt-6 p-5 rounded-xl bg-[#F8FAFC] border border-slate-300 space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-200 pb-3">
                 <div className="flex items-center gap-2">
                   {result.type === 'quote' ? (
-                    <FileText className="w-5 h-5 text-amber-400" />
+                    <FileText className="w-5 h-5 text-amber-700" />
                   ) : (
-                    <Truck className="w-5 h-5 text-emerald-400" />
+                    <Truck className="w-5 h-5 text-blue-700" />
                   )}
-                  <span className="font-mono text-xs font-bold text-white">
+                  <span className="font-mono text-xs font-bold text-slate-900">
                     {result.data.id}
                   </span>
                 </div>
@@ -134,23 +134,23 @@ export const TrackInquiryModal: React.FC<TrackInquiryModalProps> = ({ isOpen, on
                 <div className="space-y-3 text-xs">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <span className="text-slate-400 block">Client / Firm:</span>
-                      <span className="font-bold text-white">{result.data.clientName} ({result.data.companyTitle})</span>
+                      <span className="text-slate-500 block">Client / Firm:</span>
+                      <span className="font-bold text-slate-900">{result.data.clientName} ({result.data.companyTitle})</span>
                     </div>
                     <div>
-                      <span className="text-slate-400 block">Cargo Domain:</span>
-                      <span className="font-medium text-amber-300">{result.data.cargoType}</span>
+                      <span className="text-slate-500 block">Cargo Domain:</span>
+                      <span className="font-medium text-amber-800">{result.data.cargoType}</span>
                     </div>
                     <div>
-                      <span className="text-slate-400 block">Routing:</span>
-                      <span className="text-white">{result.data.origin || 'Karachi'} → {result.data.destination || 'Destination'}</span>
+                      <span className="text-slate-500 block">Routing:</span>
+                      <span className="text-slate-900">{result.data.origin || 'Karachi'} → {result.data.destination || 'Destination'}</span>
                     </div>
                     <div>
-                      <span className="text-slate-400 block">Services:</span>
-                      <span className="text-white">{(result.data.services || []).join(', ')}</span>
+                      <span className="text-slate-500 block">Services:</span>
+                      <span className="text-slate-900">{(result.data.services || []).join(', ')}</span>
                     </div>
                   </div>
-                  <div className="pt-2 border-t border-slate-800/80 flex items-center gap-2 text-slate-400">
+                  <div className="pt-2 border-t border-slate-200 flex items-center gap-2 text-slate-500">
                     <Calendar className="w-3.5 h-3.5" />
                     <span>Lodged at: {new Date(result.data.createdAt).toLocaleString()}</span>
                   </div>
@@ -159,23 +159,23 @@ export const TrackInquiryModal: React.FC<TrackInquiryModalProps> = ({ isOpen, on
                 <div className="space-y-3 text-xs">
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <span className="text-slate-400 block">Transporter Firm:</span>
-                      <span className="font-bold text-white">{result.data.companyName}</span>
+                      <span className="text-slate-500 block">Transporter Firm:</span>
+                      <span className="font-bold text-slate-900">{result.data.companyName}</span>
                     </div>
                     <div>
-                      <span className="text-slate-400 block">Representative:</span>
-                      <span className="text-white">{result.data.fullName}</span>
+                      <span className="text-slate-500 block">Representative:</span>
+                      <span className="text-slate-900">{result.data.fullName}</span>
                     </div>
                     <div>
-                      <span className="text-slate-400 block">Cargo Domain:</span>
-                      <span className="font-medium text-emerald-300">{result.data.primaryCargoType}</span>
+                      <span className="text-slate-500 block">Cargo Domain:</span>
+                      <span className="font-medium text-emerald-800">{result.data.primaryCargoType}</span>
                     </div>
                     <div>
-                      <span className="text-slate-400 block">Registered Vehicles:</span>
-                      <span className="font-bold text-white">{result.data.vehicles?.length || 0} commercial units</span>
+                      <span className="text-slate-500 block">Registered Vehicles:</span>
+                      <span className="font-bold text-slate-900">{result.data.vehicles?.length || 0} commercial units</span>
                     </div>
                   </div>
-                  <div className="pt-2 border-t border-slate-800/80 flex items-center gap-2 text-slate-400">
+                  <div className="pt-2 border-t border-slate-200 flex items-center gap-2 text-slate-500">
                     <Calendar className="w-3.5 h-3.5" />
                     <span>Enrolled at: {new Date(result.data.createdAt).toLocaleString()}</span>
                   </div>

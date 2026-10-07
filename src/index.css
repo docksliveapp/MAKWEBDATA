@@ -2,11 +2,18 @@
 
 @layer base {
   body {
+    background-color: #ECEEF3;
+    color: #0f172a;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   }
 
   h1, h2, h3, .font-heading {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Cinzel', serif;
+    letter-spacing: -0.01em;
+  }
+
+  .font-cinzel {
+    font-family: 'Cinzel', serif;
   }
 
   .font-serif-luxury {
@@ -18,21 +25,34 @@
   }
 }
 
-/* Custom styled scrollbars */
+/* Light theme scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #E2E8F0;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #94A3B8;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: #64748B;
+}
+
+/* Metallic and Gold Typography effects */
+.text-metallic-title {
+  background: linear-gradient(180deg, #182235 0%, #29384E 50%, #0F172A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gold-gradient {
+  background: linear-gradient(135deg, #B8860B 0%, #D4AF37 50%, #996515 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
