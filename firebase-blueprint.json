@@ -1,0 +1,148 @@
+{
+  "entities": {
+    "QuoteRequest": {
+      "title": "QuoteRequest",
+      "description": "Logistics single-window rate quotation request submitted by a commercial client",
+      "type": "object",
+      "properties": {
+        "clientName": {
+          "type": "string",
+          "description": "Full name of the corporate representative requesting the quotation"
+        },
+        "companyTitle": {
+          "type": "string",
+          "description": "Registered enterprise or organization name"
+        },
+        "designation": {
+          "type": "string",
+          "description": "Corporate role or job title of the representative"
+        },
+        "email": {
+          "type": "string",
+          "description": "Official corporate email address"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Mobile contact number for operational verification"
+        },
+        "whatsapp": {
+          "type": "string",
+          "description": "Direct WhatsApp line for real-time rates negotiation"
+        },
+        "cargoType": {
+          "type": "string",
+          "description": "Classification of goods (containerized, liquid, chemical, etc.)"
+        },
+        "cargoDescription": {
+          "type": "string",
+          "description": "Detailed cargo specifications, HS codes, and handling remarks"
+        },
+        "services": {
+          "type": "array",
+          "description": "Selected multimodal services from the consortium offerings"
+        },
+        "origin": {
+          "type": "string",
+          "description": "Origin port, terminal, or city"
+        },
+        "destination": {
+          "type": "string",
+          "description": "Destination dry port, cross-border terminal, or warehouse"
+        },
+        "weightPerUnit": {
+          "type": "number",
+          "description": "Weight per unit or container in metric tonnes"
+        },
+        "totalUnits": {
+          "type": "number",
+          "description": "Total quantity of units or containers"
+        },
+        "metricType": {
+          "type": "string",
+          "description": "Unit metric: Container (TEU/FEU) or Commercial Unit"
+        },
+        "documentNames": {
+          "type": "array",
+          "description": "Names of uploaded documentation files (e.g., invoices, packing lists)"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["submitted", "under_review", "quoted", "archived"],
+          "description": "Lifecycle state of the quotation request"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp representing submission creation"
+        }
+      },
+      "required": ["clientName", "companyTitle", "email", "phone", "cargoType", "services"]
+    },
+    "VehicleRegistration": {
+      "title": "VehicleRegistration",
+      "description": "Transporter vehicle registration manifest submitted by fleet operators",
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string",
+          "description": "Fleet owner or authorized transport operator full name"
+        },
+        "companyName": {
+          "type": "string",
+          "description": "Registered transport company or fleet syndicate name"
+        },
+        "designation": {
+          "type": "string",
+          "description": "Title or designation within the transport firm"
+        },
+        "email": {
+          "type": "string",
+          "description": "Official email address"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Mobile contact number"
+        },
+        "whatsapp": {
+          "type": "string",
+          "description": "WhatsApp dispatch contact line"
+        },
+        "primaryCargoType": {
+          "type": "string",
+          "description": "Primary cargo domain (e.g., Afghan Transit, TIR Transit, Private Cargo)"
+        },
+        "maxPayloadTons": {
+          "type": "number",
+          "description": "Maximum payload hauling capacity in metric tons"
+        },
+        "vehicles": {
+          "type": "array",
+          "description": "Manifest of enrolled commercial vehicles including plate, chassis, and province"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["submitted", "verified", "approved", "rejected"],
+          "description": "Verification status of the transporter vehicle registration"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "ISO timestamp of registration submission"
+        }
+      },
+      "required": ["fullName", "companyName", "email", "phone", "primaryCargoType", "vehicles"]
+    }
+  },
+  "firestore": {
+    "/quoteRequests/{quoteId}": {
+      "schema": {
+        "$ref": "#/entities/QuoteRequest"
+      },
+      "description": "Client logistics rate quotation requests"
+    },
+    "/vehicleRegistrations/{registrationId}": {
+      "schema": {
+        "$ref": "#/entities/VehicleRegistration"
+      },
+      "description": "Transporter fleet and vehicle registrations manifest"
+    }
+  }
+}

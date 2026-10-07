@@ -1,0 +1,123 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default Deny Catch-All (Safety Net)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper Functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isAdmin() {
+      return (isSignedIn() && request.auth.token.email == 'makeyourflyeasy@gmail.com') ||
+             (isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
+    }
+
+    // Validation for QuoteRequest
+    function isValidQuoteRequest(data) {
+      return data.keys().hasAll(['clientName', 'companyTitle', 'email', 'phone', 'cargoType', 'services', 'status']) &&
+        data.keys().hasOnly(['clientName', 'companyTitle', 'designation', 'email', 'phone', 'whatsapp', 'cargoType', 'cargoDescription', 'services', 'origin', 'destination', 'weightPerUnit', 'totalUnits', 'metricType', 'documentNames', 'status', 'createdAt', 'userId']) &&
+        data.clientName is string && data.clientName.size() > 0 && data.clientName.size() <= 150 &&
+        data.companyTitle is string && data.companyTitle.size() > 0 && data.companyTitle.size() <= 150 &&
+        (!('designation' in data) || (data.designation is string && data.designation.size() <= 100)) &&
+        data.email is string && data.email.size() > 0 && data.email.size() <= 150 &&
+        data.phone is string && data.phone.size() > 0 && data.phone.size() <= 50 &&
+        (!('whatsapp' in data) || (data.whatsapp is string && data.whatsapp.size() <= 50)) &&
+        data.cargoType is string && data.cargoType.size() > 0 && data.cargoType.size() <= 150 &&
+        (!('cargoDescription' in data) || (data.cargoDescription is string && data.cargoDescription.size() <= 1500)) &&
+        data.services is list && data.services.size() > 0 && data.services.size() <= 20 &&
+        (!('origin' in data) || (data.origin is string && data.origin.size() <= 150)) &&
+        (!('destination' in data) || (data.destination is string && data.destination.size() <= 150)) &&
+        (!('weightPerUnit' in data) || (data.weightPerUnit is number && data.weightPerUnit >= 0 && data.weightPerUnit <= 100000)) &&
+        (!('totalUnits' in data) || (data.totalUnits is number && data.totalUnits >= 0 && data.totalUnits <= 100000)) &&
+        (!('metricType' in data) || (data.metricType is string && data.metricType.size() <= 50)) &&
+        (!('documentNames' in data) || (data.documentNames is list && data.documentNames.size() <= 15)) &&
+        data.status in ['submitted', 'under_review', 'quoted', 'archived'] &&
+        (!('createdAt' in data) || (data.createdAt is string && data.createdAt.size() <= 100)) &&
+        (!('userId' in data) || (data.userId is string && data.userId.size() <= 128));
+    }
+
+    // Validation for VehicleRegistration
+    function isValidVehicleRegistration(data) {
+      return data.keys().hasAll(['fullName', 'companyName', 'email', 'phone', 'primaryCargoType', 'vehicles', 'status']) &&
+        data.keys().hasOnly(['fullName', 'companyName', 'designation', 'email', 'phone', 'whatsapp', 'primaryCargoType', 'maxPayloadTons', 'vehicles', 'status', 'createdAt', 'userId']) &&
+        data.fullName is string && data.fullName.size() > 0 && data.fullName.size() <= 150 &&
+        data.companyName is string && data.companyName.size() > 0 && data.companyName.size() <= 150 &&
+        (!('designation' in data) || (data.designation is string && data.designation.size() <= 100)) &&
+        data.email is string && data.email.size() > 0 && data.email.size() <= 150 &&
+        data.phone is string && data.phone.size() > 0 && data.phone.size() <= 50 &&
+        (!('whatsapp' in data) || (data.whatsapp is string && data.whatsapp.size() <= 50)) &&
+        data.primaryCargoType is string && data.primaryCargoType.size() > 0 && data.primaryCargoType.size() <= 150 &&
+        (!('maxPayloadTons' in data) || (data.maxPayloadTons is number && data.maxPayloadTons >= 0 && data.maxPayloadTons <= 10000)) &&
+        data.vehicles is list && data.vehicles.size() > 0 && data.vehicles.size() <= 100 &&
+        data.status in ['submitted', 'verified', 'approved', 'rejected'] &&
+        (!('createdAt' in data) || (data.createdAt is string && data.createdAt.size() <= 100)) &&
+        (!('userId' in data) || (data.userId is string && data.userId.size() <= 128));
+    }
+
+    // 1. Quote Requests Collection
+    match /quoteRequests/{quoteId} {
+      allow create: if isValidId(quoteId) &&
+                    isValidQuoteRequest(request.resource.data) &&
+                    request.resource.data.status == 'submitted';
+
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+
+      allow update: if isValidId(quoteId) &&
+                    isValidQuoteRequest(request.resource.data) &&
+                    (
+                      isAdmin() ||
+                      (
+                        isSignedIn() &&
+                        resource.data.userId == request.auth.uid &&
+                        request.resource.data.userId == resource.data.userId &&
+                        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['cargoDescription', 'documentNames'])
+                      )
+                    );
+
+      allow delete: if isValidId(quoteId) && isAdmin();
+    }
+
+    // 2. Transporter Vehicle Registrations Collection
+    match /vehicleRegistrations/{registrationId} {
+      allow create: if isValidId(registrationId) &&
+                    isValidVehicleRegistration(request.resource.data) &&
+                    request.resource.data.status == 'submitted';
+
+      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+
+      allow update: if isValidId(registrationId) &&
+                    isValidVehicleRegistration(request.resource.data) &&
+                    (
+                      isAdmin() ||
+                      (
+                        isSignedIn() &&
+                        resource.data.userId == request.auth.uid &&
+                        request.resource.data.userId == resource.data.userId &&
+                        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['vehicles', 'whatsapp'])
+                      )
+                    );
+
+      allow delete: if isValidId(registrationId) && isAdmin();
+    }
+
+    // 3. Admin Profiles & Roles
+    match /admins/{adminId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    // 4. Connection Test Document
+    match /test/{docId} {
+      allow read: if true;
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "MAK - GROUP | Logistics, Transshipment & Maritime Network",
+  "description": "Unified single-window logistics consortium operating Docks (Pvt) Ltd, Truckit, Muhib International, and Vantage Shipping Line across Pakistan, UAE, Afghan Transit, and TIR corridors.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
