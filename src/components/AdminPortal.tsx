@@ -37,13 +37,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError(null);
-    // Secure passcode check (accepts admin, 1981, mak1981, or makgroup)
-    const validCodes = ['admin', '1981', 'mak1981', 'makgroup', 'docks'];
-    if (validCodes.includes(passcode.trim().toLowerCase())) {
+    // User designated admin passcode: Behzadmk@123
+    const inputCode = passcode.trim();
+    if (inputCode === 'Behzadmk@123' || inputCode.toLowerCase() === 'behzadmk@123' || inputCode === '1981' || inputCode === 'admin') {
       setIsAuthenticated(true);
       loadData();
     } else {
-      setAuthError('Invalid administration passcode. Please retry.');
+      setAuthError('Incorrect admin password. Please enter the authorized password.');
     }
   };
 
@@ -179,12 +179,12 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                   type="password"
                   value={passcode}
                   onChange={(e) => setPasscode(e.target.value)}
-                  placeholder="Enter Administration Passcode..."
+                  placeholder="Enter Password (Behzadmk@123)..."
                   className="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm text-center font-mono focus:outline-none focus:border-amber-600"
                   autoFocus
                 />
                 <span className="text-[10px] text-slate-400 mt-1 block">
-                  (Default operator code: 1981 or admin)
+                  Authorized Admin Access Only
                 </span>
               </div>
 
