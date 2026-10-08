@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Truck, Plus, Trash2, Send, CheckCircle, Copy, AlertCircle } from 'lucide-react';
+import { X, Truck, Plus, Trash2, Send, CheckCircle, Copy, AlertCircle, Mail } from 'lucide-react';
 import { submitVehicleRegistration } from '../firebase';
 import type { VehicleItem, VehicleRegistration } from '../types';
 
@@ -122,8 +122,9 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
       <div className="relative w-full max-w-3xl bg-white border border-slate-300 rounded-2xl shadow-2xl text-slate-900 my-8 overflow-hidden">
+        
         {/* Header */}
-        <div className="px-6 py-5 bg-[#ECEEF3] border-b border-slate-300 flex items-center justify-between">
+        <div className="px-6 py-5 bg-gradient-to-r from-[#F8FAFC] via-[#ECEEF3] to-[#F1F5F9] border-b border-slate-300 flex items-center justify-between">
           <div>
             <span className="text-[10px] font-mono uppercase text-[#A0522D] font-bold tracking-widest block">
               TRUCKIT & MUHIB FLEET ENROLLMENT
@@ -140,8 +141,16 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
           </button>
         </div>
 
+        {/* Dispatch Target Notification */}
+        <div className="px-6 py-2.5 bg-blue-50/80 border-b border-blue-200/80 flex items-center gap-2 text-xs text-blue-950 font-medium">
+          <Mail className="w-4 h-4 text-blue-700 shrink-0" />
+          <span>
+            This vehicle manifest will be dispatched to <strong>info@mak-group.com.pk</strong> for statutory onboarding.
+          </span>
+        </div>
+
         {/* Body */}
-        <div className="p-6 max-h-[80vh] overflow-y-auto">
+        <div className="p-6 max-h-[75vh] overflow-y-auto">
           {submittedId ? (
             <div className="py-8 text-center space-y-6">
               <div className="w-16 h-16 bg-emerald-100 border border-emerald-300 rounded-full flex items-center justify-center mx-auto text-emerald-700">
@@ -150,10 +159,10 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
 
               <div>
                 <h4 className="text-2xl font-bold text-slate-900 font-serif-luxury">
-                  Fleet Registration Enrolled
+                  Fleet Registration Dispatched
                 </h4>
                 <p className="text-sm text-slate-600 mt-2 max-w-md mx-auto">
-                  Your vehicles have been enrolled in the MAK - GROUP bonded transport network. Operations dispatch will inspect and verify your fleet credentials.
+                  Your vehicles have been enrolled and dispatched to <strong>info@mak-group.com.pk</strong>. Operations dispatch will inspect and verify your fleet credentials.
                 </p>
               </div>
 
@@ -183,7 +192,7 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                     setSubmittedId(null);
                     onClose();
                   }}
-                  className="px-6 py-2.5 rounded-lg bg-[#111827] text-white font-bold text-xs uppercase tracking-wider hover:bg-[#1E293B] transition"
+                  className="btn-dark-luxury px-6 py-2.5 rounded-lg text-white font-bold text-xs uppercase tracking-wider"
                 >
                   Return to Network
                 </button>
@@ -243,7 +252,7 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                   </div>
                   <div>
                     <label className="text-xs text-slate-700 font-medium block mb-1">
-                      Email Address *
+                      Official Email Address *
                     </label>
                     <input
                       type="email"
@@ -425,13 +434,13 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-6 py-2.5 rounded-lg bg-[#111827] hover:bg-[#1E293B] text-white font-bold text-xs uppercase tracking-wider transition shadow-sm disabled:opacity-50 flex items-center gap-2 cursor-pointer"
+                  className="btn-dark-luxury px-6 py-2.5 rounded-lg text-white font-bold text-xs uppercase tracking-wider transition shadow-sm disabled:opacity-50 flex items-center gap-2 cursor-pointer"
                 >
                   {loading ? (
-                    <span>ENROLLING...</span>
+                    <span>DISPATCHING TO info@mak-group.com.pk...</span>
                   ) : (
                     <>
-                      <span>ENROLL VEHICLES</span>
+                      <span>SUBMIT TO info@mak-group.com.pk</span>
                       <Send className="w-3.5 h-3.5" />
                     </>
                   )}

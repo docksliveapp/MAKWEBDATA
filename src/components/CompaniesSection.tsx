@@ -291,11 +291,18 @@ export const CompaniesSection: React.FC<CompaniesSectionProps> = ({ onSelectServ
                   </div>
                   <div className="flex justify-between">
                     <span>Operations Email:</span>
-                    <span className="font-bold">ops@mak-group.com.pk</span>
+                    <span className="font-bold text-[#B45309]">info@mak-group.com.pk</span>
                   </div>
                   <div className="flex justify-between">
                     <span>WhatsApp Dispatch:</span>
-                    <span className="font-bold text-emerald-700">03218496806</span>
+                    <a
+                      href="https://wa.me/923218496006"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-bold text-emerald-700 hover:underline flex items-center gap-1"
+                    >
+                      24/7 Dispatch Desk
+                    </a>
                   </div>
                 </div>
                 <button

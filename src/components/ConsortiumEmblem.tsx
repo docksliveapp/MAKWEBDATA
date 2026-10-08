@@ -1,6 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-export const ConsortiumEmblem: React.FC<{ className?: string; size?: number }> = ({ className = '', size = 170 }) => {
+export const ConsortiumEmblem: React.FC<{ className?: string; size?: number; customUrl?: string }> = ({ className = '', size = 170, customUrl }) => {
+  const [logoUrl, setLogoUrl] = useState<string | null>(customUrl || null);
+
+  useEffect(() => {
+    if (customUrl) {
+      setLogoUrl(customUrl);
+      return;
+    }
+    const saved = localStorage.getItem('mak_custom_logo');
+    if (saved) {
+      setLogoUrl(saved);
+    }
+
+    const handleLogoUpdate = (e: any) => {
+      if (e.detail?.logoUrl) {
+        setLogoUrl(e.detail.logoUrl);
+      } else if (e.detail?.reset) {
+        setLogoUrl(null);
+      }
+    };
+
+    window.addEventListener('mak-logo-updated', handleLogoUpdate);
+    return () => window.removeEventListener('mak-logo-updated', handleLogoUpdate);
+  }, [customUrl]);
+
+  if (logoUrl) {
+    return (
+      <div className={`relative inline-flex items-center justify-center select-none ${className}`}>
+        <img
+          src={logoUrl}
+          alt="MAK - GROUP Logo"
+          style={{ width: size, height: size, objectFit: 'contain' }}
+          className="drop-shadow-[0_8px_20px_rgba(180,130,40,0.3)] transition-transform duration-300 hover:scale-105 rounded-full"
+          onError={() => setLogoUrl(null)}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className={`relative inline-flex items-center justify-center select-none ${className}`}>
       <svg

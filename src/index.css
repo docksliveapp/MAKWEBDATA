@@ -2,9 +2,10 @@
 
 @layer base {
   body {
-    background-color: #ECEEF3;
-    color: #0f172a;
+    background: linear-gradient(135deg, #F3F5F9 0%, #EAEFF6 50%, #F5F7FB 100%);
+    color: #0F172A;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
   }
 
   h1, h2, h3, .font-heading {
@@ -25,6 +26,100 @@
   }
 }
 
+/* Pearl White Glassmorphism utilities */
+.glass-pearl {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 10px 30px 0 rgba(148, 163, 184, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+}
+
+.glass-pearl-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.90) 0%, rgba(248, 250, 252, 0.75) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 24px -4px rgba(100, 116, 139, 0.10), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+}
+
+.glass-pearl-subtle {
+  background: rgba(241, 245, 249, 0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+/* Luxury Animated Button Effects */
+.btn-gold-luxury {
+  background: linear-gradient(135deg, #B8860B 0%, #D4AF37 50%, #A37420 100%);
+  color: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px rgba(184, 134, 11, 0.28);
+}
+
+.btn-gold-luxury:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(184, 134, 11, 0.40);
+  background: linear-gradient(135deg, #C59B27 0%, #DFBE52 50%, #B8860B 100%);
+}
+
+.btn-gold-luxury::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 20%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.35);
+  transform: rotate(30deg);
+  transition: none;
+}
+
+.btn-gold-luxury:hover::after {
+  left: 140%;
+  transition: all 0.75s ease-in-out;
+}
+
+.btn-dark-luxury {
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  color: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
+}
+
+.btn-dark-luxury:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.38);
+  background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
+}
+
+.btn-pill-interactive {
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-pill-interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(100, 116, 139, 0.16);
+  border-color: #B8860B;
+}
+
+/* Subtle Shimmer for High-Priority Tags */
+@keyframes shimmerPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(1.02); }
+}
+
+.animate-shimmer-subtle {
+  animation: shimmerPulse 3s infinite ease-in-out;
+}
+
 /* Light theme scrollbars */
 ::-webkit-scrollbar {
   width: 7px;
@@ -32,27 +127,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #E2E8F0;
+  background: #E8EDF5;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #94A3B8;
+  background: #CBD5E1;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #64748B;
-}
-
-/* Metallic and Gold Typography effects */
-.text-metallic-title {
-  background: linear-gradient(180deg, #182235 0%, #29384E 50%, #0F172A 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.text-gold-gradient {
-  background: linear-gradient(135deg, #B8860B 0%, #D4AF37 50%, #996515 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  background: #94A3B8;
 }

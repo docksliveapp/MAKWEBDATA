@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Send, CheckCircle, Copy, AlertCircle } from 'lucide-react';
+import { X, Send, CheckCircle, Copy, AlertCircle, Mail } from 'lucide-react';
 import { submitQuoteRequest } from '../firebase';
 import { SERVICE_OPTIONS, CARGO_TYPES } from '../data/consortium';
 import type { QuoteRequest } from '../types';
@@ -25,8 +25,8 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
     cargoType: CARGO_TYPES[0],
     cargoDescription: '',
     services: preselectedService ? [preselectedService] : [SERVICE_OPTIONS[0]],
-    origin: 'Karachi Port (KPT/QICT)',
-    destination: 'Kabul / Jalalabad (Afghan Transit)',
+    origin: 'Karachi Port (KPT / QICT / SAPT)',
+    destination: 'Upcountry Dry Port / Border Station',
     weightPerUnit: 24,
     totalUnits: 1,
     metricType: 'Container (TEU)',
@@ -78,7 +78,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
         weightPerUnit: Number(formData.weightPerUnit) || 0,
         totalUnits: Number(formData.totalUnits) || 1,
         metricType: formData.metricType,
-        documentNames: ['commercial-bill-manifest.pdf'],
+        documentNames: ['commercial-freight-manifest.pdf'],
       };
 
       const result = await submitQuoteRequest(payload);
@@ -103,8 +103,9 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
       <div className="relative w-full max-w-3xl bg-white border border-slate-300 rounded-2xl shadow-2xl text-slate-900 my-8 overflow-hidden">
+        
         {/* Modal Header */}
-        <div className="px-6 py-5 bg-[#ECEEF3] border-b border-slate-300 flex items-center justify-between">
+        <div className="px-6 py-5 bg-gradient-to-r from-[#F8FAFC] via-[#ECEEF3] to-[#F1F5F9] border-b border-slate-300 flex items-center justify-between">
           <div>
             <span className="text-[10px] font-mono uppercase text-[#A0522D] font-bold tracking-widest block">
               MAK - GROUP LOGISTICS SINGLE WINDOW
@@ -121,8 +122,16 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
           </button>
         </div>
 
+        {/* Dispatch Target Notification */}
+        <div className="px-6 py-2.5 bg-amber-50/80 border-b border-amber-200/80 flex items-center gap-2 text-xs text-amber-950 font-medium">
+          <Mail className="w-4 h-4 text-amber-700 shrink-0" />
+          <span>
+            This commercial quotation request will be submitted directly to <strong>info@mak-group.com.pk</strong>.
+          </span>
+        </div>
+
         {/* Content Body */}
-        <div className="p-6 max-h-[80vh] overflow-y-auto">
+        <div className="p-6 max-h-[75vh] overflow-y-auto">
           {submittedId ? (
             <div className="py-8 text-center space-y-6">
               <div className="w-16 h-16 bg-emerald-100 border border-emerald-300 rounded-full flex items-center justify-center mx-auto text-emerald-700">
@@ -131,10 +140,10 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
 
               <div>
                 <h4 className="text-2xl font-bold text-slate-900 font-serif-luxury">
-                  Quotation Request Lodged
+                  Quotation Request Dispatched
                 </h4>
                 <p className="text-sm text-slate-600 mt-2 max-w-md mx-auto">
-                  Your commercial logistics manifest has been dispatched to the MAK - GROUP single-window desk (Docks, Truckit, Muhib, and Vantage).
+                  Your commercial logistics manifest has been dispatched to <strong>info@mak-group.com.pk</strong> and logged into the MAK - GROUP operational queue.
                 </p>
               </div>
 
@@ -164,7 +173,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                     setSubmittedId(null);
                     onClose();
                   }}
-                  className="px-6 py-2.5 rounded-lg bg-[#B8860B] text-white font-bold text-xs uppercase tracking-wider hover:bg-[#A37420] transition"
+                  className="btn-gold-luxury px-6 py-2.5 rounded-lg text-white font-bold text-xs uppercase tracking-wider"
                 >
                   Close & Return
                 </button>
@@ -179,7 +188,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                 </div>
               )}
 
-              {/* Section 1: Client Details */}
+              {/* Section 1 */}
               <div>
                 <h4 className="text-xs font-mono uppercase text-[#A0522D] font-bold tracking-wider mb-3">
                   1. Commercial Client Credentials
@@ -225,7 +234,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                   </div>
                   <div>
                     <label className="text-xs text-slate-700 font-medium block mb-1">
-                      Email Address *
+                      Official Email Address *
                     </label>
                     <input
                       type="email"
@@ -264,7 +273,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                 </div>
               </div>
 
-              {/* Section 2: Services */}
+              {/* Section 2 */}
               <div>
                 <h4 className="text-xs font-mono uppercase text-[#A0522D] font-bold tracking-wider mb-2">
                   2. Required Consortium Services *
@@ -295,7 +304,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                 </div>
               </div>
 
-              {/* Section 3: Cargo Details */}
+              {/* Section 3 */}
               <div>
                 <h4 className="text-xs font-mono uppercase text-[#A0522D] font-bold tracking-wider mb-3">
                   3. Cargo & Routing Manifest
@@ -407,13 +416,13 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-6 py-2.5 rounded-lg bg-gradient-to-r from-[#B8860B] via-[#C59B27] to-[#A37420] hover:from-[#A37420] text-white font-bold text-xs uppercase tracking-wider transition shadow-sm disabled:opacity-50 flex items-center gap-2 cursor-pointer"
+                  className="btn-gold-luxury px-6 py-2.5 rounded-lg text-white font-bold text-xs uppercase tracking-wider transition shadow-sm disabled:opacity-50 flex items-center gap-2 cursor-pointer"
                 >
                   {loading ? (
-                    <span>LODGING REQUEST...</span>
+                    <span>DISPATCHING TO info@mak-group.com.pk...</span>
                   ) : (
                     <>
-                      <span>SUBMIT QUOTATION</span>
+                      <span>SUBMIT TO info@mak-group.com.pk</span>
                       <Send className="w-3.5 h-3.5" />
                     </>
                   )}

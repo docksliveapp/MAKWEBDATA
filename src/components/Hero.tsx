@@ -1,20 +1,23 @@
 import React from 'react';
 import { ConsortiumEmblem } from './ConsortiumEmblem';
-import { ArrowRight, Truck, Package, ExternalLink, Activity, Phone } from 'lucide-react';
+import { ArrowRight, Truck, Package, ExternalLink, ShieldCheck, ChevronDown } from 'lucide-react';
 
 interface HeroProps {
   onOpenQuote: () => void;
   onOpenTransporter: () => void;
-  onOpenTracker: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onOpenQuote, onOpenTransporter, onOpenTracker }) => {
+export const Hero: React.FC<HeroProps> = ({ onOpenQuote, onOpenTransporter }) => {
   return (
-    <section className="relative overflow-hidden bg-[#ECEEF3] text-slate-900 pt-8 pb-14 border-b border-slate-300/80">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+    <section id="home" className="relative overflow-hidden bg-gradient-to-b from-[#F5F7FB] via-[#EBF0F7] to-[#F3F5F9] text-slate-900 pt-10 pb-16 md:pt-14 md:pb-20 border-b border-slate-300/80">
+      
+      {/* Subtle Pearl Glow & Luxury Backdrop Elements */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-gradient-to-b from-amber-200/25 to-blue-200/20 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-7">
         
-        {/* Top Mini Pill */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E2E6ED] border border-slate-300/90 text-slate-600 text-[11px] font-semibold tracking-wider uppercase">
+        {/* Top Mini Pill Ribbon */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/90 border border-slate-300/90 shadow-2xs text-slate-700 text-[11px] font-bold tracking-wider uppercase font-mono">
           <span>INTEGRATED LOGISTICS</span>
           <span>•</span>
           <span>CROSS-BORDER TRANSIT</span>
@@ -22,21 +25,21 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuote, onOpenTransporter, onOp
           <span>MARITIME FREIGHT</span>
         </div>
 
-        {/* Center Circular Golden Consortium Seal */}
+        {/* Center Circular Golden Consortium Emblem */}
         <div className="flex justify-center pt-1 pb-1">
-          <ConsortiumEmblem size={175} />
+          <ConsortiumEmblem size={180} />
         </div>
 
         {/* Main Serif Luxury Headline */}
         <div className="space-y-1">
-          <h1 className="font-serif-luxury text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-bold tracking-tight text-slate-900 leading-[1.15]">
-            <span className="block text-slate-950 font-serif-luxury">
+          <h1 className="font-serif-luxury text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-slate-950 leading-[1.12]">
+            <span className="block font-serif-luxury">
               UNIFIED LOGISTICS,
             </span>
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#422E1A] via-[#855B25] to-[#2E2012] font-serif-luxury">
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#4A3415] via-[#8B6220] to-[#2E2010] font-serif-luxury">
               TRANSSHIPMENT & MARITIME
             </span>
-            <span className="block text-slate-950 font-serif-luxury">
+            <span className="block font-serif-luxury">
               NETWORK
             </span>
           </h1>
@@ -47,11 +50,11 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuote, onOpenTransporter, onOp
           Single-window strategic command coordinating <strong className="text-slate-900 font-semibold">2,000+ customs-registered commercial prime movers</strong>, statutory FBR bonded transshipment, transcontinental TIR corridors, and global deep-sea liner operations.
         </p>
 
-        {/* Primary Action Buttons */}
+        {/* Primary Animated Action Buttons */}
         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
           <button
             onClick={onOpenQuote}
-            className="px-6 py-3 rounded-lg bg-gradient-to-r from-[#B8860B] via-[#C59B27] to-[#A37420] hover:from-[#A37420] hover:to-[#8B6214] text-white font-semibold text-sm shadow-sm transition hover:shadow flex items-center gap-2 cursor-pointer"
+            className="btn-gold-luxury px-7 py-3.5 rounded-xl font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2 cursor-pointer"
           >
             <span>Logistics Quotation</span>
             <ArrowRight className="w-4 h-4" />
@@ -59,86 +62,84 @@ export const Hero: React.FC<HeroProps> = ({ onOpenQuote, onOpenTransporter, onOp
 
           <button
             onClick={onOpenTransporter}
-            className="px-6 py-3 rounded-lg bg-[#111827] hover:bg-[#1E293B] text-white font-semibold text-sm shadow-sm transition hover:shadow flex items-center gap-2 cursor-pointer"
+            className="btn-dark-luxury px-7 py-3.5 rounded-xl font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2 cursor-pointer"
           >
             <Truck className="w-4 h-4 text-slate-300" />
             <span>Vehicle Registration Request</span>
           </button>
         </div>
 
-        {/* Secondary Pill Bar */}
-        <div className="pt-4 flex flex-wrap items-center justify-center gap-3">
-          <button
-            onClick={onOpenTracker}
-            className="px-4 py-2.5 rounded-lg bg-[#DEE2E9] hover:bg-[#D5DAE3] border border-slate-300/80 text-slate-800 text-xs font-semibold flex items-center gap-2 shadow-xs transition"
+        {/* Direct Link Tracking Buttons */}
+        <div className="pt-3 flex flex-wrap items-center justify-center gap-3">
+          {/* Button 1: Vehicle Verification */}
+          <a
+            href="https://ais-pre-uzjhn4dzdhmnrnk7f4uuiz-279269232484.asia-east1.run.app/?mode=vehicle"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-pill-interactive px-5 py-3 rounded-xl bg-white/95 hover:bg-white border border-slate-300/90 text-slate-900 text-xs font-bold flex items-center gap-2.5 shadow-sm"
           >
-            <Package className="w-4 h-4 text-amber-700 shrink-0" />
+            <div className="p-1.5 rounded-lg bg-blue-50 text-blue-700">
+              <Truck className="w-4 h-4" />
+            </div>
+            <div className="text-left">
+              <span className="text-[10px] text-slate-500 uppercase block font-mono">GPS TELEMATICS</span>
+              <span className="flex items-center gap-1 font-bold">
+                Check Vehicle Status <ExternalLink className="w-3 h-3 text-slate-400" />
+              </span>
+            </div>
+          </a>
+
+          {/* Button 2: Container Tracking */}
+          <a
+            href="https://ais-pre-uzjhn4dzdhmnrnk7f4uuiz-279269232484.asia-east1.run.app/?mode=status"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-pill-interactive px-5 py-3 rounded-xl bg-white/95 hover:bg-white border border-slate-300/90 text-slate-900 text-xs font-bold flex items-center gap-2.5 shadow-sm"
+          >
+            <div className="p-1.5 rounded-lg bg-amber-50 text-amber-700">
+              <Package className="w-4 h-4" />
+            </div>
             <div className="text-left">
               <span className="text-[10px] text-slate-500 uppercase block font-mono">FBR & PORT TRACKING</span>
-              <span className="text-slate-900 font-medium flex items-center gap-1">
-                Check Container Status <ExternalLink className="w-3 h-3 text-slate-500" />
+              <span className="flex items-center gap-1 font-bold">
+                Track Container / Consignment <ExternalLink className="w-3 h-3 text-slate-400" />
               </span>
             </div>
-          </button>
+          </a>
 
-          <button
-            onClick={onOpenTracker}
-            className="px-4 py-2.5 rounded-lg bg-[#DEE2E9] hover:bg-[#D5DAE3] border border-slate-300/80 text-slate-800 text-xs font-semibold flex items-center gap-2 shadow-xs transition"
-          >
-            <Truck className="w-4 h-4 text-blue-700 shrink-0" />
-            <div className="text-left">
-              <span className="text-[10px] text-slate-500 uppercase block font-mono">GPS & TELEMATICS</span>
-              <span className="text-slate-900 font-medium flex items-center gap-1">
-                Check Vehicle Status <ExternalLink className="w-3 h-3 text-slate-500" />
-              </span>
-            </div>
-          </button>
-
+          {/* Explore Services Scroll Button */}
           <a
-            href="#departments"
-            className="px-4 py-2.5 rounded-lg bg-[#DEE2E9] hover:bg-[#D5DAE3] border border-slate-300/80 text-slate-800 text-xs font-semibold flex items-center gap-2 shadow-xs transition"
+            href="#services"
+            className="btn-pill-interactive px-5 py-3 rounded-xl bg-white/95 hover:bg-white border border-slate-300/90 text-slate-900 text-xs font-bold flex items-center gap-2.5 shadow-sm"
           >
-            <Activity className="w-4 h-4 text-rose-600 shrink-0" />
+            <div className="p-1.5 rounded-lg bg-emerald-50 text-emerald-700">
+              <ShieldCheck className="w-4 h-4" />
+            </div>
             <div className="text-left">
-              <span className="text-slate-900 font-medium">Checkpoint SOPs</span>
+              <span className="text-[10px] text-slate-500 uppercase block font-mono">PORTFOLIO</span>
+              <span className="flex items-center gap-1 font-bold">
+                All Services & Rates <ChevronDown className="w-3 h-3 text-slate-400" />
+              </span>
             </div>
           </a>
         </div>
 
-        {/* Operations Desk Info Line */}
-        <div className="pt-2 text-[12px] text-slate-500">
+        {/* Central Operations Desk Contact Bar strictly using info@mak-group.com.pk */}
+        <div className="pt-2 text-[12px] text-slate-600 font-medium">
           <span>Karachi Central Operations Desk: </span>
-          <a href="tel:+922132330103" className="font-semibold text-slate-700 hover:underline">
+          <a href="tel:+922132330103" className="font-bold text-slate-800 hover:underline">
             +92-21-32330103
           </a>
           <span> / </span>
-          <span className="font-semibold text-slate-700">0104</span>
+          <span className="font-bold text-slate-800">0104</span>
           <span className="mx-2">•</span>
-          <span>Email: </span>
-          <a href="mailto:info@mak-group.com.pk" className="font-semibold text-slate-700 hover:underline">
+          <span>Official Corporate Email: </span>
+          <a href="mailto:info@mak-group.com.pk" className="font-bold text-[#B45309] hover:underline font-mono">
             info@mak-group.com.pk
           </a>
-          <span className="mx-2">•</span>
-          <span>WhatsApp: </span>
-          <a href="https://wa.me/923218496806" target="_blank" rel="noopener noreferrer" className="font-semibold text-emerald-700 hover:underline">
-            03218496806
-          </a>
         </div>
-      </div>
 
-      {/* Floating WhatsApp Hotline pill at bottom right */}
-      <a
-        href="https://wa.me/923218496806"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-5 right-5 z-40 bg-[#16A34A] hover:bg-[#15803D] text-white px-4 py-2.5 rounded-full shadow-lg flex items-center gap-2.5 text-xs font-bold transition hover:scale-105"
-      >
-        <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
-        <div className="text-left leading-tight">
-          <span className="text-[9px] uppercase tracking-wider block opacity-90 font-mono">WHATSAPP HOTLINE</span>
-          <span className="text-sm font-bold tracking-wide">03218496806</span>
-        </div>
-      </a>
+      </div>
     </section>
   );
 };
