@@ -566,9 +566,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                           onClick={() => handleApplyPagePreset('/erasebg-transformed.svg')}
                           className="p-2.5 rounded-xl border border-slate-300 hover:border-amber-600 bg-white hover:bg-amber-50/60 flex flex-col items-center gap-1.5 transition text-center cursor-pointer shadow-2xs"
                         >
-                          <img src="/erasebg-transformed.svg" alt="Vintage Round" className="w-12 h-12 object-contain" />
+                          <img src="/erasebg-transformed.svg" alt="Vantage Round" className="w-12 h-12 object-contain" />
                           <span className="text-[11px] font-bold text-slate-800">Round Medallion</span>
-                          <span className="text-[9px] font-mono text-slate-500">Vintage Seal</span>
+                          <span className="text-[9px] font-mono text-slate-500">Vantage Seal</span>
                         </button>
                       </div>
                     </div>
@@ -679,7 +679,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                           onClick={() => handleApplyPreset('/erasebg-transformed.svg')}
                           className="p-2.5 rounded-xl border border-slate-300 hover:border-amber-600 bg-slate-50 hover:bg-amber-50/50 flex flex-col items-center gap-1.5 transition text-center cursor-pointer"
                         >
-                          <img src="/erasebg-transformed.svg" alt="Vintage Round" className="w-10 h-10 object-contain" />
+                          <img src="/erasebg-transformed.svg" alt="Vantage Round" className="w-10 h-10 object-contain" />
                           <span className="text-[11px] font-bold text-slate-800">Round Medallion</span>
                           <span className="text-[9px] font-mono text-slate-500">erasebg-transformed</span>
                         </button>
