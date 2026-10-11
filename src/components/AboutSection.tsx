@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { ConsortiumEmblem } from './ConsortiumEmblem';
-import { NATIONWIDE_STATIONS, LEADERSHIP_TEAM, CORPORATE_CLIENTS } from '../data/consortium';
-import { Award, ShieldCheck, MapPin, Users, CheckCircle2, ChevronRight, Building2, Phone, Mail, Clock } from 'lucide-react';
+import { NATIONWIDE_STATIONS, CONSORTIUM_ENTITIES } from '../data/consortium';
+import { CorporateClientPortfolio } from './CorporateClientPortfolio';
+import { Award, ShieldCheck, MapPin, Users, CheckCircle2, ChevronRight, Building2, Phone, Mail, Globe, ArrowRight } from 'lucide-react';
 
-export const AboutSection: React.FC = () => {
+interface AboutSectionProps {
+  onSelectServiceForQuote?: (service: string) => void;
+}
+
+export const AboutSection: React.FC<AboutSectionProps> = ({ onSelectServiceForQuote }) => {
   const [selectedStation, setSelectedStation] = useState<string>(NATIONWIDE_STATIONS[0].name);
 
   const galleryImages = [
@@ -33,11 +37,11 @@ export const AboutSection: React.FC = () => {
     <section id="about" className="py-16 md:py-24 bg-[#ECEEF3] text-slate-900 border-b border-slate-300/80">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         
-        {/* Section Header with 45 Years Heritage */}
+        {/* Section Header */}
         <div className="text-center max-w-4xl mx-auto space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-300 shadow-xs text-[#A0522D] text-xs font-bold uppercase tracking-wider font-mono">
-            <Clock className="w-4 h-4 text-amber-700" />
-            <span>45+ YEARS OF LOGISTICS, MARITIME & TRANSSHIPMENT HERITAGE</span>
+            <ShieldCheck className="w-4 h-4 text-amber-700" />
+            <span>PREMIER MULTIMODAL LOGISTICS, MARITIME & TRANSSHIPMENT CONSORTIUM</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif-luxury text-slate-900 leading-tight">
@@ -45,43 +49,41 @@ export const AboutSection: React.FC = () => {
           </h2>
 
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-3xl mx-auto">
-            Since our founding over <strong>45 years ago</strong>, MAK - GROUP has stood at the vanguard of Pakistan and regional international trade. Today, we coordinate a unified single-window consortium orchestrating four market-leading enterprises: <strong>Docks (Pvt) Ltd</strong>, <strong>Truckit (Pvt) Ltd</strong>, <strong>Muhib International (SMC-Pvt) Ltd</strong>, and <strong>Vantage Shipping Line</strong>.
+            MAK - GROUP stands at the vanguard of Pakistan and regional international trade, operating as a unified single-window consortium orchestrating four market-leading enterprises: <strong>Docks (Pvt) Ltd</strong>, <strong>Truckit (Pvt) Ltd</strong>, <strong>Muhib International (SMC-Pvt) Ltd</strong>, and <strong>Vantage Shipping Line</strong>.
           </p>
         </div>
 
-        {/* 45 Years Big Stat Banner & Core Metrics */}
+        {/* Consortium Profile & Strategic Overview */}
         <div className="glass-pearl rounded-3xl p-8 sm:p-12 border border-white/90 shadow-lg">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
             {/* Left Big Highlight */}
             <div className="lg:col-span-5 space-y-4 border-b lg:border-b-0 lg:border-r border-slate-200/80 pb-6 lg:pb-0 lg:pr-8 text-center lg:text-left">
-              <div className="flex items-center justify-center lg:justify-start gap-3">
-                <span className="text-5xl sm:text-6xl font-bold font-serif-luxury text-slate-950">
-                  45+
+              <div className="space-y-1">
+                <span className="text-xs font-bold font-mono uppercase text-[#B45309] block">
+                  STATUTORY CONSORTIUM ARCHITECTURE
                 </span>
-                <div className="text-left">
-                  <span className="text-xs font-bold font-mono uppercase text-[#B45309] block">
-                    YEARS OF EXCELLENCE
-                  </span>
-                  <span className="text-xs text-slate-500 font-medium">
-                    1981 – Present Continuous Operations
-                  </span>
-                </div>
+                <h3 className="text-2xl sm:text-3xl font-bold font-serif-luxury text-slate-950">
+                  Flawless Execution Across Land, Sea & Borders
+                </h3>
               </div>
 
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                From pioneering deepwater vessel stevedoring at Karachi Port to creating Pakistan’s first private customs-bonded carrier network under FBR Sections 121–123, our legacy ensures complete reliability, zero demurrage penalties, and statutory escorts.
+                From pioneering deepwater vessel stevedoring at Karachi Port to creating Pakistan’s premier private customs-bonded carrier network under FBR Sections 121–123, our consortium ensures total cargo security, zero demurrage risk, and nationwide statutory clearance.
               </p>
 
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-1">
-                <span className="px-2.5 py-1 rounded-md bg-white border border-slate-300 text-[11px] font-bold text-slate-700">
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-2">
+                <span className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs font-bold text-slate-800 shadow-2xs">
                   FBR Bonded Lic. 2012
                 </span>
-                <span className="px-2.5 py-1 rounded-md bg-white border border-slate-300 text-[11px] font-bold text-slate-700">
+                <span className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs font-bold text-slate-800 shadow-2xs">
                   APTTA Lic. #782-PK
                 </span>
-                <span className="px-2.5 py-1 rounded-md bg-white border border-slate-300 text-[11px] font-bold text-slate-700">
-                  UN TIR & IRU Member
+                <span className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs font-bold text-slate-800 shadow-2xs">
+                  UN TIR & IRU Accredited
+                </span>
+                <span className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs font-bold text-slate-800 shadow-2xs">
+                  PSW & WeBOC Certified
                 </span>
               </div>
             </div>
@@ -152,6 +154,81 @@ export const AboutSection: React.FC = () => {
           </div>
         </div>
 
+        {/* Complete Profile Data: The 4 Operating Consortium Companies */}
+        <div className="space-y-6">
+          <div className="text-center space-y-1">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-[#A0522D] block font-mono">
+              THE 4 STRATEGIC PILLARS OF MAK - GROUP
+            </span>
+            <h3 className="text-2xl sm:text-3xl font-bold font-serif-luxury text-slate-900">
+              Consortium Companies & Core Capabilities
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {CONSORTIUM_ENTITIES.map((company) => (
+              <div
+                key={company.id}
+                className="glass-pearl rounded-3xl p-6 sm:p-8 border border-white/90 shadow-sm space-y-5 flex flex-col justify-between"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="px-3 py-1 rounded-full bg-slate-900 text-amber-300 text-[10px] font-mono font-bold uppercase">
+                      {company.badge}
+                    </span>
+                    <span className="text-xs font-mono text-slate-500 font-semibold">
+                      {company.fleetCount}
+                    </span>
+                  </div>
+
+                  <h4 className="text-xl font-bold font-serif-luxury text-slate-950">
+                    {company.name}
+                  </h4>
+                  <p className="text-xs font-bold text-[#B45309] font-mono">
+                    {company.brandTag}
+                  </p>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    {company.description}
+                  </p>
+
+                  <div className="pt-2 space-y-1.5">
+                    <span className="text-[11px] font-bold uppercase font-mono text-slate-700 block">
+                      Core Operations:
+                    </span>
+                    <ul className="space-y-1">
+                      {company.specialties.slice(0, 3).map((spec, sIdx) => (
+                        <li key={sIdx} className="text-xs text-slate-600 flex items-start gap-1.5">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                          <span>{spec}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-slate-200/90 flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex flex-wrap gap-1.5">
+                    {company.keyHighlights.map((kh, khIdx) => (
+                      <span key={khIdx} className="px-2 py-0.5 rounded bg-white text-[10px] font-bold text-slate-700 border border-slate-300">
+                        {kh}
+                      </span>
+                    ))}
+                  </div>
+                  {onSelectServiceForQuote && (
+                    <button
+                      onClick={() => onSelectServiceForQuote(company.name)}
+                      className="text-xs font-bold text-amber-800 hover:text-amber-900 flex items-center gap-1 cursor-pointer"
+                    >
+                      <span>Inquire Now</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* High-Fidelity Visual Photo Gallery */}
         <div id="gallery" className="space-y-6">
           <div className="text-center space-y-1">
@@ -191,7 +268,7 @@ export const AboutSection: React.FC = () => {
         </div>
 
         {/* 15 Strategic Nationwide Stations Grid */}
-        <div className="glass-pearl rounded-3xl p-8 sm:p-10 border border-white/90 space-y-6">
+        <div id="stations" className="glass-pearl rounded-3xl p-8 sm:p-10 border border-white/90 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-4">
             <div>
               <span className="text-[11px] font-mono font-bold uppercase text-[#B45309] block">
@@ -233,67 +310,8 @@ export const AboutSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Key Departmental Heads & Operational Team */}
-        <div className="space-y-6">
-          <div className="text-center space-y-1">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#A0522D] block font-mono">
-              EXECUTIVE LEADERSHIP & SPECIALIZED DESKS
-            </span>
-            <h3 className="text-2xl sm:text-3xl font-bold font-serif-luxury text-slate-900">
-              Key Departmental Heads & Operational Command
-            </h3>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {LEADERSHIP_TEAM.map((leader, idx) => (
-              <div
-                key={idx}
-                className="glass-pearl-card rounded-2xl p-5 border border-white/80 space-y-3"
-              >
-                <div className="w-10 h-10 rounded-xl bg-[#1E293B] text-amber-400 flex items-center justify-center font-serif-luxury font-bold text-base shadow-xs">
-                  {leader.name.charAt(0)}
-                </div>
-                <div>
-                  <h4 className="text-base font-bold text-slate-900 font-serif-luxury">
-                    {leader.name}
-                  </h4>
-                  <span className="text-[11px] font-bold text-[#B45309] font-mono block mt-0.5 leading-tight">
-                    {leader.role}
-                  </span>
-                </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  {leader.expertise}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Major Corporate Client Portfolio */}
-        <div className="glass-pearl rounded-3xl p-8 sm:p-10 border border-white/90 space-y-6">
-          <div className="text-center space-y-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#A0522D] block font-mono">
-              TRUSTED BY BLUE-CHIP MULTINATIONALS & CONGLOMERATES
-            </span>
-            <h3 className="text-2xl sm:text-3xl font-bold font-serif-luxury text-slate-900">
-              Major Corporate Client Portfolio
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-600 max-w-2xl mx-auto">
-              Trusted turnkey logistics partner for Fortune 500 corporations, state agencies, UN humanitarian programs, and major CPEC energy projects.
-            </p>
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-2.5 pt-2">
-            {CORPORATE_CLIENTS.map((client, idx) => (
-              <span
-                key={idx}
-                className="px-3.5 py-2 rounded-xl bg-white border border-slate-200/90 text-xs font-bold text-slate-800 shadow-2xs hover:border-amber-400 hover:text-amber-900 transition-colors"
-              >
-                {client}
-              </span>
-            ))}
-          </div>
-        </div>
+        {/* Major Corporate Client Portfolio & Strategic Partnerships (Matches Exact Profile Layout) */}
+        <CorporateClientPortfolio />
 
       </div>
     </section>

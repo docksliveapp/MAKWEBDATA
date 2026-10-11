@@ -14,30 +14,20 @@ export const WhatsAppFloating: React.FC = () => {
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Open WhatsApp Chat with MAK Group Logistics"
-        className="relative flex items-center gap-3 px-4 py-3 rounded-full bg-gradient-to-r from-[#25D366] to-[#1EBE5D] hover:from-[#1EBE5D] hover:to-[#16A34A] text-white shadow-[0_8px_25px_rgba(37,211,102,0.4)] transition-all duration-300 hover:scale-105 active:scale-95"
+        aria-label="Chat on WhatsApp"
+        title="WhatsApp Support"
+        className="relative flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-[#25D366] to-[#1EBE5D] hover:from-[#1EBE5D] hover:to-[#16A34A] text-white shadow-[0_6px_20px_rgba(37,211,102,0.45)] transition-all duration-300 hover:scale-110 active:scale-95"
       >
-        {/* Animated radar rings */}
-        <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+        {/* Subtle pulsating status dot */}
+        <span className="absolute top-0 right-0 flex h-3 w-3">
           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-200"></span>
+          <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-200"></span>
         </span>
 
         {/* WhatsApp Icon */}
-        <div className="w-6 h-6 flex items-center justify-center shrink-0">
-          <MessageCircle className="w-6 h-6 fill-white text-emerald-600" />
-        </div>
-
-        {/* Text without exposing phone number on button face */}
-        <div className="flex flex-col text-left pr-1 leading-tight">
-          <span className="text-[10px] uppercase font-bold tracking-wider font-mono opacity-90">
-            24/7 Operations Desk
-          </span>
-          <span className="text-xs font-bold tracking-wide">
-            Chat on WhatsApp
-          </span>
-        </div>
+        <MessageCircle className="w-6 h-6 fill-white text-emerald-600" />
       </a>
     </aside>
   );
 };
+

@@ -313,21 +313,21 @@ export const CONSORTIUM_ENTITIES: ConsortiumCompany[] = [
 ];
 
 export const NATIONWIDE_STATIONS = [
-  { name: 'Karachi (Head Office)', role: 'Tower / Seaport Command', address: 'Office No. 14, 1st Floor, State Life Bldg No 7, G-Allana Road, Tower, Karachi', phone: '+92-21-32330103 / 0104' },
-  { name: 'Dubai (UAE Hub)', role: 'International Liner Agency (VSL)', address: 'Shipping Tower, Al Mina Road, Jebel Ali / Dubai, UAE', phone: '+971 (4) 880-7711' },
-  { name: 'Lahore Hub', role: 'Dry Ports & Central Line-Haul', address: 'Mughal Pura / Jia Bagga Dry Port Stations, Lahore', phone: '+92-42-3759900' },
-  { name: 'Islamabad / RWP', role: 'Federal Liaison & I-9 Dry Port', address: 'Spinzer Plaza, I-9 Markaz, Islamabad', phone: '+92-51-4433100' },
-  { name: 'Peshawar Hub', role: 'Regional Overland Transit Command', address: "Dean's Trade Centre, 3rd Floor, Peshawar", phone: '+92-91-5274400' },
-  { name: 'Torkham Border', role: 'Afghan Transit Northern Gate', address: 'Haji Gulab Market Desk, Torkham Border Terminal', phone: '03218496006' },
-  { name: 'Chaman & Quetta', role: 'Southern Afghan Gate & Quetta Hub', address: 'Mall Road Chaman / Khojak Road, Balochistan', phone: '03218496006' },
-  { name: 'Sialkot (Sambrial)', role: 'Export Cargo & Dry Port Station', address: 'Sambrial Dry Port Station, Sialkot', phone: '+92-52-6520100' },
-  { name: 'Faisalabad Hub', role: 'Textile Cargo & Dry Port Desk', address: 'Dry Port Complex, Faisalabad', phone: '+92-41-8720100' },
-  { name: 'Multan Station', role: 'South Punjab Transit & Reefer Hub', address: 'Industrial Estate / NLC Terminal, Multan', phone: '+92-61-6510100' },
-  { name: 'Hyderabad Station', role: 'NLC Dry Port Sindh Corridor', address: 'NLC Dry Port, Hyderabad', phone: '+92-22-3810100' },
-  { name: 'Gwadar Port Hub', role: 'Deep-Sea Port Operations', address: 'Gwadar Free Zone Terminal, Gwadar', phone: '+92-86-4210100' },
-  { name: 'Sost / Gilgit (CPEC)', role: 'China Khunjerab Border Hub', address: 'Sost Customs Dry Port, Gilgit-Baltistan', phone: '+92-5813-450100' },
-  { name: 'Taftan / Ghulam Khan', role: 'Iran TIR Gateway & Waziristan', address: 'Customs Border Stations, Taftan & Ghulam Khan', phone: '03218496006' },
-  { name: 'Azakhel (Nowshera)', role: 'KPK Bonded Terminal Desk', address: 'Azakhel Dry Port, Nowshera', phone: '+92-923-640100' }
+  { name: 'Karachi (Head Office)', role: 'Tower / Seaport Command', address: 'Office No : 13 1st Floor State Life Building No 7 G-Allana Road Towe Karachi', phone: '+92-21-32330103 / 0104' },
+  { name: 'Dubai (UAE Hub)', role: 'International Liner Agency (VSL)', address: 'Office # 304, Shipping Tower, Al Mina Road, Raffa Bur Dubai, Opposite Dubai Customs Building', phone: '+971-4- 570-8397' },
+  { name: 'Lahore Hub', role: 'Dry Ports & Central Line-Haul', address: 'Mughal Pura / Jia Bagga Dry Port Stations, Lahore', phone: '+92-21-32330103' },
+  { name: 'Islamabad / RWP', role: 'Federal Liaison & I-9 Dry Port', address: 'Spinzer Plaza, I-9 Markaz, Islamabad', phone: '+92-21-32330103' },
+  { name: 'Peshawar Hub', role: 'Regional Overland Transit Command', address: "Dean's Trade Centre, 3rd Floor, Peshawar", phone: '+92-21-32330103' },
+  { name: 'Torkham Border', role: 'Afghan Transit Northern Gate', address: 'Haji Gulab Market Desk, Torkham Border Terminal', phone: '+92-21-32330103' },
+  { name: 'Chaman & Quetta', role: 'Southern Afghan Gate & Quetta Hub', address: 'Mall Road Chaman / Khojak Road, Balochistan', phone: '+92-21-32330103' },
+  { name: 'Sialkot (Sambrial)', role: 'Export Cargo & Dry Port Station', address: 'Sambrial Dry Port Station, Sialkot', phone: '+92-21-32330103' },
+  { name: 'Faisalabad Hub', role: 'Textile Cargo & Dry Port Desk', address: 'Dry Port Complex, Faisalabad', phone: '+92-21-32330103' },
+  { name: 'Multan Station', role: 'South Punjab Transit & Reefer Hub', address: 'Industrial Estate / NLC Terminal, Multan', phone: '+92-21-32330103' },
+  { name: 'Hyderabad Station', role: 'NLC Dry Port Sindh Corridor', address: 'NLC Dry Port, Hyderabad', phone: '+92-21-32330103' },
+  { name: 'Gwadar Port Hub', role: 'Deep-Sea Port Operations', address: 'Gwadar Free Zone Terminal, Gwadar', phone: '+92-21-32330103' },
+  { name: 'Sost / Gilgit (CPEC)', role: 'China Khunjerab Border Hub', address: 'Sost Customs Dry Port, Gilgit-Baltistan', phone: '+92-21-32330103' },
+  { name: 'Taftan / Ghulam Khan', role: 'Iran TIR Gateway & Waziristan', address: 'Customs Border Stations, Taftan & Ghulam Khan', phone: '+92-21-32330103' },
+  { name: 'Azakhel (Nowshera)', role: 'KPK Bonded Terminal Desk', address: 'Azakhel Dry Port, Nowshera', phone: '+92-21-32330103' }
 ];
 
 export const LEADERSHIP_TEAM = [

@@ -361,17 +361,31 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                     </p>
                   </div>
 
-                  {/* Live Preview Card */}
-                  <div className="p-6 rounded-2xl bg-[#F8FAFC] border border-slate-300 flex flex-col items-center justify-center space-y-3">
-                    <span className="text-xs font-mono uppercase font-bold text-slate-500">
-                      Live Logo Preview
-                    </span>
-                    <div className="p-4 bg-white rounded-full border border-slate-200 shadow-md">
-                      <ConsortiumEmblem size={120} customUrl={customLogoUrl || undefined} />
+                  {/* Live Preview Cards for Header Grey and Home Round */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-5 rounded-2xl bg-[#0F172A] border border-slate-700 flex flex-col items-center justify-center space-y-3">
+                      <span className="text-[11px] font-mono uppercase font-bold text-slate-300">
+                        Header Logo (Grey Transparent)
+                      </span>
+                      <div className="p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
+                        <ConsortiumEmblem size={56} variant="header" customUrl={customLogoUrl || undefined} />
+                      </div>
+                      <span className="text-[10px] text-slate-400 font-mono">
+                        mak_transparent.png
+                      </span>
                     </div>
-                    <span className="text-[11px] text-slate-500">
-                      {customLogoUrl ? 'Custom Logo Active' : 'Default Golden Consortium Medallion Active'}
-                    </span>
+
+                    <div className="p-5 rounded-2xl bg-[#F8FAFC] border border-slate-300 flex flex-col items-center justify-center space-y-3">
+                      <span className="text-[11px] font-mono uppercase font-bold text-slate-700">
+                        Home Page Logo (White Round)
+                      </span>
+                      <div className="p-2 bg-transparent rounded-full">
+                        <ConsortiumEmblem size={100} variant="home" customUrl={customLogoUrl || undefined} />
+                      </div>
+                      <span className="text-[10px] text-slate-500 font-mono">
+                        erasebg-transformed.png
+                      </span>
+                    </div>
                   </div>
 
                   {/* Logo Upload & URL Form */}

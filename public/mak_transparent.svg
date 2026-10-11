@@ -1,0 +1,43 @@
+<svg width="200" height="200" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="silverRim" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC" />
+      <stop offset="25%" stop-color="#CBD5E1" />
+      <stop offset="50%" stop-color="#64748B" />
+      <stop offset="75%" stop-color="#334155" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <radialGradient id="platinumSheen" cx="35%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.9" />
+      <stop offset="40%" stop-color="#E2E8F0" stop-opacity="0.4" />
+      <stop offset="85%" stop-color="#94A3B8" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#475569" stop-opacity="0.0" />
+    </radialGradient>
+    <linearGradient id="chromeText" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#F1F5F9" />
+      <stop offset="20%" stop-color="#E2E8F0" />
+      <stop offset="45%" stop-color="#64748B" />
+      <stop offset="55%" stop-color="#334155" />
+      <stop offset="80%" stop-color="#1E293B" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <linearGradient id="greyBevel" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#1E293B" />
+      <stop offset="50%" stop-color="#94A3B8" />
+      <stop offset="100%" stop-color="#F8FAFC" />
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="47" stroke="url(#silverRim)" stroke-width="3" fill="none" opacity="0.95" />
+  <circle cx="50" cy="50" r="43" stroke="url(#greyBevel)" stroke-width="1" fill="none" opacity="0.6" stroke-dasharray="3 1.5" />
+  <circle cx="50" cy="50" r="41" fill="url(#platinumSheen)" />
+  <path d="M50 14 L80 27 L80 63 L50 86 L20 63 L20 27 Z" stroke="url(#silverRim)" stroke-width="1.5" fill="none" opacity="0.45" />
+  <path d="M26 66 L26 34 L33 34 L40 48 L47 34 L54 34 L54 66 L47 66 L47 45 L41.5 56 L38.5 56 L33 45 L33 66 Z" fill="url(#chromeText)" />
+  <path d="M50 33 L62 66 L55 66 L52.5 59 L47.5 59 L49 55 L51.5 55 L50 42 Z" fill="url(#silverRim)" />
+  <path d="M61 34 L68 34 L68 46 L76 34 L84 34 L74.5 48 L85 66 L77 66 L68 52 L68 66 L61 66 Z" fill="url(#chromeText)" />
+  <line x1="22" y1="71" x2="78" y2="71" stroke="url(#greyBevel)" stroke-width="1.2" stroke-linecap="round" />
+  <text x="50" y="79" text-anchor="middle" fill="#334155" font-size="6.5" font-weight="800" letter-spacing="3.5" font-family="system-ui, -apple-system, sans-serif">GROUP</text>
+  <circle cx="50" cy="8" r="1.5" fill="#475569" />
+  <circle cx="50" cy="92" r="1.5" fill="#475569" />
+  <circle cx="8" cy="50" r="1.5" fill="#475569" />
+  <circle cx="92" cy="50" r="1.5" fill="#475569" />
+</svg>
