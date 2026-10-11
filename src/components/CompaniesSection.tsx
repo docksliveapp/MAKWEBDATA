@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Anchor, Truck, Shield, Compass, ArrowRight, ExternalLink, ChevronRight } from 'lucide-react';
+import { Anchor, Truck, Shield, Compass, ArrowRight, ExternalLink, ChevronRight, FileText, Globe } from 'lucide-react';
+import { MakOfficialLogo } from './MakOfficialLogo';
 
 interface CompaniesSectionProps {
   onSelectServiceForQuote: (serviceName: string) => void;
@@ -11,8 +12,8 @@ export const CompaniesSection: React.FC<CompaniesSectionProps> = ({ onSelectServ
   const departments = [
     {
       id: 'customs',
-      name: 'Customs & Bonded Carriers',
-      entity: 'Docks (Pvt) Ltd & Muhib International',
+      name: 'Customs Clearance & Bonded Carriers',
+      entity: 'MAK - GROUP OF COMPANIES',
       desc: 'Statutory bonded transit carrier under FBR regulations. Single-window WeBOC and Pakistan Single Window (PSW) declaration processing across all terminals (KICT, QICT, SAPT, PICT) and upcountry inland dry ports.',
       points: [
         'Electronic Goods Declaration (GD) automated filing',
@@ -24,7 +25,7 @@ export const CompaniesSection: React.FC<CompaniesSectionProps> = ({ onSelectServ
     {
       id: 'fleet',
       name: 'Inland Fleet & Heavy Haulage',
-      entity: 'Truckit (Pvt) Ltd',
+      entity: 'MAK - GROUP OF COMPANIES',
       desc: 'National heavy road freight and container haulage fleet equipped with dual-satellite GPS telematics, tamper-evident seals, and dedicated operations dispatch offices on national motorways (M-9, M-5, M-3, M-2).',
       points: [
         '1,500+ commercial prime movers and multi-axle trailers',
@@ -36,19 +37,19 @@ export const CompaniesSection: React.FC<CompaniesSectionProps> = ({ onSelectServ
     {
       id: 'afghan',
       name: 'Afghan Transit & Cross-Border',
-      entity: 'Muhib International (SMC-Pvt) Ltd',
+      entity: 'MAK - GROUP OF COMPANIES',
       desc: 'Unrivaled leader in Afghan Transit Trade (ATT) under the Afghanistan-Pakistan Transit Trade Agreement (APTTA). Dedicated transshipment yards and customs desks at Torkham and Chaman border stations.',
       points: [
         'Dedicated bonded marshaling yards at Torkham and Chaman',
-        'Cross-border transshipment to Afghan registered haulers',
-        'Zero-delay demurrage mitigation for global shipping lines',
+        'Cross-border transshipment to registered haulers',
+        'Zero-delay demurrage mitigation for shipping lines',
         'Commercial and humanitarian food assistance cargo management'
       ]
     },
     {
       id: 'maritime',
-      name: 'Maritime Liner & NVOCC Slots',
-      entity: 'Vantage Shipping Line & Docks (Pvt) Ltd',
+      name: 'Maritime Liner & Ocean Forwarding',
+      entity: 'MAK - GROUP OF COMPANIES',
       desc: 'Global ocean container liner operations, regional feeder rotations between Karachi and Jebel Ali (Dubai), and full stevedoring terminal husbandry at Karachi Port and Port Qasim.',
       points: [
         'Regular weekly feeder sailings Karachi ⇄ Jebel Ali / Hamriya',
@@ -60,7 +61,7 @@ export const CompaniesSection: React.FC<CompaniesSectionProps> = ({ onSelectServ
     {
       id: 'tir',
       name: 'TIR Transcontinental Corridors',
-      entity: 'Consortium Unified Window',
+      entity: 'MAK - GROUP OF COMPANIES',
       desc: 'International TIR Convention transport routes connecting Pakistan seaports directly to landlocked Central Asian Republics (Uzbekistan, Tajikistan, Turkmenistan) under international customs transit carnets.',
       points: [
         'Single TIR Carnet transit without intermediate border duty deposits',
@@ -74,31 +75,32 @@ export const CompaniesSection: React.FC<CompaniesSectionProps> = ({ onSelectServ
   const currentDept = departments.find(d => d.id === selectedDept) || departments[0];
 
   return (
-    <section id="consortium" className="py-14 bg-[#ECEEF3] text-slate-900 border-b border-slate-300/80">
+    <section id="divisions" className="py-14 bg-[#F8FAFC] text-slate-900 border-b border-slate-200">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         
-        {/* Section 1: 4 Companies Grid matching photo 17913804309631903002994501773882.jpg */}
+        {/* Section 1: MAK - GROUP OF COMPANIES CORE DIVISIONS */}
         <div>
           {/* Section Sub-heading */}
           <div className="text-center mb-8">
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#A0522D] block font-mono">
-              OPERATED COLLECTIVELY AS ONE UNIFIED SYSTEM BY FOUR SPECIALIZED LEADERS
+              MAK - GROUP OF COMPANIES | CORE INTEGRATED DIVISIONS
             </span>
+            <h2 className="text-2xl sm:text-3xl font-bold font-serif-luxury text-slate-900 mt-1">
+              Unified Single-Window Operational Pillars
+            </h2>
           </div>
 
           {/* 4 Light Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             
-            {/* Card 1: DPL */}
+            {/* Card 1: Bonded Division */}
             <div className="bg-[#F8FAFC] border border-slate-300/80 rounded-xl p-5 shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
               <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-10 h-10 rounded-md bg-[#1E293B] flex items-center justify-center text-amber-400 font-extrabold text-xs tracking-wider">
-                    DPL
-                  </div>
+                <div className="flex items-center gap-3 mb-3">
+                  <MakOfficialLogo className="h-8 sm:h-9 w-auto shrink-0 drop-shadow-xs" />
                   <div>
                     <h3 className="font-bold text-slate-900 text-sm leading-tight">
-                      DOCKS (PVT) LTD.
+                      BONDED CARRIER DIVISION
                     </h3>
                   </div>
                 </div>
@@ -108,108 +110,101 @@ export const CompaniesSection: React.FC<CompaniesSectionProps> = ({ onSelectServ
                 </h4>
 
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Duty-unpaid bonded line-haul, TP dry ports network, and Afghan Transit Trade (AzQT) across Pakistan seaports and dry ports.
+                  Duty-unpaid bonded line-haul, TP dry ports network, and regional transit trade across Pakistan seaports and inland dry ports.
                 </p>
               </div>
 
               <div className="mt-5 pt-3 border-t border-slate-200">
-                <span className="text-[11px] font-medium text-slate-600 flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+                <span className="text-[11px] font-medium text-slate-600 flex items-center gap-1.5 font-mono">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-600" />
                   FBR Private Bonded Carrier Lic.
                 </span>
               </div>
             </div>
 
-            {/* Card 2: TRUCKIT */}
+            {/* Card 2: Fleet Division */}
             <div className="bg-[#F8FAFC] border border-slate-300/80 rounded-xl p-5 shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
               <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-10 h-10 rounded-md bg-[#F1F5F9] border border-slate-300 flex flex-col items-center justify-center px-1">
-                    <span className="text-[9px] font-black text-rose-600 tracking-tighter italic">TRUCK</span>
-                    <span className="text-[8px] font-black text-blue-600 tracking-tighter -mt-1 italic">IT</span>
-                  </div>
+                <div className="flex items-center gap-3 mb-3">
+                  <MakOfficialLogo className="h-8 sm:h-9 w-auto shrink-0 drop-shadow-xs" />
                   <div>
                     <h3 className="font-bold text-slate-900 text-sm leading-tight">
-                      TRUCKIT (PVT) LTD.
+                      NATIONWIDE FLEET DIVISION
                     </h3>
                   </div>
                 </div>
 
                 <h4 className="text-xs font-semibold text-[#B45309] mb-2 leading-tight">
-                  Domestic Commercial Haulage & Specialized Cold-Chain
+                  Commercial Heavy Haulage & Cold-Chain
                 </h4>
 
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  1,500+ commercial prime movers, heavy drop-deck low beds, double-deck car carriers, and 200+ active refrigerated gensets.
+                  2,000+ commercial prime movers, heavy drop-deck low beds, double-deck car carriers, and active refrigerated gensets.
                 </p>
               </div>
 
               <div className="mt-5 pt-3 border-t border-slate-200">
-                <span className="text-[11px] font-medium text-slate-600 flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
-                  1,500+ Fleet & Cold Chains
+                <span className="text-[11px] font-medium text-slate-600 flex items-center gap-1.5 font-mono">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+                  2,000+ Fleet Units Nationwide
                 </span>
               </div>
             </div>
 
-            {/* Card 3: MUHIB INTERNATIONAL */}
+            {/* Card 3: Customs Division */}
             <div className="bg-[#F8FAFC] border border-slate-300/80 rounded-xl p-5 shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
               <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-10 h-10 rounded-md bg-[#ECFDF5] border border-emerald-300 flex items-center justify-center text-emerald-700 font-serif-luxury font-bold text-base">
-                    M
-                  </div>
+                <div className="flex items-center gap-3 mb-3">
+                  <MakOfficialLogo className="h-8 sm:h-9 w-auto shrink-0 drop-shadow-xs" />
                   <div>
                     <h3 className="font-bold text-slate-900 text-sm leading-tight">
-                      MUHIB INTERNATIONAL (SMC-PVT) LTD
+                      CUSTOMS BROKERAGE DIVISION
                     </h3>
                   </div>
                 </div>
 
                 <h4 className="text-xs font-semibold text-[#B45309] mb-2 leading-tight">
-                  Customs Clearance & Regulatory Brokerage Desks
+                  Customs Clearance & Regulatory Port Desks
                 </h4>
 
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  WeBOC/PSW electronic GD processing, assessment support, port terminal clearances at KICT, SAPT, QICT, and border desks.
+                  WeBOC/PSW electronic GD processing, assessment support, port terminal clearances at KICT, SAPT, QICT, and international borders.
                 </p>
               </div>
 
               <div className="mt-5 pt-3 border-t border-slate-200">
-                <span className="text-[11px] font-medium text-slate-600 flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+                <span className="text-[11px] font-medium text-slate-600 flex items-center gap-1.5 font-mono">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
                   Licensed Customs Clearing Agent
                 </span>
               </div>
             </div>
 
-            {/* Card 4: VANTAGE SHIPPING LINE */}
+            {/* Card 4: Maritime Division */}
             <div className="bg-[#F8FAFC] border border-slate-300/80 rounded-xl p-5 shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
               <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-10 h-10 rounded-md bg-[#F0F9FF] border border-sky-300 flex items-center justify-center text-sky-700 font-bold text-xs">
-                    VSL
-                  </div>
+                <div className="flex items-center gap-3 mb-3">
+                  <MakOfficialLogo className="h-8 sm:h-9 w-auto shrink-0 drop-shadow-xs" />
                   <div>
                     <h3 className="font-bold text-slate-900 text-sm leading-tight">
-                      VANTAGE SHIPPING LINE
+                      MARITIME & LINER DIVISION
                     </h3>
                   </div>
                 </div>
 
                 <h4 className="text-xs font-semibold text-[#B45309] mb-2 leading-tight">
-                  Global Maritime Liner Operations & NVOCC Slots
+                  Global Maritime Liner & NVOCC Slots
                 </h4>
 
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Maritime ocean container operations, slot charter agreements on Middle East and Asia trunk routes, and feeder slots.
+                  Maritime ocean container operations, slot charter agreements on Middle East and Asia trunk routes, and scheduled feeder loops.
                 </p>
               </div>
 
               <div className="mt-5 pt-3 border-t border-slate-200">
-                <span className="text-[11px] font-medium text-slate-600 flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
-                  Dubai Maritime City Authority
+                <span className="text-[11px] font-medium text-slate-600 flex items-center gap-1.5 font-mono">
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-600" />
+                  Licensed NVOCC & Ocean Forwarder
                 </span>
               </div>
             </div>
@@ -217,7 +212,7 @@ export const CompaniesSection: React.FC<CompaniesSectionProps> = ({ onSelectServ
           </div>
         </div>
 
-        {/* Section 2: CATEGORIZED EXECUTIVE COMMAND HUB / EXPLORE OPERATIONS BY DEPARTMENT */}
+        {/* Section 2: CATEGORIZED EXECUTIVE COMMAND HUB */}
         <div id="departments" className="pt-6">
           <div className="text-center mb-8">
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#A0522D] block font-mono">
@@ -251,7 +246,7 @@ export const CompaniesSection: React.FC<CompaniesSectionProps> = ({ onSelectServ
               <div className="lg:col-span-7 space-y-4">
                 <div className="space-y-1">
                   <span className="text-xs font-mono font-bold text-[#B45309] uppercase">
-                    Managing Entity: {currentDept.entity}
+                    Managing Command: {currentDept.entity}
                   </span>
                   <h3 className="text-xl sm:text-2xl font-bold font-serif-luxury text-slate-900">
                     {currentDept.name}
@@ -279,7 +274,7 @@ export const CompaniesSection: React.FC<CompaniesSectionProps> = ({ onSelectServ
 
               <div className="lg:col-span-5 bg-[#EDF0F5] border border-slate-300 rounded-xl p-6 space-y-4">
                 <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-700 border-b border-slate-300 pb-2">
-                  Consortium Dispatch Desk
+                  MAK Group Operations Desk
                 </h4>
                 <p className="text-xs text-slate-600">
                   Ready to book freight or clear statutory documentation through this department? Our single-window desk coordinates immediate turnaround.
@@ -301,7 +296,7 @@ export const CompaniesSection: React.FC<CompaniesSectionProps> = ({ onSelectServ
                       rel="noopener noreferrer"
                       className="font-bold text-emerald-700 hover:underline flex items-center gap-1"
                     >
-                      24/7 Dispatch Desk
+                      Direct Message
                     </a>
                   </div>
                 </div>

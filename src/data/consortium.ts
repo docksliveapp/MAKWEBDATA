@@ -21,7 +21,7 @@ export const COMPREHENSIVE_SERVICES: ComprehensiveService[] = [
     category: 'Bonded Carrier',
     title: 'Bonded Carrier Line-Haul & Dry Ports Transshipment',
     subtitle: 'FBR Licensed Port-to-Dryport Transshipment Under Sec 121–123 Customs Act 1969',
-    managingEntity: 'Docks (Pvt) Ltd (DPL)',
+    managingEntity: 'MAK Bonded Carrier Division',
     badge: 'FBR BONDED LICENSED',
     statutoryAuthority: 'Officially approved Private Customs Bonded Carrier operating nationwide since 2012',
     overview: 'Direct duty-unpaid transshipment (TP) connecting coastal seaports (KICT, SAPT, QICT, KPT, AICT) to all up-country inland dry ports across Pakistan. Operating under strict FBR regulatory escrow with zero-defect cargo containment.',
@@ -57,7 +57,7 @@ export const COMPREHENSIVE_SERVICES: ComprehensiveService[] = [
     category: 'Customs Clearance',
     title: 'Customs Clearance, Port Operations & Tariff Advisory',
     subtitle: 'WeBOC, PSW & All-Pakistan Port Clearance Desks Under Sec 207 Customs Act 1969',
-    managingEntity: 'Muhib International (SMC-Pvt) Ltd',
+    managingEntity: 'MAK Customs Brokerage Division',
     badge: 'PSW CERTIFIED BROKER',
     statutoryAuthority: 'Licensed Customs House Agent (Sec 207) operating across all national Collectorates',
     overview: 'Complete digital Pakistan Single Window (PSW) and WeBOC electronic Goods Declaration (GD) handling. Providing expert HS code classification, tariff valuation, plant/animal quarantine clearances, and regulatory SRO exemptions.',
@@ -93,7 +93,7 @@ export const COMPREHENSIVE_SERVICES: ComprehensiveService[] = [
     category: 'Maritime',
     title: 'Maritime Freight & Vessel Slot Operations',
     subtitle: 'Global Ocean Freight Forwarding, NVOCC Slot Management & Marine Chartering',
-    managingEntity: 'Vantage Shipping Line (VSL)',
+    managingEntity: 'MAK Maritime & Ocean Liner Division',
     badge: 'NVOCC LINER CARRIER',
     statutoryAuthority: 'Dubai Maritime City Authority & Global Maritime Trade Licensures',
     overview: 'Licensed Non-Vessel Operating Common Carrier issuing through Multimodal Bills of Lading (MBL/HBL). Contracted slot space agreements on Tier-1 global ocean carriers connecting Pakistan to Middle East, China, Europe, and the Americas.',
@@ -162,7 +162,7 @@ export const COMPREHENSIVE_SERVICES: ComprehensiveService[] = [
     category: 'Afghan Transit',
     title: 'Afghan Transit Trade (AzOT) Turnkey Logistics',
     subtitle: 'APTTA Bilateral Framework • One-Window Command • 60,000+ TEUs Moved',
-    managingEntity: 'Muhib International & Docks (Pvt) Ltd',
+    managingEntity: 'MAK Cross-Border Operations Division',
     badge: 'APTTA CROSS-BORDER',
     statutoryAuthority: 'Authorized APTTA Transit Operator with Security Escort Accreditations',
     overview: 'Daily scheduled line-haul connecting Karachi ports directly to major Afghan consumption centers (Kabul, Kandahar, Jalalabad, Herat, Mazar-e-Sharif) under official bilateral trade protocols.',
@@ -196,7 +196,7 @@ export const COMPREHENSIVE_SERVICES: ComprehensiveService[] = [
     category: 'Specialized Fleet',
     title: 'Engineered Transport, Cold-Chain & Private Cargo Distribution',
     subtitle: '1,500+ Commercial Prime Movers • 200+ Reefer Gensets • 500,000+ Sq. Ft. Warehouses',
-    managingEntity: 'Truckit (Pvt) Ltd',
+    managingEntity: 'MAK Heavy Haulage Fleet Division',
     badge: 'ENGINEERED FLEET',
     statutoryAuthority: 'NHA Compliant National Commercial Transport Fleet',
     overview: 'Complete nationwide commercial freight and engineered haulage. Operating temperature-controlled reefer gensets (-25°C to +25°C), ISO tanks for hazardous chemicals, hydraulic low-beds for heavy machinery up to 200T+, and double-deck car carriers.',
@@ -231,9 +231,9 @@ export const COMPREHENSIVE_SERVICES: ComprehensiveService[] = [
 
 export const CONSORTIUM_ENTITIES: ConsortiumCompany[] = [
   {
-    id: 'docks',
-    name: 'Docks (Pvt) Ltd.',
-    brandTag: 'Customs Bonded Carrier & Regional Transit',
+    id: 'mak-bonded',
+    name: 'MAK Bonded Carrier & Regional Transit Division',
+    brandTag: 'FBR Licensed Customs Bonded Line-Haul',
     tagline: 'FBR Licensed Private Customs Bonded Carrier Operating Nationwide Since 2012',
     description: 'Statutory bonded line-haul connecting coastal ports (KICT, SAPT, QICT, KPT) directly to up-country dry ports under Sections 121–123 of Customs Act 1969. Over 1,000+ containers moved monthly with triple-tier tamper seals.',
     specialties: [
@@ -251,8 +251,8 @@ export const CONSORTIUM_ENTITIES: ConsortiumCompany[] = [
     established: '1981'
   },
   {
-    id: 'truckit',
-    name: 'Truckit (Pvt) Ltd.',
+    id: 'mak-fleet',
+    name: 'MAK Nationwide Heavy Haulage & Reefer Division',
     brandTag: 'Domestic Commercial Haulage & Specialized Cold-Chain',
     tagline: '1,500+ Commercial Prime Movers, Heavy Low-Beds & 200+ Reefer Gensets',
     description: 'Pakistan’s leading private cargo and engineered heavy transport operator. Providing nationwide line-haul across national motorways, temperature-controlled cold chains, bulk liquid ISO tanks, and double-deck automotive carriers.',
@@ -271,8 +271,8 @@ export const CONSORTIUM_ENTITIES: ConsortiumCompany[] = [
     established: '2016'
   },
   {
-    id: 'muhib',
-    name: 'Muhib International (SMC-Pvt) Ltd',
+    id: 'mak-customs',
+    name: 'MAK Customs Clearance & PSW Brokerage Division',
     brandTag: 'Customs Clearance & Regulatory Brokerage Desks',
     tagline: 'WeBOC / PSW Electronic GD Handling & Seaport Terminal Clearances',
     description: 'Licensed Customs Agency operating under Section 207 of Customs Act 1969. Stationed clearing desks at Karachi Port, Port Qasim, and international border gateways with full digital Pakistan Single Window (PSW) capabilities.',
@@ -291,8 +291,8 @@ export const CONSORTIUM_ENTITIES: ConsortiumCompany[] = [
     established: '1995'
   },
   {
-    id: 'vantage',
-    name: 'Vantage Shipping Line',
+    id: 'mak-maritime',
+    name: 'MAK Maritime Liner & Ocean Slot Division',
     brandTag: 'Global Maritime Liner Operations & NVOCC Slots',
     tagline: 'Vessel Slot Allocations, Ocean Forwarding & Karachi-Jebel Ali Feeder',
     description: 'Licensed NVOCC carrier issuing Multimodal Bills of Lading (MBL/HBL). Connecting Pakistan exporters and importers to the Middle East, Far East, China, Europe, and Americas with regular feeder rotations.',
@@ -314,20 +314,7 @@ export const CONSORTIUM_ENTITIES: ConsortiumCompany[] = [
 
 export const NATIONWIDE_STATIONS = [
   { name: 'Karachi (Head Office)', role: 'Tower / Seaport Command', address: 'Office No : 13 1st Floor State Life Building No 7 G-Allana Road Towe Karachi', phone: '+92-21-32330103 / 0104' },
-  { name: 'Dubai (UAE Hub)', role: 'International Liner Agency (VSL)', address: 'Office # 304, Shipping Tower, Al Mina Road, Raffa Bur Dubai, Opposite Dubai Customs Building', phone: '+971-4- 570-8397' },
-  { name: 'Lahore Hub', role: 'Dry Ports & Central Line-Haul', address: 'Mughal Pura / Jia Bagga Dry Port Stations, Lahore', phone: '+92-21-32330103' },
-  { name: 'Islamabad / RWP', role: 'Federal Liaison & I-9 Dry Port', address: 'Spinzer Plaza, I-9 Markaz, Islamabad', phone: '+92-21-32330103' },
-  { name: 'Peshawar Hub', role: 'Regional Overland Transit Command', address: "Dean's Trade Centre, 3rd Floor, Peshawar", phone: '+92-21-32330103' },
-  { name: 'Torkham Border', role: 'Afghan Transit Northern Gate', address: 'Haji Gulab Market Desk, Torkham Border Terminal', phone: '+92-21-32330103' },
-  { name: 'Chaman & Quetta', role: 'Southern Afghan Gate & Quetta Hub', address: 'Mall Road Chaman / Khojak Road, Balochistan', phone: '+92-21-32330103' },
-  { name: 'Sialkot (Sambrial)', role: 'Export Cargo & Dry Port Station', address: 'Sambrial Dry Port Station, Sialkot', phone: '+92-21-32330103' },
-  { name: 'Faisalabad Hub', role: 'Textile Cargo & Dry Port Desk', address: 'Dry Port Complex, Faisalabad', phone: '+92-21-32330103' },
-  { name: 'Multan Station', role: 'South Punjab Transit & Reefer Hub', address: 'Industrial Estate / NLC Terminal, Multan', phone: '+92-21-32330103' },
-  { name: 'Hyderabad Station', role: 'NLC Dry Port Sindh Corridor', address: 'NLC Dry Port, Hyderabad', phone: '+92-21-32330103' },
-  { name: 'Gwadar Port Hub', role: 'Deep-Sea Port Operations', address: 'Gwadar Free Zone Terminal, Gwadar', phone: '+92-21-32330103' },
-  { name: 'Sost / Gilgit (CPEC)', role: 'China Khunjerab Border Hub', address: 'Sost Customs Dry Port, Gilgit-Baltistan', phone: '+92-21-32330103' },
-  { name: 'Taftan / Ghulam Khan', role: 'Iran TIR Gateway & Waziristan', address: 'Customs Border Stations, Taftan & Ghulam Khan', phone: '+92-21-32330103' },
-  { name: 'Azakhel (Nowshera)', role: 'KPK Bonded Terminal Desk', address: 'Azakhel Dry Port, Nowshera', phone: '+92-21-32330103' }
+  { name: 'Dubai (UAE Hub)', role: 'International Liner Agency (VSL)', address: 'Office # 304, Shipping Tower, Al Mina Road, Raffa Bur Dubai, Opposite Dubai Customs Building (Stelco building)', phone: '+971-4- 570-8397' }
 ];
 
 export const LEADERSHIP_TEAM = [
@@ -355,7 +342,7 @@ export const TRADE_CORRIDORS: TradeCorridor[] = [
     destination: 'Kabul Customs Yard / Jalalabad, Afghanistan',
     transitTime: '5 – 7 Days',
     mode: 'Bonded Multimodal (Sea + Road)',
-    operatingEntity: 'Muhib International + Docks (Pvt) Ltd',
+    operatingEntity: 'MAK - GROUP OF COMPANIES',
     keyCheckpoints: ['Karachi Ports', 'Hyderabad Motorway M-9', 'Sukkur M-5', 'Peshawar Jamrud', 'Torkham Border', 'Jalalabad Custom Yard'],
     description: 'Primary Northern Afghan Transit corridor handling commercial goods, construction equipment, humanitarian food grains, and relief cargo under APTTA.'
   },
@@ -368,7 +355,7 @@ export const TRADE_CORRIDORS: TradeCorridor[] = [
     destination: 'Kandahar Industrial Park / Herat, Afghanistan',
     transitTime: '4 – 6 Days',
     mode: 'Direct Bonded Road Haulage',
-    operatingEntity: 'Muhib International + Truckit',
+    operatingEntity: 'MAK - GROUP OF COMPANIES',
     keyCheckpoints: ['Karachi Port', 'Bela', 'Khuzdar', 'Quetta Marshaling', 'Chaman Customs', 'Spin Boldak / Weesh', 'Kandahar Custom Yard'],
     description: 'Fastest Southern access route into Southern and Western Afghanistan with dedicated off-dock customs inspection and border transshipment.'
   },
@@ -381,7 +368,7 @@ export const TRADE_CORRIDORS: TradeCorridor[] = [
     destination: 'Jebel Ali Port (DP World Hub), UAE',
     transitTime: '2 – 3 Days Sail',
     mode: 'Ocean Feeder & NVOCC',
-    operatingEntity: 'Vantage Shipping Line + Docks (Pvt) Ltd',
+    operatingEntity: 'MAK - GROUP OF COMPANIES',
     keyCheckpoints: ['Karachi Deepsea Berths', 'Strait of Hormuz Transit', 'Jebel Ali Free Zone (JAFZA)'],
     description: 'Scheduled weekly maritime express connecting Pakistan exporters and importers directly to global transshipment loops at DP World Jebel Ali.'
   },
@@ -394,7 +381,7 @@ export const TRADE_CORRIDORS: TradeCorridor[] = [
     destination: 'Tashkent / Termez (Uzbekistan) & Dushanbe (Tajikistan)',
     transitTime: '9 – 12 Days',
     mode: 'International TIR Convention Convoy',
-    operatingEntity: 'MAK Consortium Joint Command',
+    operatingEntity: 'MAK - GROUP OF COMPANIES',
     keyCheckpoints: ['Karachi Port', 'Torkham', 'Kabul', 'Salang Pass', 'Hairatan / Termez River Border', 'Tashkent Logistics Hub'],
     description: 'Revolutionary transit corridor unlocking bilateral trade between Pakistan and landlocked Central Asian nations without double customs inspection under TIR Carnets.'
   },
@@ -407,7 +394,7 @@ export const TRADE_CORRIDORS: TradeCorridor[] = [
     destination: 'Istanbul / Ankara, Türkiye',
     transitTime: '10 – 12 Days (5,300 km)',
     mode: 'TIR Carnet International Convoy',
-    operatingEntity: 'MAK Consortium Joint Command',
+    operatingEntity: 'MAK - GROUP OF COMPANIES',
     keyCheckpoints: ['Quetta', 'Taftan Border', 'Zahedan', 'Tehran', 'Tabriz', 'Gurbulak', 'Ankara', 'Istanbul Gateway'],
     description: 'Direct commercial overland gateway into the European Union under €100,000 international customs carnet guarantees.'
   },
@@ -420,16 +407,16 @@ export const TRADE_CORRIDORS: TradeCorridor[] = [
     destination: 'Kashgar (Xinjiang), China',
     transitTime: '4 – 6 Days (1,106 km)',
     mode: 'High-Altitude Bonded Trade Pipeline',
-    operatingEntity: 'Truckit + Muhib International',
+    operatingEntity: 'MAK - GROUP OF COMPANIES',
     keyCheckpoints: ['Hassanabdal', 'Mansehra', 'Chilas', 'Gilgit', 'Sost Customs Dry Port', 'Khunjerab Pass', 'Tashkurgan', 'Kashgar Hub'],
     description: 'High-altitude bonded trade corridor crossing the Khunjerab Pass connecting Pakistan directly with Western China.'
   }
 ];
 
 export const SERVICE_OPTIONS = [
-  'Bonded Carrier Line-Haul (Docks Pvt Ltd)',
-  'Customs Clearance & PSW Brokerage (Muhib Intl)',
-  'Ocean Freight / Feeder (Vantage Shipping)',
+  'Bonded Carrier Line-Haul (MAK Group)',
+  'Customs Clearance & PSW Brokerage (MAK Group)',
+  'Ocean Freight & Maritime Feeder (MAK Group)',
   'International TIR Transit Corridors (UN TIR Carnet)',
   'Afghan Transit Trade (AzOT via Torkham & Chaman)',
   'Refrigerated Cold Chain Transport (-25°C to +25°C)',

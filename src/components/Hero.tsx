@@ -9,18 +9,37 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = () => {
+  const [pageLogoUrl, setPageLogoUrl] = React.useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('mak_page_logo') || '/mak_pearl_grey_edge.svg';
+    }
+    return '/mak_pearl_grey_edge.svg';
+  });
+
+  React.useEffect(() => {
+    const handlePageLogoUpdate = (e: any) => {
+      if (e.detail?.pageLogo) {
+        setPageLogoUrl(e.detail.pageLogo);
+      } else if (e.detail?.resetPageLogo) {
+        setPageLogoUrl('/mak_pearl_grey_edge.svg');
+      }
+    };
+    window.addEventListener('mak-page-logo-updated', handlePageLogoUpdate);
+    return () => window.removeEventListener('mak-page-logo-updated', handlePageLogoUpdate);
+  }, []);
+
   return (
-    <section id="home" className="relative overflow-hidden bg-gradient-to-b from-[#F5F7FB] via-[#EBF0F7] to-[#F3F5F9] text-slate-900 pt-8 pb-14 md:pt-12 md:pb-18 border-b border-slate-300/80">
+    <section id="home" className="relative overflow-hidden bg-white text-slate-900 pt-6 pb-14 md:pt-10 md:pb-18 border-b border-slate-200">
       
       {/* Subtle Pearl Glow & Luxury Backdrop Elements */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[720px] h-[360px] bg-gradient-to-b from-amber-200/25 to-blue-200/20 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-5">
         
         {/* Top Marketing Greeting & Slogan Banner */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 border border-slate-300/90 shadow-xs text-slate-800 text-[11px] sm:text-xs font-bold tracking-wider font-mono">
           <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-          <span>WELCOME TO MAK - GROUP CONSORTIUM</span>
+          <span>WELCOME TO MAK - GROUP OF COMPANIES</span>
           <span className="hidden sm:inline text-slate-400">•</span>
           <span className="hidden sm:inline text-[#B45309]">PAKISTAN'S PREMIER MULTIMODAL NETWORK</span>
         </div>
@@ -32,6 +51,19 @@ export const Hero: React.FC<HeroProps> = () => {
           <span>CROSS-BORDER TRANSIT</span>
           <span>•</span>
           <span>OCEAN LINER FREIGHT</span>
+        </div>
+
+        {/* Page Logo above UNIFIED LOGISTICS (Managed & Uploadable via Admin Settings "Page Logo Upload") */}
+        <div className="pt-2 pb-1 flex justify-center">
+          <img
+            src={pageLogoUrl || '/mak_pearl_grey_edge.svg'}
+            alt="MAK - GROUP OF COMPANIES"
+            className="w-40 h-40 sm:w-52 sm:h-52 md:w-60 md:h-60 object-contain mx-auto select-none drop-shadow-[0_16px_36px_rgba(15,23,42,0.22)] transition-transform duration-300 hover:scale-105"
+            loading="eager"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = '/mak_pearl_grey_edge.svg';
+            }}
+          />
         </div>
 
         {/* Main Serif Luxury Headline */}
@@ -52,14 +84,14 @@ export const Hero: React.FC<HeroProps> = () => {
         {/* Warm Marketing Subtitle & Value Proposition */}
         <div className="max-w-3xl mx-auto space-y-2">
           <p className="text-sm sm:text-base text-slate-700 font-medium leading-relaxed">
-            Welcome to Pakistan's foremost single-window trade and transport consortium. We coordinate <strong className="text-slate-950 font-bold">2,000+ customs-registered commercial prime movers</strong>, statutory FBR bonded carrier line-haul, transcontinental TIR overland corridors, and global deep-sea liner operations.
+            Welcome to Pakistan's foremost single-window trade and transport group of companies. We coordinate <strong className="text-slate-950 font-bold">2,000+ customs-registered commercial prime movers</strong>, statutory FBR bonded carrier line-haul, transcontinental TIR overland corridors, and global deep-sea liner operations.
           </p>
           <p className="text-xs sm:text-sm text-slate-500 italic">
             "Delivering cargo from deepwater seaports to inland dry ports and Central Asian frontiers with guaranteed integrity, speed, and statutory escort."
           </p>
         </div>
 
-        {/* Cinematic Video Showcase Player (All buttons removed from here; accessible via top Services & Inquiry menus) */}
+        {/* Cinematic Video Showcase Player */}
         <HeroVideoPlayer />
 
         {/* Central Operations Desk Contact Bar */}

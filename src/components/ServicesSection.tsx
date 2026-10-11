@@ -59,12 +59,12 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
         <div className="flex flex-wrap items-center justify-center gap-2">
           {[
             { id: 'all', label: 'All Services (6)' },
-            { id: 'bonded', label: 'Bonded Carrier (DPL)' },
-            { id: 'customs', label: 'Customs Clearance (Muhib)' },
-            { id: 'maritime', label: 'Maritime & Liner (Vantage)' },
-            { id: 'tir', label: 'International TIR' },
+            { id: 'bonded', label: 'Bonded Carrier Line-Haul' },
+            { id: 'customs', label: 'Customs Clearance & PSW' },
+            { id: 'maritime', label: 'Maritime & Liner Slots' },
+            { id: 'tir', label: 'International TIR Transit' },
             { id: 'afghan', label: 'Afghan Transit (AzOT)' },
-            { id: 'fleet', label: 'Specialized Fleet (Truckit)' }
+            { id: 'fleet', label: 'Specialized Road Fleet' }
           ].map((tab) => (
             <button
               key={tab.id}
@@ -159,7 +159,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({
             Statutory Bonded Licensing & Customs Act Governance
           </span>
           <p className="text-xs text-slate-600">
-            Docks (Pvt) Ltd holds FBR Customs Bonded Carrier Lic. under Sec 121–123 Customs Act 1969. Muhib International holds Customs House Agent Lic. under Sec 207 Customs Act 1969. All central logistics inquiries directed strictly to <strong className="text-slate-900 font-bold">info@mak-group.com.pk</strong>.
+            MAK - GROUP OF COMPANIES operates under statutory FBR Customs Bonded Carrier Lic. under Sec 121–123 Customs Act 1969, Customs House Agent Lic. under Sec 207 Customs Act 1969, and APTTA / UN TIR credentials. All central logistics inquiries directed strictly to <strong className="text-slate-900 font-bold">info@mak-group.com.pk</strong>.
           </p>
         </div>
 

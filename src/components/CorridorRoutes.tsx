@@ -12,7 +12,7 @@ export const CorridorRoutes: React.FC<CorridorRoutesProps> = ({ onQuoteCorridor 
   const selectedCorridor = TRADE_CORRIDORS.find(c => c.id === selectedCorridorId) || TRADE_CORRIDORS[0];
 
   return (
-    <section id="corridors" className="py-16 bg-[#ECEEF3] text-slate-900 border-b border-slate-300/80">
+    <section id="corridors" className="py-16 bg-white text-slate-900 border-b border-slate-200">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         
         {/* Section Header */}

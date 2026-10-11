@@ -1,8 +1,26 @@
 @import "tailwindcss";
 
+:root {
+  color-scheme: light only !important;
+}
+
+html, body {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  color-scheme: light only !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root, html, body {
+    color-scheme: light only !important;
+    background-color: #FFFFFF !important;
+    color: #0F172A !important;
+  }
+}
+
 @layer base {
   body {
-    background: linear-gradient(135deg, #F3F5F9 0%, #EAEFF6 50%, #F5F7FB 100%);
+    background: #FFFFFF;
     color: #0F172A;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     min-height: 100vh;

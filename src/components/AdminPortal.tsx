@@ -21,13 +21,17 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
   const [searchQuery, setSearchQuery] = useState('');
 
   // Branding states
-  const [customLogoUrl, setCustomLogoUrl] = useState<string>('');
+  const [customLogoUrl, setCustomLogoUrl] = useState<string>(''); // Header logo
+  const [pageLogoUrl, setPageLogoUrl] = useState<string>(''); // Page logo (above Unified Logistics)
   const [savedSuccess, setSavedSuccess] = useState(false);
+  const [pageLogoSavedSuccess, setPageLogoSavedSuccess] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
-      const savedLogo = localStorage.getItem('mak_custom_logo') || '';
-      setCustomLogoUrl(savedLogo);
+      const savedHeaderLogo = localStorage.getItem('mak_header_logo') || localStorage.getItem('mak_custom_logo') || '';
+      setCustomLogoUrl(savedHeaderLogo);
+      const savedPage = localStorage.getItem('mak_page_logo') || '/mak_pearl_grey_edge.svg';
+      setPageLogoUrl(savedPage);
       if (isAuthenticated) {
         loadData();
       }
@@ -73,27 +77,60 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
     setVehicles(prev => prev.map(v => v.id === id ? { ...v, status: newStatus } : v));
   };
 
+  // Header Logo Handlers
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.size > 2 * 1024 * 1024) {
-        alert('File size exceeds 2MB. Please choose a smaller logo image.');
+      if (file.size > 3 * 1024 * 1024) {
+        alert('File size exceeds 3MB. Please choose a smaller logo image.');
         return;
       }
       const reader = new FileReader();
       reader.onloadend = () => {
-        setCustomLogoUrl(reader.result as string);
+        const resultUrl = reader.result as string;
+        setCustomLogoUrl(resultUrl);
+        localStorage.setItem('mak_custom_logo', resultUrl);
+        localStorage.setItem('mak_header_logo', resultUrl);
+        window.dispatchEvent(
+          new CustomEvent('mak-logo-updated', {
+            detail: { logoUrl: resultUrl, headerLogo: resultUrl },
+          })
+        );
+        setSavedSuccess(true);
+        setTimeout(() => setSavedSuccess(false), 3000);
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const handleApplyPreset = (url: string) => {
+    setCustomLogoUrl(url);
+    localStorage.setItem('mak_custom_logo', url);
+    localStorage.setItem('mak_header_logo', url);
+    window.dispatchEvent(
+      new CustomEvent('mak-logo-updated', {
+        detail: { logoUrl: url, headerLogo: url },
+      })
+    );
+    setSavedSuccess(true);
+    setTimeout(() => setSavedSuccess(false), 2500);
+  };
+
   const handleSaveBranding = () => {
     if (customLogoUrl.trim()) {
       localStorage.setItem('mak_custom_logo', customLogoUrl.trim());
-      window.dispatchEvent(new CustomEvent('mak-logo-updated', { detail: { logoUrl: customLogoUrl.trim() } }));
+      localStorage.setItem('mak_header_logo', customLogoUrl.trim());
+      window.dispatchEvent(
+        new CustomEvent('mak-logo-updated', {
+          detail: {
+            logoUrl: customLogoUrl.trim(),
+            headerLogo: customLogoUrl.trim(),
+          },
+        })
+      );
     } else {
       localStorage.removeItem('mak_custom_logo');
+      localStorage.removeItem('mak_header_logo');
       window.dispatchEvent(new CustomEvent('mak-logo-updated', { detail: { reset: true } }));
     }
     setSavedSuccess(true);
@@ -103,9 +140,79 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
   const handleResetLogo = () => {
     setCustomLogoUrl('');
     localStorage.removeItem('mak_custom_logo');
+    localStorage.removeItem('mak_header_logo');
     window.dispatchEvent(new CustomEvent('mak-logo-updated', { detail: { reset: true } }));
     setSavedSuccess(true);
     setTimeout(() => setSavedSuccess(false), 2500);
+  };
+
+  // Page Logo Handlers (Home page center logo above UNIFIED LOGISTICS)
+  const handlePageFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 3 * 1024 * 1024) {
+        alert('File size exceeds 3MB. Please choose a smaller logo image.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const resultUrl = reader.result as string;
+        setPageLogoUrl(resultUrl);
+        localStorage.setItem('mak_page_logo', resultUrl);
+        window.dispatchEvent(
+          new CustomEvent('mak-page-logo-updated', {
+            detail: { pageLogo: resultUrl },
+          })
+        );
+        setPageLogoSavedSuccess(true);
+        setTimeout(() => setPageLogoSavedSuccess(false), 3000);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleApplyPagePreset = (url: string) => {
+    setPageLogoUrl(url);
+    localStorage.setItem('mak_page_logo', url);
+    window.dispatchEvent(
+      new CustomEvent('mak-page-logo-updated', {
+        detail: { pageLogo: url },
+      })
+    );
+    setPageLogoSavedSuccess(true);
+    setTimeout(() => setPageLogoSavedSuccess(false), 2500);
+  };
+
+  const handleSavePageLogo = () => {
+    if (pageLogoUrl.trim()) {
+      localStorage.setItem('mak_page_logo', pageLogoUrl.trim());
+      window.dispatchEvent(
+        new CustomEvent('mak-page-logo-updated', {
+          detail: { pageLogo: pageLogoUrl.trim() },
+        })
+      );
+    } else {
+      localStorage.setItem('mak_page_logo', '/mak_pearl_grey_edge.svg');
+      window.dispatchEvent(
+        new CustomEvent('mak-page-logo-updated', {
+          detail: { pageLogo: '/mak_pearl_grey_edge.svg', resetPageLogo: true },
+        })
+      );
+    }
+    setPageLogoSavedSuccess(true);
+    setTimeout(() => setPageLogoSavedSuccess(false), 2500);
+  };
+
+  const handleResetPageLogo = () => {
+    setPageLogoUrl('/mak_pearl_grey_edge.svg');
+    localStorage.setItem('mak_page_logo', '/mak_pearl_grey_edge.svg');
+    window.dispatchEvent(
+      new CustomEvent('mak-page-logo-updated', {
+        detail: { pageLogo: '/mak_pearl_grey_edge.svg', resetPageLogo: true },
+      })
+    );
+    setPageLogoSavedSuccess(true);
+    setTimeout(() => setPageLogoSavedSuccess(false), 2500);
   };
 
   if (!isOpen) return null;
@@ -351,66 +458,238 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
               )}
 
               {activeTab === 'branding' && (
-                <div className="max-w-2xl mx-auto space-y-6 py-4">
+                <div className="max-w-3xl mx-auto space-y-6 py-4">
                   <div className="text-center space-y-1">
                     <h4 className="text-xl font-bold font-serif-luxury text-slate-900">
-                      Consortium Logo & Brand Configuration
+                      Corporate Logo & Branding Settings
                     </h4>
                     <p className="text-xs text-slate-600">
-                      Upload your official corporate logo or specify an image URL to replace the default gold emblem across the entire site.
+                      Upload and manage your logos for both the <strong>Home Page Center (Unified Logistics)</strong> and the <strong>Top-Left Navigation Header</strong>.
                     </p>
                   </div>
 
-                  {/* Live Preview Cards for Header Grey and Home Round */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="p-5 rounded-2xl bg-[#0F172A] border border-slate-700 flex flex-col items-center justify-center space-y-3">
-                      <span className="text-[11px] font-mono uppercase font-bold text-slate-300">
-                        Header Logo (Grey Transparent)
-                      </span>
-                      <div className="p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
-                        <ConsortiumEmblem size={56} variant="header" customUrl={customLogoUrl || undefined} />
+                  {/* SECTION 1: HOME PAGE LOGO (PAGE LOGO UPLOAD - REQUESTED BY USER) */}
+                  <div className="bg-gradient-to-b from-amber-50/60 to-white p-6 rounded-2xl border-2 border-amber-400/90 shadow-xs space-y-5">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-amber-200/80 pb-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                          <h5 className="text-sm font-bold uppercase tracking-wider text-slate-950 font-mono">
+                            Home Page Logo (Page Logo)
+                          </h5>
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-200 text-amber-900 font-mono">
+                            Hero Showcase Centerpiece
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-600 mt-1">
+                          The official corporate medallion displayed at the center of the Home Page hero showcase above "UNIFIED LOGISTICS". Upload a custom logo or select a preset below:
+                        </p>
                       </div>
-                      <span className="text-[10px] text-slate-400 font-mono">
-                        mak_transparent.png
-                      </span>
+
+                      {/* Live preview thumbnail */}
+                      <div className="flex items-center gap-3 bg-white px-3 py-2 rounded-xl border border-amber-200/80 shadow-xs shrink-0">
+                        <span className="text-[10px] font-mono font-bold text-slate-500 uppercase">Live Preview:</span>
+                        <img
+                          src={pageLogoUrl || '/mak_pearl_grey_edge.svg'}
+                          alt="Current Page Logo"
+                          className="h-14 w-14 object-contain"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = '/mak_pearl_grey_edge.svg';
+                          }}
+                        />
+                      </div>
                     </div>
 
-                    <div className="p-5 rounded-2xl bg-[#F8FAFC] border border-slate-300 flex flex-col items-center justify-center space-y-3">
-                      <span className="text-[11px] font-mono uppercase font-bold text-slate-700">
-                        Home Page Logo (White Round)
-                      </span>
-                      <div className="p-2 bg-transparent rounded-full">
-                        <ConsortiumEmblem size={100} variant="home" customUrl={customLogoUrl || undefined} />
-                      </div>
-                      <span className="text-[10px] text-slate-500 font-mono">
-                        erasebg-transformed.png
-                      </span>
-                    </div>
-                  </div>
+                    {/* Dedicated Page Logo Upload Button */}
+                    <div className="bg-white p-4 rounded-xl border border-amber-300/80 shadow-xs">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div>
+                          <label className="block text-xs font-bold text-slate-900 uppercase tracking-wider mb-0.5">
+                            Page Logo Upload
+                          </label>
+                          <span className="text-[11px] text-slate-500">
+                            Upload PNG, JPG, SVG, WebP directly from your device (e.g. Mak Pearl Grey logo)
+                          </span>
+                        </div>
 
-                  {/* Logo Upload & URL Form */}
-                  <div className="space-y-4 bg-white p-6 rounded-2xl border border-slate-300">
+                        <label className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 text-white text-xs font-bold uppercase tracking-wider shadow-sm cursor-pointer transition shrink-0">
+                          <Upload className="w-4 h-4" />
+                          <span>Page Logo Upload</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handlePageFileUpload}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Quick Preset Buttons for Page Logo */}
+                    <div>
+                      <span className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-2 font-mono">
+                        Quick Preset Logos (One-Click Apply to Home Page):
+                      </span>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleApplyPagePreset('/mak_pearl_grey_edge.svg')}
+                          className="p-2.5 rounded-xl border border-slate-300 hover:border-amber-600 bg-white hover:bg-amber-50/60 flex flex-col items-center gap-1.5 transition text-center cursor-pointer shadow-2xs"
+                        >
+                          <img src="/mak_pearl_grey_edge.svg" alt="Mak Pearl Grey" className="w-12 h-12 object-contain" />
+                          <span className="text-[11px] font-bold text-slate-800">Mak Pearl Grey</span>
+                          <span className="text-[9px] font-mono text-emerald-700 font-bold">3D Medallion</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleApplyPagePreset('/MAK-Group-Of-Companies.svg')}
+                          className="p-2.5 rounded-xl border border-slate-300 hover:border-amber-600 bg-white hover:bg-amber-50/60 flex flex-col items-center gap-1.5 transition text-center cursor-pointer shadow-2xs"
+                        >
+                          <img src="/MAK-Group-Of-Companies.svg" alt="MAK - GROUP" className="w-16 h-12 object-contain" />
+                          <span className="text-[11px] font-bold text-slate-800">MAK Group</span>
+                          <span className="text-[9px] font-mono text-slate-500">Official Logo</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleApplyPagePreset('/mak_transparent.svg')}
+                          className="p-2.5 rounded-xl border border-slate-300 hover:border-amber-600 bg-white hover:bg-amber-50/60 flex flex-col items-center gap-1.5 transition text-center cursor-pointer shadow-2xs"
+                        >
+                          <img src="/mak_transparent.svg" alt="Metallic Monogram" className="w-12 h-12 object-contain" />
+                          <span className="text-[11px] font-bold text-slate-800">Monogram</span>
+                          <span className="text-[9px] font-mono text-slate-500">Metallic Edge</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleApplyPagePreset('/erasebg-transformed.svg')}
+                          className="p-2.5 rounded-xl border border-slate-300 hover:border-amber-600 bg-white hover:bg-amber-50/60 flex flex-col items-center gap-1.5 transition text-center cursor-pointer shadow-2xs"
+                        >
+                          <img src="/erasebg-transformed.svg" alt="Vintage Round" className="w-12 h-12 object-contain" />
+                          <span className="text-[11px] font-bold text-slate-800">Round Medallion</span>
+                          <span className="text-[9px] font-mono text-slate-500">Vintage Seal</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Page Logo URL Input */}
                     <div>
                       <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
-                        Upload Logo File (PNG, JPG, SVG)
+                        Or Enter Page Logo Web URL
+                      </label>
+                      <input
+                        type="url"
+                        value={pageLogoUrl}
+                        onChange={(e) => setPageLogoUrl(e.target.value)}
+                        placeholder="https://example.com/page-logo.png"
+                        className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-amber-600 font-mono bg-white"
+                      />
+                    </div>
+
+                    {/* Action buttons for Page Logo */}
+                    <div className="flex items-center justify-between pt-1">
+                      <button
+                        onClick={handleResetPageLogo}
+                        className="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
+                      >
+                        <Trash2 className="w-3.5 h-3.5 text-rose-500" />
+                        <span>Reset Page Logo</span>
+                      </button>
+
+                      <button
+                        onClick={handleSavePageLogo}
+                        className="px-5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition cursor-pointer shadow-xs"
+                      >
+                        <Check className="w-4 h-4 text-emerald-400" />
+                        <span>Save & Apply Page Logo</span>
+                      </button>
+                    </div>
+
+                    {pageLogoSavedSuccess && (
+                      <div className="p-3 bg-emerald-50 border border-emerald-300 rounded-xl text-center text-xs text-emerald-800 font-bold">
+                        ✓ Page Logo successfully updated and applied above UNIFIED LOGISTICS on the home page!
+                      </div>
+                    )}
+                  </div>
+
+                  {/* SECTION 2: HEADER NAVBAR LOGO */}
+                  <div className="bg-white p-6 rounded-2xl border border-slate-300 space-y-5">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 pb-3">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
+                          <h5 className="text-sm font-bold uppercase tracking-wider text-slate-950 font-mono">
+                            Header Navbar Logo (Top Corner)
+                          </h5>
+                        </div>
+                        <p className="text-xs text-slate-600 mt-1">
+                          Official corporate logo displayed in the top-left corner of the header navigation across desktop, tablet, and mobile views.
+                        </p>
+                      </div>
+
+                      {/* Live header preview */}
+                      <div className="flex items-center gap-3 bg-slate-50 px-3 py-2 rounded-xl border border-slate-200 shrink-0">
+                        <span className="text-[10px] font-mono font-bold text-slate-500 uppercase">Live:</span>
+                        <ConsortiumEmblem size={44} variant="header" customUrl={customLogoUrl || undefined} />
+                      </div>
+                    </div>
+
+                    {/* Upload Header Logo */}
+                    <div>
+                      <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
+                        Upload Header Logo File (PNG, JPG, SVG)
                       </label>
                       <input
                         type="file"
                         accept="image/*"
                         onChange={handleFileUpload}
-                        className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-100 file:text-amber-900 hover:file:bg-amber-200 cursor-pointer"
+                        className="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-800 hover:file:bg-slate-200 cursor-pointer"
                       />
                     </div>
 
-                    <div className="relative flex items-center justify-center">
-                      <div className="border-t border-slate-200 w-full" />
-                      <span className="bg-white px-3 text-[10px] uppercase font-mono font-bold text-slate-400">or enter image url</span>
-                      <div className="border-t border-slate-200 w-full" />
+                    {/* Header Presets */}
+                    <div>
+                      <span className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-2 font-mono">
+                        Header Preset Logos:
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleApplyPreset('/MAK-Group-Of-Companies.svg')}
+                          className="p-2.5 rounded-xl border border-slate-300 hover:border-amber-600 bg-slate-50 hover:bg-amber-50/50 flex flex-col items-center gap-1.5 transition text-center cursor-pointer"
+                        >
+                          <img src="/MAK-Group-Of-Companies.svg" alt="MAK - GROUP OF COMPANIES" className="w-16 h-8 object-contain" />
+                          <span className="text-[11px] font-bold text-slate-800">MAK - GROUP</span>
+                          <span className="text-[9px] font-mono text-slate-500">GROUP OF COMPANIES</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleApplyPreset('/mak_transparent.svg')}
+                          className="p-2.5 rounded-xl border border-slate-300 hover:border-amber-600 bg-slate-50 hover:bg-amber-50/50 flex flex-col items-center gap-1.5 transition text-center cursor-pointer"
+                        >
+                          <img src="/mak_transparent.svg" alt="Metallic Monogram" className="w-10 h-10 object-contain" />
+                          <span className="text-[11px] font-bold text-slate-800">Metallic Monogram</span>
+                          <span className="text-[9px] font-mono text-slate-500">mak_transparent.svg</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleApplyPreset('/erasebg-transformed.svg')}
+                          className="p-2.5 rounded-xl border border-slate-300 hover:border-amber-600 bg-slate-50 hover:bg-amber-50/50 flex flex-col items-center gap-1.5 transition text-center cursor-pointer"
+                        >
+                          <img src="/erasebg-transformed.svg" alt="Vintage Round" className="w-10 h-10 object-contain" />
+                          <span className="text-[11px] font-bold text-slate-800">Round Medallion</span>
+                          <span className="text-[9px] font-mono text-slate-500">erasebg-transformed</span>
+                        </button>
+                      </div>
                     </div>
 
+                    {/* Header Logo URL */}
                     <div>
                       <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
-                        Logo Image Web URL
+                        Header Logo Image Web URL
                       </label>
                       <input
                         type="url"
@@ -421,28 +700,28 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                       />
                     </div>
 
-                    {/* Action buttons */}
+                    {/* Action buttons for Header */}
                     <div className="flex items-center justify-between pt-2">
                       <button
                         onClick={handleResetLogo}
                         className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
                       >
                         <Trash2 className="w-3.5 h-3.5 text-rose-500" />
-                        <span>Reset to Default Medallion</span>
+                        <span>Reset Header Logo</span>
                       </button>
 
                       <button
                         onClick={handleSaveBranding}
-                        className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#B8860B] to-[#92400E] hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition shadow-sm cursor-pointer"
+                        className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#B8860B] to-[#92400E] hover:opacity-95 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 transition shadow-sm cursor-pointer"
                       >
                         <Check className="w-4 h-4" />
-                        <span>Save & Apply Logo</span>
+                        <span>Save & Apply Header Logo</span>
                       </button>
                     </div>
 
                     {savedSuccess && (
                       <div className="p-3 bg-emerald-50 border border-emerald-300 rounded-xl text-center text-xs text-emerald-800 font-bold">
-                        ✓ Branding saved successfully! Logo updated across all header, hero, and footer components.
+                        ✓ Header logo updated successfully!
                       </div>
                     )}
                   </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Globe, ExternalLink, ArrowRight, ShieldCheck } from 'lucide-react';
-import { HeaderGreyLogo } from './HeaderGreyLogo';
+import { MakOfficialLogo } from './MakOfficialLogo';
 
 export const ContactSection: React.FC = () => {
   return (
@@ -15,19 +15,9 @@ export const ContactSection: React.FC = () => {
         {/* Main Official Contact Card matching IMG-20261012-WA0001.jpg */}
         <div className="bg-white/95 backdrop-blur-xl rounded-3xl p-6 sm:p-12 shadow-2xl border border-white/90 text-center space-y-8">
           
-          {/* Top MAK GROUP OF COMPANIES Brand Typography */}
+          {/* Top MAK GROUP OF COMPANIES Brand Official Logo */}
           <div className="flex flex-col items-center justify-center space-y-1">
-            <div className="flex items-center gap-3">
-              <HeaderGreyLogo size={58} className="drop-shadow-sm" />
-              <div className="text-left">
-                <span className="font-serif-luxury font-black text-3xl sm:text-5xl text-slate-900 tracking-wider block leading-none">
-                  MAK
-                </span>
-                <span className="text-[11px] sm:text-xs font-mono font-extrabold tracking-[0.3em] uppercase text-slate-600 block mt-1 border-t border-slate-300 pt-1">
-                  GROUP OF COMPANIES
-                </span>
-              </div>
-            </div>
+            <MakOfficialLogo className="h-16 sm:h-22 w-auto object-contain mx-auto drop-shadow-sm" />
           </div>
 
           {/* Golden Handshake Icon Badge */}
@@ -61,16 +51,10 @@ export const ContactSection: React.FC = () => {
               </div>
               <div className="space-y-1 pl-6">
                 <a
-                  href="mailto:Info@mak-group.com.pk"
+                  href="mailto:info@mak-group.com.pk"
                   className="block text-xs sm:text-sm font-semibold text-slate-900 hover:text-amber-800 hover:underline font-mono"
                 >
-                  Info@mak-group.com.pk
-                </a>
-                <a
-                  href="mailto:Info@vantageliners.com"
-                  className="block text-xs sm:text-sm font-semibold text-slate-900 hover:text-amber-800 hover:underline font-mono"
-                >
-                  Info@vantageliners.com
+                  info@mak-group.com.pk
                 </a>
               </div>
             </div>
@@ -216,15 +200,13 @@ export const ContactSection: React.FC = () => {
 
           </div>
 
-          {/* Bottom 4 Companies Strip from Profile */}
-          <div className="pt-4 border-t border-slate-200/90 text-[11px] sm:text-xs font-mono font-bold text-slate-500 uppercase tracking-widest flex flex-wrap items-center justify-center gap-2 sm:gap-4">
-            <span>DOCKS</span>
-            <span className="text-slate-300">|</span>
-            <span>TRUCKIT</span>
-            <span className="text-slate-300">|</span>
-            <span>MUHIB INTERNATIONAL</span>
-            <span className="text-slate-300">|</span>
-            <span>VANTAGE SHIPPING LINE</span>
+          {/* Bottom Accreditation & Group Strip */}
+          <div className="pt-4 border-t border-slate-200/90 text-[11px] sm:text-xs font-mono font-bold text-[#B45309] uppercase tracking-widest flex flex-wrap items-center justify-center gap-2 sm:gap-4">
+            <span>MAK - GROUP OF COMPANIES</span>
+            <span className="text-slate-300">•</span>
+            <span>MULTIMODAL LOGISTICS NETWORK</span>
+            <span className="text-slate-300">•</span>
+            <span>PAKISTAN & REGIONAL TRADE CORRIDORS</span>
           </div>
 
         </div>

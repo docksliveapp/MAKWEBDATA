@@ -127,7 +127,7 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
         <div className="px-6 py-5 bg-gradient-to-r from-[#F8FAFC] via-[#ECEEF3] to-[#F1F5F9] border-b border-slate-300 flex items-center justify-between">
           <div>
             <span className="text-[10px] font-mono uppercase text-[#A0522D] font-bold tracking-widest block">
-              TRUCKIT & MUHIB FLEET ENROLLMENT
+              MAK - GROUP OF COMPANIES FLEET ENROLLMENT
             </span>
             <h3 className="text-xl font-bold font-serif-luxury text-slate-900">
               Transporter Vehicle Registration Request

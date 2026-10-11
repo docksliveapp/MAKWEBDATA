@@ -3,10 +3,10 @@ import { Navbar, type AppPage } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { CompaniesSection } from './components/CompaniesSection';
 import { ServicesSection } from './components/ServicesSection';
+import { ServiceDetailPage } from './components/ServiceDetailPage';
 import { AboutSection } from './components/AboutSection';
 import { CorridorRoutes } from './components/CorridorRoutes';
 import { ContactSection } from './components/ContactSection';
-import { ServiceDetailModal } from './components/ServiceDetailModal';
 import { QuoteModal } from './components/QuoteModal';
 import { TransporterModal } from './components/TransporterModal';
 import { TrackInquiryModal } from './components/TrackInquiryModal';
@@ -38,11 +38,20 @@ export function App() {
 
   const handleNavigate = (page: AppPage) => {
     setCurrentPage(page);
+    if (page !== 'services') {
+      setSelectedServiceDetail(null);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleOpenServiceDetail = (svc: ComprehensiveService) => {
+    setSelectedServiceDetail(svc);
+    setCurrentPage('services');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#F3F5F9] via-[#EAEFF6] to-[#F5F7FB] text-slate-900 flex flex-col font-sans selection:bg-amber-300 selection:text-slate-950">
+    <div className="min-h-screen w-full overflow-x-hidden bg-white text-slate-900 flex flex-col font-sans selection:bg-amber-300 selection:text-slate-950">
       
       {/* Navigation Header with Page Tabs & Services Dropdown */}
       <Navbar
@@ -51,12 +60,10 @@ export function App() {
         onOpenQuote={handleOpenQuote}
         onOpenTransporter={() => setTransporterOpen(true)}
         onOpenInquiry={() => setInquiryOpen(true)}
-        onSelectServiceDetail={(svc) => {
-          setSelectedServiceDetail(svc);
-        }}
+        onSelectServiceDetail={handleOpenServiceDetail}
       />
 
-      {/* Distinct Separate Pages (No single endless scrolling page) */}
+      {/* Distinct Separate Pages (No single endless scrolling page, No popups for service pages) */}
       <main className="flex-1">
         {/* 1. HOME PAGE */}
         {currentPage === 'home' && (
@@ -66,13 +73,24 @@ export function App() {
           </div>
         )}
 
-        {/* 2. SERVICES PAGE */}
+        {/* 2. SERVICES PAGE / SERVICE DETAIL FULL PAGE */}
         {currentPage === 'services' && (
           <div className="animate-in fade-in duration-300">
-            <ServicesSection
-              onSelectServiceDetail={(svc) => setSelectedServiceDetail(svc)}
-              onRequestQuote={handleOpenQuoteWithService}
-            />
+            {selectedServiceDetail ? (
+              <ServiceDetailPage
+                service={selectedServiceDetail}
+                onBack={() => {
+                  setSelectedServiceDetail(null);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                onBookService={handleOpenQuoteWithService}
+              />
+            ) : (
+              <ServicesSection
+                onSelectServiceDetail={handleOpenServiceDetail}
+                onRequestQuote={handleOpenQuoteWithService}
+              />
+            )}
           </div>
         )}
 
@@ -98,7 +116,7 @@ export function App() {
         )}
       </main>
 
-      {/* Floating WhatsApp Contact Button (Direct WhatsApp chat target 03218496006) */}
+      {/* Floating WhatsApp Contact Button (Direct WhatsApp chat target wa.me/923218496006) */}
       <WhatsAppFloating />
 
       {/* Footer with Page Navigation */}
@@ -110,19 +128,12 @@ export function App() {
         onOpenInquiry={() => setInquiryOpen(true)}
       />
 
-      {/* Modals & Overlays */}
+      {/* Action Modals */}
       <InquiryPortalModal
         isOpen={inquiryOpen}
         onClose={() => setInquiryOpen(false)}
         onOpenQuote={handleOpenQuote}
         onOpenTransporter={() => setTransporterOpen(true)}
-      />
-
-      <ServiceDetailModal
-        service={selectedServiceDetail}
-        isOpen={Boolean(selectedServiceDetail)}
-        onClose={() => setSelectedServiceDetail(null)}
-        onBookService={handleOpenQuoteWithService}
       />
 
       <QuoteModal

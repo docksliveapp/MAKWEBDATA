@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HeaderGreyLogo } from './HeaderGreyLogo';
+import { ConsortiumEmblem } from './ConsortiumEmblem';
 import { COMPREHENSIVE_SERVICES, type ComprehensiveService } from '../data/consortium';
 import {
   ExternalLink,
@@ -71,7 +71,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             FBR BONDED CARRIER • PSW CUSTOMS BROKER • IRU TIR TRANSIT • NVOCC MARITIME
           </span>
           <span className="mx-auto md:mx-0 font-medium text-slate-700">
-            MAK - GROUP | Pakistan's Premier Multimodal Logistics Network
+            MAK - GROUP OF COMPANIES | Pakistan's Premier Multimodal Logistics Network
           </span>
           <span className="hidden md:inline font-mono text-[10px] text-slate-700 font-semibold">
             Tel: +92-21-32330103 / 0104 • Dubai: +971-4- 570-8397
@@ -81,24 +81,24 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Main Navbar */}
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-18">
+        <div className="flex items-center justify-between h-20 sm:h-22">
           
-          {/* Company Brand Logo & Name on Left (Click returns to Home) */}
+          {/* Company Brand Logo & Name on Left (Large Logo & Vertically Centered Title) */}
           <div className="flex items-center gap-3">
             <button
               onClick={() => handlePageSelect('home')}
-              className="flex items-center gap-3 group text-left cursor-pointer focus:outline-none"
+              className="flex items-center gap-3.5 sm:gap-4 group text-left cursor-pointer focus:outline-none py-1"
             >
-              <HeaderGreyLogo
-                size={46}
-                className="shrink-0 transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_2px_6px_rgba(15,23,42,0.16)]"
+              <ConsortiumEmblem
+                size={64}
+                className="shrink-0 h-13 sm:h-15 w-auto transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_2px_8px_rgba(15,23,42,0.14)]"
               />
-              <div className="flex flex-col">
-                <span className="font-serif-luxury font-extrabold tracking-wider text-xl sm:text-2xl text-slate-900 group-hover:text-amber-800 transition-colors leading-tight">
+              <div className="flex flex-col justify-center">
+                <span className="font-serif-luxury font-extrabold tracking-wider text-xl sm:text-2xl lg:text-[26px] text-slate-900 group-hover:text-amber-800 transition-colors leading-none mb-1.5">
                   MAK - GROUP
                 </span>
-                <span className="text-[10px] sm:text-[11px] font-bold tracking-widest text-[#B45309] uppercase -mt-0.5 font-mono">
-                  Consortium of Four Leaders
+                <span className="text-[11px] sm:text-xs font-bold tracking-[0.22em] text-[#B45309] uppercase font-mono leading-none">
+                  GROUP OF COMPANIES
                 </span>
               </div>
             </button>
@@ -356,9 +356,9 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* Mobile Drawer (Navigates to distinct pages) */}
+      {/* Mobile Drawer (Navigates to distinct pages in pure white theme) */}
       {mobileMenuOpen && (
-        <div className="lg:hidden glass-pearl border-b border-slate-300 px-4 py-5 space-y-4 shadow-xl max-h-[85vh] overflow-y-auto">
+        <div className="lg:hidden bg-white border-b border-slate-200 px-4 py-5 space-y-4 shadow-xl max-h-[85vh] overflow-y-auto">
           <div className="flex flex-col space-y-2 font-bold text-sm text-slate-800">
             <button
               onClick={() => handlePageSelect('home')}

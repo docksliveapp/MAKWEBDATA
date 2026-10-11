@@ -1,0 +1,81 @@
+<svg width="500" height="240" viewBox="0 0 500 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- MAK GROUP OF COMPANIES Official Cutout Logo -->
+  <defs>
+    <style>
+      .mak-brand { fill: #485460; }
+      .mak-text { font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', Arial, sans-serif; }
+    </style>
+  </defs>
+
+  <g id="mak-monogram" class="mak-brand">
+    <!-- Letter M -->
+    <path
+      d="M 24,64
+         L 56,30
+         L 96,30
+         L 138,114
+         L 180,30
+         L 220,30
+         L 220,158
+         L 184,158
+         L 184,82
+         L 150,146
+         L 126,146
+         L 92,82
+         L 92,158
+         L 24,158
+         Z"
+    />
+
+    <!-- Letter A with Smooth Rounded Top Arch -->
+    <path
+      d="M 172,158
+         L 172,82
+         C 172,46 194,30 236,30
+         L 264,30
+         L 310,158
+         L 270,158
+         L 258,124
+         L 214,124
+         L 214,158
+         Z
+         M 214,94
+         L 248,94
+         L 238,62
+         C 234,54 228,52 222,52
+         C 216,52 214,56 214,64
+         Z"
+      fill-rule="evenodd"
+    />
+
+    <!-- Letter K -->
+    <path
+      d="M 318,30
+         L 358,30
+         L 358,82
+         L 412,30
+         L 466,30
+         L 396,96
+         L 472,158
+         L 418,158
+         L 358,106
+         L 358,158
+         L 318,158
+         Z"
+    />
+
+    <!-- Horizontal Divider Rule (Aligned from M start to K end) -->
+    <rect x="24" y="176" width="448" height="4.5" rx="2.25" />
+
+    <!-- Subtitle: GROUP OF COMPANIES -->
+    <text
+      x="248"
+      y="214"
+      text-anchor="middle"
+      class="mak-text"
+      font-size="24"
+      font-weight="900"
+      letter-spacing="9"
+    >GROUP OF COMPANIES</text>
+  </g>
+</svg>

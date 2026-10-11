@@ -24,7 +24,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onSelectServiceForQu
     {
       url: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80',
       title: 'Maritime Container Line & Jebel Ali Feeder',
-      subtitle: 'Vantage Shipping Line Ocean Charters & Regional Slots'
+      subtitle: 'Dedicated Ocean Charters & Regional Slot Feeders (Karachi ⇄ Dubai / UAE)'
     },
     {
       url: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1200&q=80',
@@ -34,26 +34,26 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onSelectServiceForQu
   ];
 
   return (
-    <section id="about" className="py-16 md:py-24 bg-[#ECEEF3] text-slate-900 border-b border-slate-300/80">
+    <section id="about" className="py-16 md:py-24 bg-white text-slate-900 border-b border-slate-200">
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         
         {/* Section Header */}
         <div className="text-center max-w-4xl mx-auto space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-slate-300 shadow-xs text-[#A0522D] text-xs font-bold uppercase tracking-wider font-mono">
             <ShieldCheck className="w-4 h-4 text-amber-700" />
-            <span>PREMIER MULTIMODAL LOGISTICS, MARITIME & TRANSSHIPMENT CONSORTIUM</span>
+            <span>PREMIER MULTIMODAL LOGISTICS, MARITIME & TRANSSHIPMENT GROUP OF COMPANIES</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-serif-luxury text-slate-900 leading-tight">
-            About MAK - GROUP Consortium
+            About MAK - GROUP OF COMPANIES
           </h2>
 
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-3xl mx-auto">
-            MAK - GROUP stands at the vanguard of Pakistan and regional international trade, operating as a unified single-window consortium orchestrating four market-leading enterprises: <strong>Docks (Pvt) Ltd</strong>, <strong>Truckit (Pvt) Ltd</strong>, <strong>Muhib International (SMC-Pvt) Ltd</strong>, and <strong>Vantage Shipping Line</strong>.
+            MAK - GROUP OF COMPANIES stands at the vanguard of Pakistan and regional international trade, operating as a unified single-window organization orchestrating comprehensive bonded transit, customs brokerage, heavy road haulage, and international maritime logistics.
           </p>
         </div>
 
-        {/* Consortium Profile & Strategic Overview */}
+        {/* Corporate Profile & Strategic Overview */}
         <div className="glass-pearl rounded-3xl p-8 sm:p-12 border border-white/90 shadow-lg">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
@@ -61,7 +61,7 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onSelectServiceForQu
             <div className="lg:col-span-5 space-y-4 border-b lg:border-b-0 lg:border-r border-slate-200/80 pb-6 lg:pb-0 lg:pr-8 text-center lg:text-left">
               <div className="space-y-1">
                 <span className="text-xs font-bold font-mono uppercase text-[#B45309] block">
-                  STATUTORY CONSORTIUM ARCHITECTURE
+                  STATUTORY CORPORATE ARCHITECTURE
                 </span>
                 <h3 className="text-2xl sm:text-3xl font-bold font-serif-luxury text-slate-950">
                   Flawless Execution Across Land, Sea & Borders
@@ -158,10 +158,10 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onSelectServiceForQu
         <div className="space-y-6">
           <div className="text-center space-y-1">
             <span className="text-[11px] font-bold uppercase tracking-wider text-[#A0522D] block font-mono">
-              THE 4 STRATEGIC PILLARS OF MAK - GROUP
+              THE 4 STRATEGIC DIVISIONS OF MAK - GROUP OF COMPANIES
             </span>
             <h3 className="text-2xl sm:text-3xl font-bold font-serif-luxury text-slate-900">
-              Consortium Companies & Core Capabilities
+              Core Operational Divisions & Capabilities
             </h3>
           </div>
 
@@ -173,10 +173,10 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onSelectServiceForQu
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="px-3 py-1 rounded-full bg-slate-900 text-amber-300 text-[10px] font-mono font-bold uppercase">
+                    <span className="px-3 py-1 rounded-full bg-slate-100/90 border border-slate-300 text-slate-800 text-[10px] font-mono font-bold uppercase tracking-wider">
                       {company.badge}
                     </span>
-                    <span className="text-xs font-mono text-slate-500 font-semibold">
+                    <span className="text-xs font-mono text-slate-600 font-semibold">
                       {company.fleetCount}
                     </span>
                   </div>
@@ -267,23 +267,23 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onSelectServiceForQu
           </div>
         </div>
 
-        {/* 15 Strategic Nationwide Stations Grid */}
+        {/* Strategic Office Locations (Karachi & Dubai) */}
         <div id="stations" className="glass-pearl rounded-3xl p-8 sm:p-10 border border-white/90 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200/80 pb-4">
             <div>
               <span className="text-[11px] font-mono font-bold uppercase text-[#B45309] block">
-                15 KEY STRATEGIC STATIONS ACROSS PAKISTAN & UAE
+                STRATEGIC CORPORATE LOCATIONS & LOGISTICS HUBS
               </span>
               <h3 className="text-2xl font-bold font-serif-luxury text-slate-900">
-                Operational Office Locations & Border Clearances
+                Official Corporate Office Locations
               </h3>
             </div>
             <span className="text-xs font-mono text-slate-500">
-              Coordinated via Karachi HQ & Dubai Liner Office
+              Karachi (Head Office) & Dubai (International Hub)
             </span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {NATIONWIDE_STATIONS.map((station, idx) => (
               <div
                 key={idx}

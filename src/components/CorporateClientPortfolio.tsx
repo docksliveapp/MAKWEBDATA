@@ -353,8 +353,8 @@ export const CorporateClientPortfolio: React.FC = () => {
               Full NDA, HSE compliance, statutory audit accreditation, and long-term service level agreements (SLAs) across public & private sectors.
             </p>
           </div>
-          <div className="text-[11px] font-mono font-bold text-slate-500 whitespace-nowrap self-start sm:self-auto border-t sm:border-t-0 sm:border-l border-slate-200 pt-2 sm:pt-0 sm:pl-4">
-            DOCKS • TRUCKIT • MUHIB INT. • VANTAGE
+          <div className="text-[11px] font-mono font-bold text-amber-800 whitespace-nowrap self-start sm:self-auto border-t sm:border-t-0 sm:border-l border-slate-200 pt-2 sm:pt-0 sm:pl-4">
+            MAK — GROUP OF COMPANIES
           </div>
         </div>
       </div>

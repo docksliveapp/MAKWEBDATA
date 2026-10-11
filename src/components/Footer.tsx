@@ -1,5 +1,5 @@
 import React from 'react';
-import { HeaderGreyLogo } from './HeaderGreyLogo';
+import { ConsortiumEmblem } from './ConsortiumEmblem';
 import { MapPin, Phone, Mail, Lock, ExternalLink, Package, Truck, Globe } from 'lucide-react';
 
 interface FooterProps {
@@ -66,11 +66,8 @@ export const Footer: React.FC<FooterProps> = ({
               </h4>
             </div>
             <div className="space-y-1 font-mono font-bold text-[11px] text-[#B45309]">
-              <a href="mailto:Info@mak-group.com.pk" className="block hover:underline">
-                Info@mak-group.com.pk
-              </a>
-              <a href="mailto:Info@vantageliners.com" className="block hover:underline">
-                Info@vantageliners.com
+              <a href="mailto:info@mak-group.com.pk" className="block hover:underline">
+                info@mak-group.com.pk
               </a>
             </div>
             <div className="pt-1 text-[11px] font-mono text-slate-700">
@@ -86,14 +83,14 @@ export const Footer: React.FC<FooterProps> = ({
         
         {/* Brand Information */}
         <div className="md:col-span-5 space-y-3">
-          <div className="flex items-center gap-2.5">
-            <HeaderGreyLogo size={36} />
-            <span className="font-serif-luxury font-bold text-base text-slate-900">
+          <div className="flex items-center gap-3">
+            <ConsortiumEmblem size={48} className="h-10 sm:h-12 w-auto shrink-0" />
+            <span className="font-serif-luxury font-bold text-base sm:text-lg text-slate-900">
               MAK — GROUP OF COMPANIES
             </span>
           </div>
           <p className="text-slate-600 text-xs leading-relaxed max-w-md">
-            Single-window logistics command orchestrating four market-leading enterprises: <strong>Docks (Pvt) Ltd</strong>, <strong>Truckit (Pvt) Ltd</strong>, <strong>Muhib International (SMC-Pvt) Ltd</strong>, and <strong>Vantage Shipping Line</strong>.
+            Single-window logistics command orchestrating nationwide bonded transit, customs brokerage, modern fleet haulage, and international cross-border trade corridors under one unified corporate command: <strong>MAK - GROUP OF COMPANIES</strong>.
           </p>
           <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-500 font-mono pt-1">
             <span>FBR Lic. 1969</span>
