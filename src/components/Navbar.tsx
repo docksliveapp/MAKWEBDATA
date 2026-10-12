@@ -20,7 +20,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 
-export type AppPage = 'home' | 'services' | 'about' | 'corridors' | 'contact';
+export type AppPage = 'home' | 'services' | 'about' | 'corridors' | 'contact' | 'drive';
 
 interface NavbarProps {
   currentPage: AppPage;
@@ -81,23 +81,23 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Main Navbar */}
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20 sm:h-22">
+        <div className="flex items-center justify-between h-22 sm:h-26 lg:h-28">
           
-          {/* Company Brand Logo & Name on Left (Large Logo & Vertically Centered Title) */}
-          <div className="flex items-center gap-3">
+          {/* Company Brand Logo & Name on Left (Prominent Logo & Vertically Centered Brand Titles) */}
+          <div className="flex items-center">
             <button
               onClick={() => handlePageSelect('home')}
-              className="flex items-center gap-3.5 sm:gap-4 group text-left cursor-pointer focus:outline-none py-1"
+              className="flex items-center gap-3 sm:gap-4.5 group text-left cursor-pointer focus:outline-none py-1.5"
             >
               <ConsortiumEmblem
-                size={64}
-                className="shrink-0 h-13 sm:h-15 w-auto transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_2px_8px_rgba(15,23,42,0.14)]"
+                size={76}
+                className="shrink-0 h-14 sm:h-18 lg:h-20 w-auto transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_2px_10px_rgba(15,23,42,0.16)]"
               />
               <div className="flex flex-col justify-center">
-                <span className="font-serif-luxury font-extrabold tracking-wider text-xl sm:text-2xl lg:text-[26px] text-slate-900 group-hover:text-amber-800 transition-colors leading-none mb-1.5">
+                <span className="font-serif-luxury font-extrabold tracking-wider text-xl sm:text-2xl lg:text-[26px] text-slate-900 group-hover:text-amber-800 transition-colors leading-tight">
                   MAK - GROUP
                 </span>
-                <span className="text-[11px] sm:text-xs font-bold tracking-[0.22em] text-[#B45309] uppercase font-mono leading-none">
+                <span className="text-[10px] sm:text-[11px] lg:text-xs font-bold tracking-[0.24em] text-[#B45309] uppercase font-mono leading-tight mt-0.5">
                   GROUP OF COMPANIES
                 </span>
               </div>
@@ -341,6 +341,19 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               Contact Us
             </button>
+
+            {/* 7. Google Drive Vault */}
+            <button
+              onClick={() => handlePageSelect('drive')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                currentPage === 'drive'
+                  ? 'bg-amber-600 text-white shadow-sm'
+                  : 'bg-slate-100 hover:bg-amber-50 text-slate-700 hover:text-amber-900 border border-slate-200'
+              }`}
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>Google Drive</span>
+            </button>
           </nav>
 
           {/* Mobile hamburger menu toggle */}
@@ -419,6 +432,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               }`}
             >
               Contact Us & Social Media
+            </button>
+
+            <button
+              onClick={() => handlePageSelect('drive')}
+              className={`text-left py-2 px-3 rounded-lg hover:bg-slate-200/70 cursor-pointer flex items-center gap-2 ${
+                currentPage === 'drive' ? 'bg-amber-600 text-white font-extrabold' : 'text-slate-800'
+              }`}
+            >
+              <FileText className="w-4 h-4" />
+              <span>Google Drive Logistics Vault</span>
             </button>
           </div>
 

@@ -2,12 +2,14 @@ import React from 'react';
 import { ConsortiumEmblem } from './ConsortiumEmblem';
 import { MapPin, Phone, Mail, Lock, ExternalLink, Package, Truck, Globe } from 'lucide-react';
 
+import type { AppPage } from './Navbar';
+
 interface FooterProps {
   onOpenQuote: () => void;
   onOpenTransporter: () => void;
   onOpenAdmin: () => void;
   onOpenInquiry?: () => void;
-  onNavigate?: (page: 'home' | 'services' | 'about' | 'corridors' | 'contact') => void;
+  onNavigate?: (page: AppPage) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -152,6 +154,11 @@ export const Footer: React.FC<FooterProps> = ({
             <li>
               <button onClick={() => onNavigate?.('contact')} className="hover:text-amber-800 transition cursor-pointer text-left">
                 Official Contact & Global Desks
+              </button>
+            </li>
+            <li>
+              <button onClick={() => onNavigate?.('drive')} className="hover:text-amber-800 transition cursor-pointer text-left font-bold text-amber-900">
+                Google Drive Logistics Vault
               </button>
             </li>
           </ul>

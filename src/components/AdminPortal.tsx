@@ -14,7 +14,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
   const [passcode, setPasscode] = useState('');
   const [authError, setAuthError] = useState<string | null>(null);
 
-  const [activeTab, setActiveTab] = useState<'quotes' | 'transporters' | 'branding'>('quotes');
+  const [activeTab, setActiveTab] = useState<'quotes' | 'transporters' | 'branding' | 'database'>('quotes');
   const [quotes, setQuotes] = useState<QuoteRequest[]>([]);
   const [vehicles, setVehicles] = useState<VehicleRegistration[]>([]);
   const [loading, setLoading] = useState(false);
@@ -349,9 +349,21 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                   <Image className="w-4 h-4" />
                   <span>Logo & Branding</span>
                 </button>
+
+                <button
+                  onClick={() => setActiveTab('database')}
+                  className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition cursor-pointer ${
+                    activeTab === 'database'
+                      ? 'bg-amber-700 text-white'
+                      : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                  }`}
+                >
+                  <ExternalLink className="w-4 h-4" />
+                  <span>Firebase RTDB</span>
+                </button>
               </div>
 
-              {activeTab !== 'branding' && (
+              {activeTab !== 'branding' && activeTab !== 'database' && (
                 <div className="relative w-64">
                   <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-3" />
                   <input
@@ -724,6 +736,55 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                         ✓ Header logo updated successfully!
                       </div>
                     )}
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'database' && (
+                <div className="max-w-2xl mx-auto space-y-6">
+                  <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+                        DB
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-slate-900 text-base">
+                          Firebase Realtime Database (makwebdata)
+                        </h4>
+                        <p className="text-xs text-slate-500 font-mono">
+                          Instance: makwebdata-default-rtdb
+                        </p>
+                      </div>
+                    </div>
+
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      Your designated Firebase Realtime Database for MAK Group web data is configured. You can access the Firebase web console directly or view current synchronization status.
+                    </p>
+
+                    <div className="p-3.5 bg-white rounded-xl border border-slate-200 font-mono text-xs text-slate-700 break-all space-y-1">
+                      <span className="text-[10px] uppercase text-slate-400 font-bold block">Console URL</span>
+                      <a
+                        href="https://console.firebase.google.com/u/2/project/makwebdata/database/makwebdata-default-rtdb/data/~2F"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-amber-800 hover:underline flex items-center gap-1 font-semibold"
+                      >
+                        <span>https://console.firebase.google.com/u/2/project/makwebdata/database/makwebdata-default-rtdb/data/~2F</span>
+                        <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                      </a>
+                    </div>
+
+                    <div className="pt-2">
+                      <a
+                        href="https://console.firebase.google.com/u/2/project/makwebdata/database/makwebdata-default-rtdb/data/~2F"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-700 hover:bg-amber-800 text-white text-xs font-bold transition shadow-sm"
+                      >
+                        <span>Open Firebase RTDB Console</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
                   </div>
                 </div>
               )}

@@ -12,6 +12,7 @@ import { TransporterModal } from './components/TransporterModal';
 import { TrackInquiryModal } from './components/TrackInquiryModal';
 import { InquiryPortalModal } from './components/InquiryPortalModal';
 import { AdminPortal } from './components/AdminPortal';
+import { DrivePortalSection } from './components/DrivePortalSection';
 import { WhatsAppFloating } from './components/WhatsAppFloating';
 import { Footer } from './components/Footer';
 import type { ComprehensiveService } from './data/consortium';
@@ -112,6 +113,13 @@ export function App() {
         {currentPage === 'contact' && (
           <div className="animate-in fade-in duration-300">
             <ContactSection />
+          </div>
+        )}
+
+        {/* 6. GOOGLE DRIVE LOGISTICS VAULT PAGE */}
+        {currentPage === 'drive' && (
+          <div className="animate-in fade-in duration-300">
+            <DrivePortalSection />
           </div>
         )}
       </main>

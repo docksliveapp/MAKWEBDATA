@@ -3,15 +3,18 @@ import { getFirestore, collection, doc, setDoc, getDocs, getDoc, updateDoc, quer
 import { getAuth, signInAnonymously } from 'firebase/auth';
 import type { QuoteRequest, VehicleRegistration } from './types';
 
-// Read config from config file or fallback
+import firebaseAppletConfig from '../firebase-applet-config.json';
+import { getDocFromServer } from 'firebase/firestore';
+
+// Configuration loaded dynamically from firebase-applet-config.json
 const firebaseConfig = {
-  projectId: "gen-lang-client-0658279997",
-  appId: "1:231637092829:web:032f657821ea8fb2f40e34",
-  apiKey: "AIzaSyAuJ08P2Pr9Lw_qn-eDUmIdiE96PYdPxyQ",
-  authDomain: "gen-lang-client-0658279997.firebaseapp.com",
-  firestoreDatabaseId: "ai-studio-makgrouplogistic-5e96a451-a87a-4eeb-aafb-2260655f7c94",
-  storageBucket: "gen-lang-client-0658279997.firebasestorage.app",
-  messagingSenderId: "231637092829",
+  projectId: firebaseAppletConfig.projectId,
+  appId: firebaseAppletConfig.appId,
+  apiKey: firebaseAppletConfig.apiKey,
+  authDomain: firebaseAppletConfig.authDomain,
+  firestoreDatabaseId: firebaseAppletConfig.firestoreDatabaseId,
+  storageBucket: firebaseAppletConfig.storageBucket,
+  messagingSenderId: firebaseAppletConfig.messagingSenderId,
 };
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
@@ -20,6 +23,20 @@ export const auth = getAuth(app);
 export const db = firebaseConfig.firestoreDatabaseId 
   ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
   : getFirestore(app);
+
+// Connection test on boot per Firestore integration guidelines
+export async function testConnection(): Promise<boolean> {
+  try {
+    await getDocFromServer(doc(db, 'test', 'connection'));
+    return true;
+  } catch (error) {
+    if (error instanceof Error && error.message.includes('the client is offline')) {
+      console.warn('Firebase Firestore client is offline or connecting...');
+    }
+    return false;
+  }
+}
+testConnection();
 
 // In-memory fallback storage if offline or during local simulation
 const fallbackQuotes: QuoteRequest[] = [];
