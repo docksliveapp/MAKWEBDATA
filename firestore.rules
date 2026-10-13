@@ -17,7 +17,7 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      return (isSignedIn() && request.auth.token.email == 'makeyourflyeasy@gmail.com') ||
+      return (isSignedIn() && (request.auth.token.email == 'makeyourflyeasy@gmail.com' || request.auth.token.email == 'docks.live.app@gmail.com')) ||
              (isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)));
     }
 
@@ -69,7 +69,8 @@ service cloud.firestore {
                     isValidQuoteRequest(request.resource.data) &&
                     request.resource.data.status == 'submitted';
 
-      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow get: if isValidId(quoteId);
+      allow list: if isAdmin();
 
       allow update: if isValidId(quoteId) &&
                     isValidQuoteRequest(request.resource.data) &&
@@ -92,7 +93,8 @@ service cloud.firestore {
                     isValidVehicleRegistration(request.resource.data) &&
                     request.resource.data.status == 'submitted';
 
-      allow read: if isAdmin() || (isSignedIn() && resource.data.userId == request.auth.uid);
+      allow get: if isValidId(registrationId);
+      allow list: if isAdmin();
 
       allow update: if isValidId(registrationId) &&
                     isValidVehicleRegistration(request.resource.data) &&

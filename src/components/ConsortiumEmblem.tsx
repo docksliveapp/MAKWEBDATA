@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { HeaderGreyLogo } from './HeaderGreyLogo';
 
 export interface ConsortiumEmblemProps {
   className?: string;
@@ -8,49 +7,73 @@ export interface ConsortiumEmblemProps {
   variant?: 'header' | 'home' | 'grey-transparent' | 'white-round' | 'pearl-medallion';
 }
 
+const PRESET_PATHS = [
+  '/mak_pearl_grey_edge.svg',
+  '/MAK-Group-Of-Companies.svg',
+  '/mak_transparent.svg',
+  '/erasebg-transformed.svg',
+  '/mak_official_logo.svg',
+];
+
+function isUploadedLogo(url: string | null | undefined): url is string {
+  if (!url || !url.trim()) return false;
+  return !PRESET_PATHS.includes(url.trim());
+}
+
 export const ConsortiumEmblem: React.FC<ConsortiumEmblemProps> = ({
   className = '',
-  size = 46,
+  size = 56,
   customUrl,
   variant = 'header',
 }) => {
-  const [logoUrl, setLogoUrl] = useState<string | null>(() => {
-    if (customUrl) return customUrl;
+  const [headerLogoUrl, setHeaderLogoUrl] = useState<string | null>(() => {
+    if (isUploadedLogo(customUrl)) return customUrl;
     if (typeof window !== 'undefined') {
-      return (
-        localStorage.getItem('mak_custom_logo') ||
+      const saved =
         localStorage.getItem('mak_header_logo') ||
-        null
-      );
+        localStorage.getItem('mak_custom_logo');
+      return isUploadedLogo(saved) ? saved : null;
+    }
+    return null;
+  });
+
+  const [pageLogoUrl, setPageLogoUrl] = useState<string | null>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('mak_page_logo');
+      return isUploadedLogo(saved) ? saved : null;
     }
     return null;
   });
 
   useEffect(() => {
-    if (customUrl) {
-      setLogoUrl(customUrl);
+    if (isUploadedLogo(customUrl)) {
+      setHeaderLogoUrl(customUrl);
       return;
     }
-    const saved =
-      localStorage.getItem('mak_custom_logo') ||
-      localStorage.getItem('mak_header_logo');
-    if (saved) {
-      setLogoUrl(saved);
-    }
+    const savedHeader =
+      localStorage.getItem('mak_header_logo') ||
+      localStorage.getItem('mak_custom_logo');
+    setHeaderLogoUrl(isUploadedLogo(savedHeader) ? savedHeader : null);
+
+    const savedPage = localStorage.getItem('mak_page_logo');
+    setPageLogoUrl(isUploadedLogo(savedPage) ? savedPage : null);
 
     const handleLogoUpdate = (e: any) => {
-      if (e.detail?.logoUrl) {
-        setLogoUrl(e.detail.logoUrl);
-      } else if (e.detail?.headerLogo) {
-        setLogoUrl(e.detail.headerLogo);
-      } else if (e.detail?.reset) {
-        setLogoUrl(null);
+      const nextUrl = e.detail?.logoUrl || e.detail?.headerLogo;
+      if (e.detail?.reset || !isUploadedLogo(nextUrl)) {
+        setHeaderLogoUrl(null);
+      } else {
+        setHeaderLogoUrl(nextUrl);
       }
     };
 
-    const handlePageLogoUpdate = () => {
-      // Force re-render if variant is pearl-medallion or home
-      setLogoUrl(prev => prev);
+    const handlePageLogoUpdate = (e: any) => {
+      const nextPageUrl = e.detail?.pageLogo;
+      if (e.detail?.resetPageLogo || !isUploadedLogo(nextPageUrl)) {
+        setPageLogoUrl(null);
+      } else {
+        setPageLogoUrl(nextPageUrl);
+      }
     };
 
     window.addEventListener('mak-logo-updated', handleLogoUpdate);
@@ -61,49 +84,32 @@ export const ConsortiumEmblem: React.FC<ConsortiumEmblemProps> = ({
     };
   }, [customUrl]);
 
-  // 1. If variant is home or pearl-medallion, render page logo (default: mak_pearl_grey_edge.svg)
+  // Home / Page logo variant: only render if uploaded
   if (variant === 'pearl-medallion' || variant === 'white-round' || variant === 'home') {
-    const pageLogo = typeof window !== 'undefined' ? localStorage.getItem('mak_page_logo') : null;
+    if (!pageLogoUrl) return null;
     return (
       <img
-        src={pageLogo || "/mak_pearl_grey_edge.svg"}
+        src={pageLogoUrl}
         alt="MAK - GROUP OF COMPANIES"
         style={{ width: size, height: size }}
         className={`object-contain select-none ${className}`}
         loading="eager"
-        onError={(e) => {
-          (e.currentTarget as HTMLImageElement).src = '/mak_pearl_grey_edge.svg';
-        }}
+        onError={() => setPageLogoUrl(null)}
       />
     );
   }
 
-  // 2. For header & general branding: if custom logo was uploaded via Admin, render it
-  if (logoUrl) {
-    return (
-      <div className={`relative inline-flex items-center justify-center select-none ${className}`}>
-        <img
-          src={logoUrl}
-          alt="MAK - GROUP Header Logo"
-          style={{ width: size, height: size, objectFit: 'contain' }}
-          className="drop-shadow-[0_4px_12px_rgba(30,41,59,0.20)] transition-transform duration-300 hover:scale-105"
-          onError={() => setLogoUrl(null)}
-        />
-      </div>
-    );
-  }
+  // Header logo variant: only render if uploaded
+  if (!headerLogoUrl) return null;
 
-  // 3. Default to the official MAK cutout logo
   return (
     <div className={`relative inline-flex items-center justify-center select-none ${className}`}>
       <img
-        src="/mak_official_logo.svg"
-        alt="MAK - GROUP OF COMPANIES"
+        src={headerLogoUrl}
+        alt="MAK - GROUP Header Logo"
         style={{ width: size, height: size, objectFit: 'contain' }}
-        className="transition-transform duration-300 drop-shadow-xs"
-        onError={(e) => {
-          (e.currentTarget as HTMLImageElement).src = '/MAK-Group-Of-Companies.svg';
-        }}
+        className="drop-shadow-[0_2px_8px_rgba(15,23,42,0.14)] transition-transform duration-300"
+        onError={() => setHeaderLogoUrl(null)}
       />
     </div>
   );

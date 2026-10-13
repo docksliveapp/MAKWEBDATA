@@ -1,6 +1,5 @@
 import React from 'react';
-import { Sparkles } from 'lucide-react';
-import { HeroVideoPlayer } from './HeroVideoPlayer';
+import { FileText, Truck, Compass, ArrowRight } from 'lucide-react';
 
 interface HeroProps {
   onOpenQuote?: () => void;
@@ -8,20 +7,39 @@ interface HeroProps {
   onOpenInquiry?: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = () => {
-  const [pageLogoUrl, setPageLogoUrl] = React.useState<string>(() => {
+const PRESET_PATHS = [
+  '/mak_pearl_grey_edge.svg',
+  '/MAK-Group-Of-Companies.svg',
+  '/mak_transparent.svg',
+  '/erasebg-transformed.svg',
+  '/mak_official_logo.svg',
+];
+
+function isUploadedLogo(url: string | null | undefined): url is string {
+  if (!url || !url.trim()) return false;
+  return !PRESET_PATHS.includes(url.trim());
+}
+
+export const Hero: React.FC<HeroProps> = ({
+  onOpenQuote,
+  onOpenTransporter,
+  onOpenInquiry,
+}) => {
+  const [pageLogoUrl, setPageLogoUrl] = React.useState<string | null>(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('mak_page_logo') || '/mak_pearl_grey_edge.svg';
+      const saved = localStorage.getItem('mak_page_logo');
+      return isUploadedLogo(saved) ? saved : null;
     }
-    return '/mak_pearl_grey_edge.svg';
+    return null;
   });
 
   React.useEffect(() => {
     const handlePageLogoUpdate = (e: any) => {
-      if (e.detail?.pageLogo) {
-        setPageLogoUrl(e.detail.pageLogo);
-      } else if (e.detail?.resetPageLogo) {
-        setPageLogoUrl('/mak_pearl_grey_edge.svg');
+      const nextUrl = e.detail?.pageLogo;
+      if (e.detail?.resetPageLogo || !isUploadedLogo(nextUrl)) {
+        setPageLogoUrl(null);
+      } else {
+        setPageLogoUrl(nextUrl);
       }
     };
     window.addEventListener('mak-page-logo-updated', handlePageLogoUpdate);
@@ -29,86 +47,115 @@ export const Hero: React.FC<HeroProps> = () => {
   }, []);
 
   return (
-    <section id="home" className="relative overflow-hidden bg-white text-slate-900 pt-6 pb-14 md:pt-10 md:pb-18 border-b border-slate-200">
-      
-      {/* Subtle Pearl Glow & Luxury Backdrop Elements */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[720px] h-[360px] bg-gradient-to-b from-amber-200/25 to-blue-200/20 rounded-full blur-3xl pointer-events-none" />
+    <section
+      id="home"
+      className="relative overflow-hidden bg-gradient-to-b from-[#FAF9F6] via-[#FFFFFF] to-[#F4F6F9] text-slate-900 pt-7 pb-12 sm:pt-12 sm:pb-18 border-b border-slate-200/90"
+    >
+      {/* Soft Eye-Friendly Ambient Backdrop */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[780px] h-[380px] bg-gradient-to-b from-amber-100/35 to-slate-200/25 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-5">
-        
-        {/* Top Marketing Greeting & Slogan Banner */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/95 border border-slate-300/90 shadow-xs text-slate-800 text-[11px] sm:text-xs font-bold tracking-wider font-mono">
-          <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-          <span>WELCOME TO MAK - GROUP OF COMPANIES</span>
-          <span className="hidden sm:inline text-slate-400">•</span>
-          <span className="hidden sm:inline text-[#B45309]">PAKISTAN'S PREMIER MULTIMODAL NETWORK</span>
+      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-5 sm:space-y-6">
+        {/* Clean Unboxed Kicker & Slogan Metadata */}
+        <div className="space-y-1.5">
+          <p className="text-[11px] sm:text-sm font-mono font-bold tracking-[0.16em] uppercase text-[#9A6B16]">
+            MAK - GROUP OF COMPANIES · PAKISTAN'S PREMIER MULTIMODAL NETWORK
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1 text-xs sm:text-sm font-medium text-slate-600">
+            <span>Connecting Deepwater Ports</span>
+            <span aria-hidden="true" className="text-slate-400">·</span>
+            <span>Cross-Border TIR & Afghan Transit</span>
+            <span aria-hidden="true" className="text-slate-400">·</span>
+            <span>Global Ocean Liner Freight</span>
+          </div>
         </div>
 
-        {/* Brand Slogan Ribbon */}
-        <div className="flex flex-wrap items-center justify-center gap-2 text-xs font-mono font-bold uppercase text-[#8B6220] tracking-widest">
-          <span>CONNECTING PORTS</span>
-          <span>•</span>
-          <span>CROSS-BORDER TRANSIT</span>
-          <span>•</span>
-          <span>OCEAN LINER FREIGHT</span>
-        </div>
-
-        {/* Page Logo above UNIFIED LOGISTICS (Managed & Uploadable via Admin Settings "Page Logo Upload") */}
-        <div className="pt-2 pb-1 flex justify-center">
-          <img
-            src={pageLogoUrl || '/mak_pearl_grey_edge.svg'}
-            alt="MAK - GROUP OF COMPANIES"
-            className="w-40 h-40 sm:w-52 sm:h-52 md:w-60 md:h-60 object-contain mx-auto select-none drop-shadow-[0_16px_36px_rgba(15,23,42,0.22)] transition-transform duration-300 hover:scale-105"
-            loading="eager"
-            onError={(e) => {
-              (e.currentTarget as HTMLImageElement).src = '/mak_pearl_grey_edge.svg';
-            }}
-          />
-        </div>
+        {/* Uploaded Home Page Logo (Only shown when uploaded via Admin Portal) */}
+        {pageLogoUrl && (
+          <div className="pt-2 pb-1 flex justify-center">
+            <img
+              src={pageLogoUrl}
+              alt="MAK - GROUP OF COMPANIES"
+              className="w-36 h-36 sm:w-52 sm:h-52 md:w-56 md:h-56 object-contain mx-auto select-none drop-shadow-[0_12px_28px_rgba(15,23,42,0.16)] transition-transform duration-300"
+              loading="eager"
+              onError={() => setPageLogoUrl(null)}
+            />
+          </div>
+        )}
 
         {/* Main Serif Luxury Headline */}
-        <div className="space-y-1">
-          <h1 className="font-serif-luxury text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-slate-950 leading-[1.12]">
-            <span className="block font-serif-luxury">
-              UNIFIED LOGISTICS,
-            </span>
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#4A3415] via-[#8B6220] to-[#2E2010] font-serif-luxury">
+        <div className="space-y-2">
+          <h1 className="font-serif-luxury text-2xl sm:text-5xl md:text-[54px] font-bold tracking-tight text-slate-900 leading-[1.16]">
+            <span className="block font-serif-luxury">UNIFIED LOGISTICS,</span>
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#5C3D12] via-[#9A6B16] to-[#3B270C] font-serif-luxury">
               TRANSSHIPMENT & MARITIME
             </span>
-            <span className="block font-serif-luxury">
-              NETWORK
-            </span>
+            <span className="block font-serif-luxury">NETWORK</span>
           </h1>
         </div>
 
-        {/* Warm Marketing Subtitle & Value Proposition */}
-        <div className="max-w-3xl mx-auto space-y-2">
-          <p className="text-sm sm:text-base text-slate-700 font-medium leading-relaxed">
-            Welcome to Pakistan's foremost single-window trade and transport group of companies. We coordinate <strong className="text-slate-950 font-bold">2,000+ customs-registered commercial prime movers</strong>, statutory FBR bonded carrier line-haul, transcontinental TIR overland corridors, and global deep-sea liner operations.
+        {/* Eye-Friendly Readable Subtitle & Value Proposition */}
+        <div className="max-w-3xl mx-auto space-y-2.5">
+          <p className="text-sm sm:text-lg text-slate-700 font-normal leading-relaxed">
+            Welcome to Pakistan's foremost single-window trade and transport group of companies. We coordinate{' '}
+            <strong className="text-slate-900 font-semibold">
+              2,000+ customs-registered commercial prime movers
+            </strong>
+            , statutory FBR bonded carrier line-haul, transcontinental TIR overland corridors, and global deep-sea liner operations.
           </p>
-          <p className="text-xs sm:text-sm text-slate-500 italic">
+          <p className="text-xs sm:text-base text-slate-600 italic">
             "Delivering cargo from deepwater seaports to inland dry ports and Central Asian frontiers with guaranteed integrity, speed, and statutory escort."
           </p>
         </div>
 
-        {/* Cinematic Video Showcase Player */}
-        <HeroVideoPlayer />
+        {/* Balanced, Easy-to-Use Action Buttons */}
+        <div className="pt-2 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-3 max-w-md sm:max-w-none mx-auto">
+          {onOpenQuote && (
+            <button
+              onClick={onOpenQuote}
+              className="btn-gold-luxury min-h-[46px] px-6 py-3 rounded-xl text-sm font-semibold tracking-wide flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <FileText className="w-4 h-4 shrink-0" />
+              <span>Request Commercial Quote</span>
+              <ArrowRight className="w-4 h-4 shrink-0" />
+            </button>
+          )}
 
-        {/* Central Operations Desk Contact Bar */}
-        <div className="pt-1 text-[12px] text-slate-600 font-medium">
-          <span>Karachi Central Operations Desk: </span>
-          <a href="tel:+922132330103" className="font-bold text-slate-800 hover:underline">
-            +92-21-32330103
-          </a>
-          <span> / </span>
-          <span className="font-bold text-slate-800">0104</span>
-          <span className="mx-2">•</span>
-          <span>Official Corporate Email: </span>
-          <a href="mailto:info@mak-group.com.pk" className="font-bold text-[#B45309] hover:underline font-mono">
-            info@mak-group.com.pk
-          </a>
+          {onOpenTransporter && (
+            <button
+              onClick={onOpenTransporter}
+              className="min-h-[46px] px-5 py-3 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 shadow-2xs text-sm font-semibold flex items-center justify-center gap-2 transition cursor-pointer"
+            >
+              <Truck className="w-4 h-4 text-[#9A6B16] shrink-0" />
+              <span>Vehicle & Fleet Registration</span>
+            </button>
+          )}
+
+          {onOpenInquiry && (
+            <button
+              onClick={onOpenInquiry}
+              className="min-h-[46px] px-5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-800 border border-slate-200 text-sm font-semibold flex items-center justify-center gap-2 transition cursor-pointer"
+            >
+              <Compass className="w-4 h-4 text-slate-700 shrink-0" />
+              <span>Consignment & Vehicle Status</span>
+            </button>
+          )}
         </div>
 
+        {/* Central Operations Desk Contact Bar */}
+        <div className="pt-3 text-xs sm:text-sm text-slate-600 font-medium flex flex-wrap items-center justify-center gap-x-2 gap-y-1">
+          <span>Karachi Central Operations Desk:</span>
+          <a href="tel:+922132330103" className="font-semibold text-slate-900 hover:underline">
+            +92-21-32330103 / 0104
+          </a>
+          <span aria-hidden="true" className="text-slate-400">·</span>
+          <span>Official Corporate Email:</span>
+          <a
+            href="mailto:Info@mak-group.com.pk"
+            className="font-semibold text-[#9A6B16] hover:underline font-mono"
+          >
+            Info@mak-group.com.pk
+          </a>
+        </div>
       </div>
     </section>
   );

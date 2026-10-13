@@ -2,8 +2,21 @@ import React, { useState, useEffect } from 'react';
 
 export interface MakOfficialLogoProps {
   className?: string;
-  size?: number; // optional height/size hint
+  size?: number;
   customUrl?: string;
+}
+
+const PRESET_PATHS = [
+  '/mak_pearl_grey_edge.svg',
+  '/MAK-Group-Of-Companies.svg',
+  '/mak_transparent.svg',
+  '/erasebg-transformed.svg',
+  '/mak_official_logo.svg',
+];
+
+function isUploadedLogo(url: string | null | undefined): url is string {
+  if (!url || !url.trim()) return false;
+  return !PRESET_PATHS.includes(url.trim());
 }
 
 export const MakOfficialLogo: React.FC<MakOfficialLogoProps> = ({
@@ -11,19 +24,19 @@ export const MakOfficialLogo: React.FC<MakOfficialLogoProps> = ({
   size,
   customUrl,
 }) => {
-  const [logoSrc, setLogoSrc] = useState<string>(() => {
-    if (customUrl) return customUrl;
+  const [logoSrc, setLogoSrc] = useState<string | null>(() => {
+    if (isUploadedLogo(customUrl)) return customUrl;
     if (typeof window !== 'undefined') {
       const saved =
         localStorage.getItem('mak_header_logo') ||
         localStorage.getItem('mak_custom_logo');
-      if (saved) return saved;
+      return isUploadedLogo(saved) ? saved : null;
     }
-    return '/mak_official_logo.svg';
+    return null;
   });
 
   useEffect(() => {
-    if (customUrl) {
+    if (isUploadedLogo(customUrl)) {
       setLogoSrc(customUrl);
       return;
     }
@@ -31,17 +44,14 @@ export const MakOfficialLogo: React.FC<MakOfficialLogoProps> = ({
     const saved =
       localStorage.getItem('mak_header_logo') ||
       localStorage.getItem('mak_custom_logo');
-    if (saved) {
-      setLogoSrc(saved);
-    }
+    setLogoSrc(isUploadedLogo(saved) ? saved : null);
 
     const handleUpdate = (e: any) => {
-      if (e.detail?.headerLogo) {
-        setLogoSrc(e.detail.headerLogo);
-      } else if (e.detail?.logoUrl) {
-        setLogoSrc(e.detail.logoUrl);
-      } else if (e.detail?.reset) {
-        setLogoSrc('/mak_official_logo.svg');
+      const nextUrl = e.detail?.headerLogo || e.detail?.logoUrl;
+      if (e.detail?.reset || !isUploadedLogo(nextUrl)) {
+        setLogoSrc(null);
+      } else {
+        setLogoSrc(nextUrl);
       }
     };
 
@@ -49,16 +59,16 @@ export const MakOfficialLogo: React.FC<MakOfficialLogoProps> = ({
     return () => window.removeEventListener('mak-logo-updated', handleUpdate);
   }, [customUrl]);
 
+  if (!logoSrc) return null;
+
   return (
     <img
       src={logoSrc}
       alt="MAK - GROUP OF COMPANIES"
       style={size ? { height: size } : undefined}
-      className={`object-contain select-none transition-transform duration-300 hover:scale-102 ${className}`}
+      className={`object-contain select-none transition-transform duration-300 ${className}`}
       loading="eager"
-      onError={(e) => {
-        (e.currentTarget as HTMLImageElement).src = '/mak_official_logo.svg';
-      }}
+      onError={() => setLogoSrc(null)}
     />
   );
 };

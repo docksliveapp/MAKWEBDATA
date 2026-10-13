@@ -12,7 +12,6 @@ import { TransporterModal } from './components/TransporterModal';
 import { TrackInquiryModal } from './components/TrackInquiryModal';
 import { InquiryPortalModal } from './components/InquiryPortalModal';
 import { AdminPortal } from './components/AdminPortal';
-import { DrivePortalSection } from './components/DrivePortalSection';
 import { WhatsAppFloating } from './components/WhatsAppFloating';
 import { Footer } from './components/Footer';
 import type { ComprehensiveService } from './data/consortium';
@@ -52,7 +51,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden bg-white text-slate-900 flex flex-col font-sans selection:bg-amber-300 selection:text-slate-950">
+    <div className="min-h-screen w-full overflow-x-hidden bg-[#FAF9F6] text-slate-900 flex flex-col font-sans selection:bg-amber-200 selection:text-slate-950">
       
       {/* Navigation Header with Page Tabs & Services Dropdown */}
       <Navbar
@@ -69,7 +68,11 @@ export function App() {
         {/* 1. HOME PAGE */}
         {currentPage === 'home' && (
           <div className="animate-in fade-in duration-300">
-            <Hero />
+            <Hero
+              onOpenQuote={handleOpenQuote}
+              onOpenTransporter={() => setTransporterOpen(true)}
+              onOpenInquiry={() => setInquiryOpen(true)}
+            />
             <CompaniesSection onSelectServiceForQuote={handleOpenQuoteWithService} />
           </div>
         )}
@@ -113,13 +116,6 @@ export function App() {
         {currentPage === 'contact' && (
           <div className="animate-in fade-in duration-300">
             <ContactSection />
-          </div>
-        )}
-
-        {/* 6. GOOGLE DRIVE LOGISTICS VAULT PAGE */}
-        {currentPage === 'drive' && (
-          <div className="animate-in fade-in duration-300">
-            <DrivePortalSection />
           </div>
         )}
       </main>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Anchor, Truck, Shield, Compass, ArrowRight, ExternalLink, ChevronRight, FileText, Globe } from 'lucide-react';
+import { ArrowRight, ChevronRight } from 'lucide-react';
 import { MakOfficialLogo } from './MakOfficialLogo';
 
 interface CompaniesSectionProps {
@@ -75,135 +75,129 @@ export const CompaniesSection: React.FC<CompaniesSectionProps> = ({ onSelectServ
   const currentDept = departments.find(d => d.id === selectedDept) || departments[0];
 
   return (
-    <section id="divisions" className="py-14 bg-[#F8FAFC] text-slate-900 border-b border-slate-200">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+    <section id="divisions" className="py-16 md:py-20 bg-[#F4F6F9] text-slate-900 border-b border-slate-200">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-18">
         
         {/* Section 1: MAK - GROUP OF COMPANIES CORE DIVISIONS */}
         <div>
-          {/* Section Sub-heading */}
-          <div className="text-center mb-8">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#A0522D] block font-mono">
-              MAK - GROUP OF COMPANIES | CORE INTEGRATED DIVISIONS
+          <div className="text-center max-w-3xl mx-auto mb-10 space-y-2">
+            <span className="text-xs font-bold uppercase tracking-[0.16em] text-[#9A6B16] block font-mono">
+              MAK - GROUP OF COMPANIES · CORE INTEGRATED DIVISIONS
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold font-serif-luxury text-slate-900 mt-1">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-serif-luxury text-slate-900">
               Unified Single-Window Operational Pillars
             </h2>
+            <p className="text-sm sm:text-base text-slate-600">
+              Four specialized divisions operating under unified executive command across seaports, inland dry ports, and international borders.
+            </p>
           </div>
 
-          {/* 4 Light Cards Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* 4 Crisp White Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             
             {/* Card 1: Bonded Division */}
-            <div className="bg-[#F8FAFC] border border-slate-300/80 rounded-xl p-5 shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
-              <div>
-                <div className="flex items-center gap-3 mb-3">
-                  <MakOfficialLogo className="h-8 sm:h-9 w-auto shrink-0 drop-shadow-xs" />
-                  <div>
-                    <h3 className="font-bold text-slate-900 text-sm leading-tight">
-                      BONDED CARRIER DIVISION
-                    </h3>
-                  </div>
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <MakOfficialLogo className="h-9 sm:h-10 w-auto shrink-0" />
+                  <h3 className="font-bold text-slate-900 text-base leading-snug">
+                    BONDED CARRIER DIVISION
+                  </h3>
                 </div>
                 
-                <h4 className="text-xs font-semibold text-[#B45309] mb-2 leading-tight">
+                <h4 className="text-sm font-semibold text-[#9A6B16] leading-snug">
                   Customs Bonded Carrier & Regional Transit
                 </h4>
 
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-sm text-slate-600 leading-relaxed">
                   Duty-unpaid bonded line-haul, TP dry ports network, and regional transit trade across Pakistan seaports and inland dry ports.
                 </p>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-slate-200">
-                <span className="text-[11px] font-medium text-slate-600 flex items-center gap-1.5 font-mono">
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-600" />
+              <div className="mt-6 pt-3.5 border-t border-slate-100">
+                <span className="text-xs font-medium text-slate-600 flex items-center gap-2 font-mono">
+                  <span className="w-2 h-2 rounded-full bg-amber-600" />
                   FBR Private Bonded Carrier Lic.
                 </span>
               </div>
             </div>
 
             {/* Card 2: Fleet Division */}
-            <div className="bg-[#F8FAFC] border border-slate-300/80 rounded-xl p-5 shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
-              <div>
-                <div className="flex items-center gap-3 mb-3">
-                  <MakOfficialLogo className="h-8 sm:h-9 w-auto shrink-0 drop-shadow-xs" />
-                  <div>
-                    <h3 className="font-bold text-slate-900 text-sm leading-tight">
-                      NATIONWIDE FLEET DIVISION
-                    </h3>
-                  </div>
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <MakOfficialLogo className="h-9 sm:h-10 w-auto shrink-0" />
+                  <h3 className="font-bold text-slate-900 text-base leading-snug">
+                    NATIONWIDE FLEET DIVISION
+                  </h3>
                 </div>
 
-                <h4 className="text-xs font-semibold text-[#B45309] mb-2 leading-tight">
+                <h4 className="text-sm font-semibold text-[#9A6B16] leading-snug">
                   Commercial Heavy Haulage & Cold-Chain
                 </h4>
 
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-sm text-slate-600 leading-relaxed">
                   2,000+ commercial prime movers, heavy drop-deck low beds, double-deck car carriers, and active refrigerated gensets.
                 </p>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-slate-200">
-                <span className="text-[11px] font-medium text-slate-600 flex items-center gap-1.5 font-mono">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" />
+              <div className="mt-6 pt-3.5 border-t border-slate-100">
+                <span className="text-xs font-medium text-slate-600 flex items-center gap-2 font-mono">
+                  <span className="w-2 h-2 rounded-full bg-emerald-600" />
                   2,000+ Fleet Units Nationwide
                 </span>
               </div>
             </div>
 
             {/* Card 3: Customs Division */}
-            <div className="bg-[#F8FAFC] border border-slate-300/80 rounded-xl p-5 shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
-              <div>
-                <div className="flex items-center gap-3 mb-3">
-                  <MakOfficialLogo className="h-8 sm:h-9 w-auto shrink-0 drop-shadow-xs" />
-                  <div>
-                    <h3 className="font-bold text-slate-900 text-sm leading-tight">
-                      CUSTOMS BROKERAGE DIVISION
-                    </h3>
-                  </div>
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <MakOfficialLogo className="h-9 sm:h-10 w-auto shrink-0" />
+                  <h3 className="font-bold text-slate-900 text-base leading-snug">
+                    CUSTOMS BROKERAGE DIVISION
+                  </h3>
                 </div>
 
-                <h4 className="text-xs font-semibold text-[#B45309] mb-2 leading-tight">
+                <h4 className="text-sm font-semibold text-[#9A6B16] leading-snug">
                   Customs Clearance & Regulatory Port Desks
                 </h4>
 
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-sm text-slate-600 leading-relaxed">
                   WeBOC/PSW electronic GD processing, assessment support, port terminal clearances at KICT, SAPT, QICT, and international borders.
                 </p>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-slate-200">
-                <span className="text-[11px] font-medium text-slate-600 flex items-center gap-1.5 font-mono">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+              <div className="mt-6 pt-3.5 border-t border-slate-100">
+                <span className="text-xs font-medium text-slate-600 flex items-center gap-2 font-mono">
+                  <span className="w-2 h-2 rounded-full bg-blue-600" />
                   Licensed Customs Clearing Agent
                 </span>
               </div>
             </div>
 
             {/* Card 4: Maritime Division */}
-            <div className="bg-[#F8FAFC] border border-slate-300/80 rounded-xl p-5 shadow-xs hover:shadow-md transition-shadow flex flex-col justify-between">
-              <div>
-                <div className="flex items-center gap-3 mb-3">
-                  <MakOfficialLogo className="h-8 sm:h-9 w-auto shrink-0 drop-shadow-xs" />
-                  <div>
-                    <h3 className="font-bold text-slate-900 text-sm leading-tight">
-                      MARITIME & LINER DIVISION
-                    </h3>
-                  </div>
+            <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <MakOfficialLogo className="h-9 sm:h-10 w-auto shrink-0" />
+                  <h3 className="font-bold text-slate-900 text-base leading-snug">
+                    MARITIME & LINER DIVISION
+                  </h3>
                 </div>
 
-                <h4 className="text-xs font-semibold text-[#B45309] mb-2 leading-tight">
+                <h4 className="text-sm font-semibold text-[#9A6B16] leading-snug">
                   Global Maritime Liner & NVOCC Slots
                 </h4>
 
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-sm text-slate-600 leading-relaxed">
                   Maritime ocean container operations, slot charter agreements on Middle East and Asia trunk routes, and scheduled feeder loops.
                 </p>
               </div>
 
-              <div className="mt-5 pt-3 border-t border-slate-200">
-                <span className="text-[11px] font-medium text-slate-600 flex items-center gap-1.5 font-mono">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-600" />
+              <div className="mt-6 pt-3.5 border-t border-slate-100">
+                <span className="text-xs font-medium text-slate-600 flex items-center gap-2 font-mono">
+                  <span className="w-2 h-2 rounded-full bg-cyan-600" />
                   Licensed NVOCC & Ocean Forwarder
                 </span>
               </div>
@@ -213,26 +207,26 @@ export const CompaniesSection: React.FC<CompaniesSectionProps> = ({ onSelectServ
         </div>
 
         {/* Section 2: CATEGORIZED EXECUTIVE COMMAND HUB */}
-        <div id="departments" className="pt-6">
-          <div className="text-center mb-8">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#A0522D] block font-mono">
+        <div id="departments" className="pt-4">
+          <div className="text-center max-w-3xl mx-auto mb-8 space-y-2">
+            <span className="text-xs font-bold uppercase tracking-[0.16em] text-[#9A6B16] block font-mono">
               CATEGORIZED EXECUTIVE COMMAND HUB
             </span>
-            <h2 className="text-2xl sm:text-3xl font-bold font-serif-luxury text-slate-900 mt-1">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-serif-luxury text-slate-900">
               Explore Operations by Department
             </h2>
           </div>
 
-          {/* Department Selection Pills */}
-          <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
+          {/* Interactive Department Filter Tabs */}
+          <div className="flex flex-wrap items-center justify-center gap-2.5 mb-8">
             {departments.map((dept) => (
               <button
                 key={dept.id}
                 onClick={() => setSelectedDept(dept.id)}
-                className={`px-4 py-2 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                className={`min-h-[42px] px-5 py-2.5 rounded-xl text-sm font-semibold transition cursor-pointer ${
                   selectedDept === dept.id
-                    ? 'bg-[#1E293B] text-white shadow-sm'
-                    : 'bg-[#DEE2E9] text-slate-700 hover:bg-[#D5DAE3]'
+                    ? 'bg-slate-900 text-white shadow-sm'
+                    : 'bg-white text-slate-700 border border-slate-200 hover:border-slate-300 hover:bg-slate-50'
                 }`}
               >
                 {dept.name}
@@ -241,30 +235,30 @@ export const CompaniesSection: React.FC<CompaniesSectionProps> = ({ onSelectServ
           </div>
 
           {/* Department Detail Display Card */}
-          <div className="bg-[#F8FAFC] border border-slate-300/80 rounded-2xl p-6 sm:p-8 shadow-sm">
+          <div className="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-9 shadow-sm">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
               <div className="lg:col-span-7 space-y-4">
-                <div className="space-y-1">
-                  <span className="text-xs font-mono font-bold text-[#B45309] uppercase">
-                    Managing Command: {currentDept.entity}
+                <div className="space-y-1.5">
+                  <span className="text-xs font-mono font-bold text-[#9A6B16] uppercase tracking-wider block">
+                    Managing Command · {currentDept.entity}
                   </span>
-                  <h3 className="text-xl sm:text-2xl font-bold font-serif-luxury text-slate-900">
+                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold font-serif-luxury text-slate-900">
                     {currentDept.name}
                   </h3>
                 </div>
 
-                <p className="text-sm text-slate-600 leading-relaxed">
+                <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
                   {currentDept.desc}
                 </p>
 
-                <div className="space-y-2 pt-2">
-                  <span className="text-xs font-mono uppercase font-bold text-slate-500 block">
+                <div className="space-y-3 pt-2">
+                  <span className="text-xs font-mono uppercase font-bold text-slate-500 block tracking-wider">
                     Operational Competencies:
                   </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {currentDept.points.map((pt, idx) => (
-                      <div key={idx} className="flex items-start gap-2 text-xs text-slate-700 p-2 rounded bg-[#F1F5F9] border border-slate-200">
-                        <ChevronRight className="w-3.5 h-3.5 text-amber-700 shrink-0 mt-0.5" />
+                      <div key={idx} className="flex items-start gap-2.5 text-sm text-slate-700 p-3 rounded-xl bg-[#F8FAFC] border border-slate-200/80">
+                        <ChevronRight className="w-4 h-4 text-[#9A6B16] shrink-0 mt-0.5" />
                         <span>{pt}</span>
                       </div>
                     ))}
@@ -272,24 +266,24 @@ export const CompaniesSection: React.FC<CompaniesSectionProps> = ({ onSelectServ
                 </div>
               </div>
 
-              <div className="lg:col-span-5 bg-[#EDF0F5] border border-slate-300 rounded-xl p-6 space-y-4">
-                <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-700 border-b border-slate-300 pb-2">
+              <div className="lg:col-span-5 bg-[#F8FAFC] border border-slate-200 rounded-2xl p-6 sm:p-7 space-y-5">
+                <h4 className="text-sm font-mono font-bold uppercase tracking-wider text-slate-800 border-b border-slate-200 pb-3">
                   MAK Group Operations Desk
                 </h4>
-                <p className="text-xs text-slate-600">
+                <p className="text-sm text-slate-600 leading-relaxed">
                   Ready to book freight or clear statutory documentation through this department? Our single-window desk coordinates immediate turnaround.
                 </p>
-                <div className="space-y-2 pt-1 text-xs font-mono text-slate-700">
-                  <div className="flex justify-between">
-                    <span>Direct Desk Tel:</span>
-                    <span className="font-bold">+92-21-32330103</span>
+                <div className="space-y-2.5 pt-1 text-sm font-mono text-slate-700">
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-500">Direct Desk Tel:</span>
+                    <span className="font-bold text-slate-900">+92-21-32330103</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Operations Email:</span>
-                    <span className="font-bold text-[#B45309]">info@mak-group.com.pk</span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-500">Operations Email:</span>
+                    <span className="font-bold text-[#9A6B16]">info@mak-group.com.pk</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>WhatsApp Dispatch:</span>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-500">WhatsApp Dispatch:</span>
                     <a
                       href="https://wa.me/923218496006"
                       target="_blank"
@@ -302,10 +296,10 @@ export const CompaniesSection: React.FC<CompaniesSectionProps> = ({ onSelectServ
                 </div>
                 <button
                   onClick={() => onSelectServiceForQuote(currentDept.name)}
-                  className="w-full py-2.5 rounded-lg bg-gradient-to-r from-[#B8860B] via-[#C59B27] to-[#A37420] hover:from-[#A37420] hover:to-[#8B6214] text-white font-semibold text-xs tracking-wider uppercase transition shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+                  className="btn-gold-luxury w-full min-h-[44px] py-3 px-5 rounded-xl text-white font-semibold text-sm tracking-wide transition flex items-center justify-center gap-2 cursor-pointer"
                 >
                   <span>Request Department Rate Quote</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </div>

@@ -2,150 +2,143 @@
 
 :root {
   color-scheme: light only !important;
+  --surface-canvas: #FAF9F6;
+  --surface-card: #FFFFFF;
+  --surface-subtle: #F3F5F8;
+  --ink-primary: #0F172A;
+  --ink-secondary: #334155;
+  --ink-muted: #64748B;
+  --accent-bronze: #9A6B16;
+  --accent-gold: #B8860B;
 }
 
 html, body {
-  background-color: #FFFFFF !important;
+  background-color: #FAF9F6 !important;
   color: #0F172A !important;
   color-scheme: light only !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 @media (prefers-color-scheme: dark) {
   :root, html, body {
     color-scheme: light only !important;
-    background-color: #FFFFFF !important;
+    background-color: #FAF9F6 !important;
     color: #0F172A !important;
   }
 }
 
 @layer base {
   body {
-    background: #FFFFFF;
+    background: #FAF9F6;
     color: #0F172A;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.65;
     min-height: 100vh;
+  }
+
+  p {
+    line-height: 1.68;
   }
 
   h1, h2, h3, .font-heading {
     font-family: 'Cinzel', serif;
     letter-spacing: -0.01em;
+    color: #0F172A;
   }
 
-  .font-cinzel {
-    font-family: 'Cinzel', serif;
-  }
-
-  .font-serif-luxury {
+  .font-cinzel, .font-serif-luxury {
     font-family: 'Cinzel', serif;
   }
 
   .font-mono-code {
     font-family: 'JetBrains Mono', monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid #B8860B;
+    outline-offset: 2px;
   }
 }
 
-/* Pearl White Glassmorphism utilities */
+/* Eye-Friendly Pearl & Warm Alabaster Surface Utilities */
 .glass-pearl {
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.85);
-  box-shadow: 0 10px 30px 0 rgba(148, 163, 184, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
 }
 
 .glass-pearl-card {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.90) 0%, rgba(248, 250, 252, 0.75) 100%);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  box-shadow: 0 8px 24px -4px rgba(100, 116, 139, 0.10), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 6px 20px -4px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
 }
 
 .glass-pearl-subtle {
-  background: rgba(241, 245, 249, 0.65);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
+  background: #F4F6F9;
+  border: 1px solid #E2E8F0;
 }
 
-/* Luxury Animated Button Effects */
+/* Decent, Balanced Executive Button Styles */
 .btn-gold-luxury {
-  background: linear-gradient(135deg, #B8860B 0%, #D4AF37 50%, #A37420 100%);
+  background: linear-gradient(135deg, #9A6B16 0%, #B8860B 55%, #8C5E12 100%);
   color: #FFFFFF;
   position: relative;
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 14px rgba(184, 134, 11, 0.28);
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 3px 10px rgba(154, 107, 22, 0.22);
 }
 
 .btn-gold-luxury:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(184, 134, 11, 0.40);
-  background: linear-gradient(135deg, #C59B27 0%, #DFBE52 50%, #B8860B 100%);
-}
-
-.btn-gold-luxury::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -60%;
-  width: 20%;
-  height: 200%;
-  background: rgba(255, 255, 255, 0.35);
-  transform: rotate(30deg);
-  transition: none;
-}
-
-.btn-gold-luxury:hover::after {
-  left: 140%;
-  transition: all 0.75s ease-in-out;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(154, 107, 22, 0.30);
+  background: linear-gradient(135deg, #AA781B 0%, #C49214 55%, #9A6B16 100%);
 }
 
 .btn-dark-luxury {
-  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+  background: #0F172A;
   color: #FFFFFF;
   position: relative;
   overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.16);
 }
 
 .btn-dark-luxury:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.38);
-  background: linear-gradient(135deg, #1E293B 0%, #334155 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.24);
+  background: #1E293B;
 }
 
 .btn-pill-interactive {
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
 }
 
 .btn-pill-interactive:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(100, 116, 139, 0.16);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(100, 116, 139, 0.14);
   border-color: #B8860B;
-}
-
-/* Subtle Shimmer for High-Priority Tags */
-@keyframes shimmerPulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.85; transform: scale(1.02); }
-}
-
-.animate-shimmer-subtle {
-  animation: shimmerPulse 3s infinite ease-in-out;
 }
 
 /* Light theme scrollbars */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #E8EDF5;
+  background: #F1F5F9;
 }
 
 ::-webkit-scrollbar-thumb {
