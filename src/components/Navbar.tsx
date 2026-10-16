@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ConsortiumEmblem } from './ConsortiumEmblem';
 import { COMPREHENSIVE_SERVICES, type ComprehensiveService } from '../data/consortium';
 import {
@@ -15,7 +15,6 @@ import {
   Globe,
   ShieldCheck,
   Phone,
-  Mail,
   ArrowRight,
   Home,
   Building2,
@@ -37,13 +36,24 @@ export const Navbar: React.FC<NavbarProps> = ({
   onNavigate,
   onOpenQuote,
   onOpenTransporter,
-  onOpenInquiry,
   onSelectServiceDetail,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [servicesDropdownOpen, setServicesDropdownOpen] = useState(false);
   const [inquiryDropdownOpen, setInquiryDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setServicesDropdownOpen(false);
+        setInquiryDropdownOpen(false);
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const handlePageSelect = (page: AppPage) => {
     onNavigate(page);
@@ -68,37 +78,22 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-2xs transition-all">
-      {/* Top Executive Information Strip */}
-      <div className="border-b border-slate-200/80 px-4 py-1.5 text-center text-xs font-medium text-slate-700 tracking-wide bg-[#F4F6F9]">
-        <div className="max-w-[1440px] mx-auto flex items-center justify-between">
-          <span className="hidden md:inline font-mono text-[11px] font-semibold text-[#9A6B16]">
-            FBR BONDED CARRIER · PSW CUSTOMS BROKER · IRU TIR TRANSIT · NVOCC MARITIME
-          </span>
-          <span className="mx-auto md:mx-0 font-semibold text-slate-800">
-            MAK - GROUP OF COMPANIES | Pakistan's Premier Multimodal Logistics Network
-          </span>
-          <span className="hidden md:inline font-mono text-[11px] text-slate-700 font-semibold">
-            Tel: +92-21-32330103 / 0104 · Dubai: +971-4-570-8397
-          </span>
-        </div>
-      </div>
-
-      {/* Main Navbar */}
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20 sm:h-24">
+      {/* Main Responsive Navbar */}
+      <div className="container-luxury">
+        <div className="flex items-center justify-between h-18 sm:h-22 lg:h-24 gap-4">
           
           {/* Brand Logo & Title */}
-          <div className="flex items-center">
+          <div className="flex items-center shrink-0">
             <button
               onClick={() => handlePageSelect('home')}
-              className="flex items-center gap-3 sm:gap-4 group text-left cursor-pointer focus:outline-none py-1.5"
+              className="flex items-center gap-3 sm:gap-3.5 group text-left cursor-pointer focus:outline-none py-1.5"
             >
               <ConsortiumEmblem
-                size={68}
-                className="shrink-0 h-13 sm:h-16 w-auto transition-transform duration-300 group-hover:scale-103 drop-shadow-[0_2px_8px_rgba(15,23,42,0.14)]"
+                size={64}
+                className="shrink-0 h-12 sm:h-15 w-auto transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_2px_8px_rgba(15,23,42,0.14)]"
               />
               <div className="flex flex-col justify-center">
-                <span className="font-serif-luxury font-bold tracking-wider text-lg sm:text-2xl text-slate-900 group-hover:text-[#9A6B16] transition-colors leading-tight">
+                <span className="font-serif-luxury font-bold tracking-wider text-lg sm:text-2xl 2xl:text-[26px] text-slate-900 group-hover:text-[#9A6B16] transition-colors leading-tight">
                   MAK - GROUP
                 </span>
                 <span className="text-[10px] sm:text-xs font-bold tracking-[0.22em] text-[#9A6B16] uppercase font-mono leading-tight mt-0.5">
@@ -108,11 +103,11 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           </div>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-6 text-sm font-semibold text-slate-700">
+          {/* Laptop, Desktop & Big Screen Navigation Links */}
+          <nav className="hidden lg:flex items-center gap-5 xl:gap-7 2xl:gap-8 text-sm 2xl:text-[15px] font-semibold text-slate-700">
             <button
               onClick={() => handlePageSelect('home')}
-              className={`hover:text-[#9A6B16] transition-colors cursor-pointer py-1.5 border-b-2 font-semibold ${
+              className={`hover:text-[#9A6B16] transition-all cursor-pointer py-1.5 border-b-2 font-semibold ${
                 currentPage === 'home'
                   ? 'text-[#9A6B16] border-[#B8860B]'
                   : 'text-slate-700 border-transparent'
@@ -128,7 +123,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   setServicesDropdownOpen(!servicesDropdownOpen);
                   setInquiryDropdownOpen(false);
                 }}
-                className={`flex items-center gap-1.5 hover:text-[#9A6B16] transition-colors cursor-pointer py-1.5 border-b-2 font-semibold ${
+                className={`flex items-center gap-1.5 hover:text-[#9A6B16] transition-all cursor-pointer py-1.5 border-b-2 font-semibold ${
                   currentPage === 'services' || servicesDropdownOpen
                     ? 'text-[#9A6B16] border-[#B8860B]'
                     : 'text-slate-700 border-transparent'
@@ -143,17 +138,17 @@ export const Navbar: React.FC<NavbarProps> = ({
               {servicesDropdownOpen && (
                 <div
                   onMouseLeave={() => setServicesDropdownOpen(false)}
-                  className="absolute left-0 mt-2 w-96 bg-white rounded-2xl shadow-xl border border-slate-200 p-3 space-y-1 z-50 animate-in fade-in duration-150 max-h-[80vh] overflow-y-auto"
+                  className="absolute left-0 mt-2.5 w-96 bg-white rounded-2xl shadow-2xl border border-slate-200/90 p-3 space-y-1 z-50 animate-fade-up max-h-[80vh] overflow-y-auto"
                 >
                   <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between">
                     <span className="text-xs font-mono uppercase font-bold text-slate-500 tracking-wider">
-                      Service Divisions
+                      6 Core Divisions
                     </span>
                     <button
                       onClick={() => handlePageSelect('services')}
                       className="text-xs font-bold text-[#9A6B16] hover:underline cursor-pointer flex items-center gap-1"
                     >
-                      <span>View All Services</span>
+                      <span>All Services</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
@@ -162,14 +157,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <button
                       key={svc.id}
                       onClick={() => handleCategorySelect(svc)}
-                      className="w-full p-3 rounded-xl hover:bg-slate-50 transition-colors flex items-start gap-3 text-left group cursor-pointer border border-transparent hover:border-slate-200"
+                      className="w-full p-3 rounded-xl hover:bg-[#FAF9F6] transition-all flex items-start gap-3 text-left group cursor-pointer border border-transparent hover:border-amber-200/80"
                     >
-                      <div className="w-9 h-9 rounded-lg bg-[#F4F6F9] text-slate-800 flex items-center justify-center shrink-0 mt-0.5">
-                        {svc.category === 'Bonded Carrier' && <Truck className="w-4 h-4 text-amber-800" />}
+                      <div className="w-9 h-9 rounded-lg bg-[#F3F5F8] text-slate-800 flex items-center justify-center shrink-0 mt-0.5 group-hover:bg-amber-50 transition-colors">
+                        {svc.category === 'Bonded Carrier' && <Truck className="w-4 h-4 text-[#9A6B16]" />}
                         {svc.category === 'Customs Clearance' && <FileText className="w-4 h-4 text-blue-800" />}
                         {svc.category === 'Maritime' && <Anchor className="w-4 h-4 text-cyan-800" />}
                         {svc.category === 'TIR Transit' && <Globe className="w-4 h-4 text-emerald-800" />}
-                        {svc.category === 'Afghan Transit' && <ShieldCheck className="w-4 h-4 text-amber-800" />}
+                        {svc.category === 'Afghan Transit' && <ShieldCheck className="w-4 h-4 text-[#9A6B16]" />}
                         {svc.category === 'Specialized Fleet' && <Package className="w-4 h-4 text-indigo-800" />}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -177,7 +172,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                           {svc.title}
                         </span>
                         <span className="text-xs text-slate-500 font-mono block truncate pt-0.5">
-                          {svc.managingEntity} · {svc.badge}
+                          {svc.category} · {svc.badge}
                         </span>
                       </div>
                     </button>
@@ -188,7 +183,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => handlePageSelect('about')}
-              className={`hover:text-[#9A6B16] transition-colors cursor-pointer py-1.5 border-b-2 font-semibold ${
+              className={`hover:text-[#9A6B16] transition-all cursor-pointer py-1.5 border-b-2 font-semibold ${
                 currentPage === 'about'
                   ? 'text-[#9A6B16] border-[#B8860B]'
                   : 'text-slate-700 border-transparent'
@@ -199,7 +194,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => handlePageSelect('corridors')}
-              className={`hover:text-[#9A6B16] transition-colors cursor-pointer py-1.5 border-b-2 font-semibold ${
+              className={`hover:text-[#9A6B16] transition-all cursor-pointer py-1.5 border-b-2 font-semibold ${
                 currentPage === 'corridors'
                   ? 'text-[#9A6B16] border-[#B8860B]'
                   : 'text-slate-700 border-transparent'
@@ -210,7 +205,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               onClick={() => handlePageSelect('contact')}
-              className={`hover:text-[#9A6B16] transition-colors cursor-pointer py-1.5 border-b-2 font-semibold ${
+              className={`hover:text-[#9A6B16] transition-all cursor-pointer py-1.5 border-b-2 font-semibold ${
                 currentPage === 'contact'
                   ? 'text-[#9A6B16] border-[#B8860B]'
                   : 'text-slate-700 border-transparent'
@@ -226,7 +221,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   setInquiryDropdownOpen(!inquiryDropdownOpen);
                   setServicesDropdownOpen(false);
                 }}
-                className="min-h-[40px] px-4 py-2 rounded-xl bg-[#FAF9F6] hover:bg-amber-50/80 text-slate-800 border border-slate-300 flex items-center gap-1.5 text-sm font-semibold transition shadow-2xs cursor-pointer"
+                className="btn-surface-luxury min-h-[42px] px-4 py-2 rounded-xl flex items-center gap-1.5 text-sm font-semibold cursor-pointer"
               >
                 <Compass className="w-4 h-4 text-[#9A6B16]" />
                 <span>Status Hub</span>
@@ -236,17 +231,17 @@ export const Navbar: React.FC<NavbarProps> = ({
               {inquiryDropdownOpen && (
                 <div
                   onMouseLeave={() => setInquiryDropdownOpen(false)}
-                  className="absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-xl border border-slate-200 p-2.5 space-y-1 z-50 animate-in fade-in duration-150"
+                  className="absolute right-0 mt-2.5 w-72 bg-white rounded-2xl shadow-2xl border border-slate-200/90 p-2.5 space-y-1 z-50 animate-fade-up"
                 >
                   <a
                     href="https://status.makpk.online/?mode=status"
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => setInquiryDropdownOpen(false)}
-                    className="p-3 rounded-xl hover:bg-slate-50 flex items-center justify-between text-left group"
+                    className="p-3 rounded-xl hover:bg-[#FAF9F6] flex items-center justify-between text-left group border border-transparent hover:border-amber-200/80"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-amber-50 border border-amber-200/70 flex items-center justify-center text-amber-800">
+                      <div className="w-9 h-9 rounded-lg bg-amber-50 border border-amber-200/70 flex items-center justify-center text-[#9A6B16]">
                         <Package className="w-4 h-4" />
                       </div>
                       <div>
@@ -266,7 +261,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => setInquiryDropdownOpen(false)}
-                    className="p-3 rounded-xl hover:bg-slate-50 flex items-center justify-between text-left group"
+                    className="p-3 rounded-xl hover:bg-[#FAF9F6] flex items-center justify-between text-left group border border-transparent hover:border-blue-200/80"
                   >
                     <div className="flex items-center gap-3">
                       <div className="w-9 h-9 rounded-lg bg-blue-50 border border-blue-200/70 flex items-center justify-center text-blue-800">
@@ -287,21 +282,29 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </div>
 
-            {/* Primary CTA Button */}
+            {/* Primary Animated CTA Button */}
             <button
               onClick={onOpenQuote}
-              className="btn-gold-luxury min-h-[40px] px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-1.5 cursor-pointer"
+              className="group btn-gold-luxury min-h-[42px] px-5 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 cursor-pointer"
             >
               <span>Get Quote</span>
-              <ArrowRight className="w-4 h-4" />
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
             </button>
           </nav>
 
-          {/* Mobile Hamburger Button */}
-          <div className="flex lg:hidden items-center gap-2">
+          {/* Tablet & Mobile Actions */}
+          <div className="flex lg:hidden items-center gap-2.5">
+            <button
+              onClick={onOpenQuote}
+              className="hidden sm:inline-flex btn-gold-luxury min-h-[40px] px-4 py-2 rounded-xl text-xs font-semibold items-center gap-1.5 cursor-pointer"
+            >
+              <span>Get Quote</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2.5 rounded-xl bg-[#F4F6F9] border border-slate-200 text-slate-800 hover:bg-slate-200/70 transition-colors cursor-pointer"
+              className="p-2.5 rounded-xl bg-[#F3F5F8] border border-slate-200 text-slate-800 hover:bg-slate-200/70 transition-colors cursor-pointer"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -310,9 +313,9 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* Redesigned Clean & Decent Mobile Navigation Menu (Without Google Drive Vault) */}
+      {/* Smooth Mobile & Tablet Navigation Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#FAF9F6] border-b border-slate-200 px-4 pt-3 pb-6 shadow-xl max-h-[84vh] overflow-y-auto">
+        <div className="lg:hidden bg-[#FAF9F6] border-b border-slate-200 px-4 pt-3 pb-6 shadow-2xl max-h-[85vh] overflow-y-auto animate-fade-up">
           <div className="max-w-lg mx-auto space-y-4">
             
             {/* Primary Navigation List */}
@@ -357,12 +360,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </div>
 
                 {mobileServicesOpen && (
-                  <div className="mt-1 ml-4 pl-3 border-l-2 border-amber-200 space-y-1 py-1">
+                  <div className="mt-1.5 mx-2 p-2 rounded-xl bg-[#FAF9F6] border border-slate-200/80 space-y-1">
                     {COMPREHENSIVE_SERVICES.map((svc) => (
                       <button
                         key={svc.id}
                         onClick={() => handleCategorySelect(svc)}
-                        className="w-full text-left py-2 px-3 rounded-lg hover:bg-slate-100 text-xs font-medium text-slate-700 hover:text-slate-900 flex items-center justify-between gap-2 cursor-pointer"
+                        className="w-full text-left py-2 px-3 rounded-lg hover:bg-white text-xs font-medium text-slate-700 hover:text-slate-900 flex items-center justify-between gap-2 cursor-pointer"
                       >
                         <span className="truncate">{svc.title}</span>
                         <ArrowRight className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -418,7 +421,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             </div>
 
-            {/* Live Status Tracking Links (Compact 2-Column Row) */}
+            {/* Consignment & Vehicle Status Links */}
             <div className="grid grid-cols-2 gap-2.5">
               <a
                 href="https://status.makpk.online/?mode=status"
@@ -447,14 +450,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               </a>
             </div>
 
-            {/* Direct Email Inquiry Actions */}
+            {/* Direct Quotation & Vehicle Registration Actions */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
                   onOpenQuote();
                 }}
-                className="btn-gold-luxury min-h-[44px] py-2.5 px-4 rounded-xl text-white text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer"
+                className="btn-gold-luxury min-h-[46px] py-2.5 px-4 rounded-xl text-white text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer"
               >
                 <FileText className="w-4 h-4" />
                 <span>Request Logistics Quote</span>
@@ -465,22 +468,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                   setMobileMenuOpen(false);
                   onOpenTransporter();
                 }}
-                className="min-h-[44px] py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer transition"
+                className="btn-dark-luxury min-h-[46px] py-2.5 px-4 rounded-xl text-white text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer"
               >
                 <ClipboardCheck className="w-4 h-4 text-amber-400" />
                 <span>Vehicle Registration</span>
               </button>
-            </div>
-
-            {/* Direct Contact Strip */}
-            <div className="pt-1 flex items-center justify-between text-xs text-slate-500 px-1">
-              <a href="tel:+922132330103" className="hover:text-slate-900 font-mono">
-                +92-21-32330103
-              </a>
-              <a href="mailto:Info@mak-group.com.pk" className="text-[#9A6B16] font-mono font-semibold hover:underline flex items-center gap-1">
-                <Mail className="w-3.5 h-3.5" />
-                <span>Info@mak-group.com.pk</span>
-              </a>
             </div>
 
           </div>

@@ -10,12 +10,10 @@ import {
   Database,
   Lock,
   LogOut,
-  Mail,
   RefreshCw,
   HardDrive,
   Eye,
   EyeOff,
-  Sparkles,
 } from 'lucide-react';
 import {
   loginWithGoogle,
@@ -24,6 +22,7 @@ import {
   testConnection,
   ensureInitialFirestoreCollections,
 } from '../firebase';
+import firebaseAppletConfig from '../../firebase-applet-config.json';
 import { DrivePortalSection } from './DrivePortalSection';
 import type { User } from 'firebase/auth';
 
@@ -42,7 +41,13 @@ const PRESET_PATHS = [
 
 function isUploadedLogo(url: string | null | undefined): url is string {
   if (!url || !url.trim()) return false;
-  return !PRESET_PATHS.includes(url.trim());
+  const trimmed = url.trim();
+  if (PRESET_PATHS.includes(trimmed)) return false;
+  return (
+    trimmed.startsWith('data:image/') ||
+    trimmed.startsWith('https://') ||
+    trimmed.startsWith('blob:')
+  );
 }
 
 export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => {
@@ -58,18 +63,20 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
 
   const [activeTab, setActiveTab] = useState<'branding' | 'drive' | 'firebase' | 'security'>('branding');
 
-  // Uploaded logos state (no presets)
   const [headerLogoData, setHeaderLogoData] = useState<string>('');
   const [pageLogoData, setPageLogoData] = useState<string>('');
   const [savedHeaderSuccess, setSavedHeaderSuccess] = useState(false);
   const [savedPageSuccess, setSavedPageSuccess] = useState(false);
 
-  // Admin passcode management
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showNewPasscode, setShowNewPasscode] = useState(false);
   const [passwordSaved, setPasswordSaved] = useState(false);
   const [passwordError, setPasswordError] = useState('');
+
+  const [failedAttempts, setFailedAttempts] = useState(0);
+  const [lockoutUntil, setLockoutUntil] = useState<number>(0);
+  const [uploadErrorMsg, setUploadErrorMsg] = useState<string>('');
 
   const getStoredPassword = () => {
     return localStorage.getItem('mak_admin_password') || 'Behzadmk@123';
@@ -97,16 +104,43 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
     }
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   const handlePasscodeLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    const now = Date.now();
+    if (lockoutUntil > now) {
+      const remainingSec = Math.ceil((lockoutUntil - now) / 1000);
+      setAuthError(true);
+      setAuthErrorMsg(`Too many failed attempts. Please wait ${remainingSec} seconds.`);
+      return;
+    }
+
     if (passwordInput === getStoredPassword()) {
       setIsAuthenticated(true);
+      setFailedAttempts(0);
+      setLockoutUntil(0);
       setAuthError(false);
       setAuthErrorMsg('');
       setPasswordInput('');
     } else {
-      setAuthError(true);
-      setAuthErrorMsg('Incorrect administrator passcode. Please try again.');
+      const nextFailures = failedAttempts + 1;
+      setFailedAttempts(nextFailures);
+      if (nextFailures >= 5) {
+        setLockoutUntil(now + 30000);
+        setAuthError(true);
+        setAuthErrorMsg('Too many failed attempts. Login locked for 30 seconds.');
+      } else {
+        setAuthError(true);
+        setAuthErrorMsg('Incorrect administrator passcode. Please try again.');
+      }
     }
   };
 
@@ -141,22 +175,34 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
     }
   };
 
-  // Header Logo Upload
   const handleHeaderFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setUploadErrorMsg('');
+    if (!file.type.startsWith('image/')) {
+      setUploadErrorMsg('Please select a valid image file (PNG, SVG, JPG, WebP).');
+      return;
+    }
+    if (file.size > 4 * 1024 * 1024) {
+      setUploadErrorMsg('Logo file size must be under 4 MB.');
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (event) => {
       const dataUrl = event.target?.result as string;
-      if (dataUrl) {
-        setHeaderLogoData(dataUrl);
-        localStorage.setItem('mak_header_logo', dataUrl);
-        localStorage.setItem('mak_custom_logo', dataUrl);
-        window.dispatchEvent(
-          new CustomEvent('mak-logo-updated', { detail: { logoUrl: dataUrl, headerLogo: dataUrl } })
-        );
-        setSavedHeaderSuccess(true);
-        setTimeout(() => setSavedHeaderSuccess(false), 2500);
+      if (dataUrl && dataUrl.startsWith('data:image/')) {
+        try {
+          localStorage.setItem('mak_header_logo', dataUrl);
+          localStorage.setItem('mak_custom_logo', dataUrl);
+          setHeaderLogoData(dataUrl);
+          window.dispatchEvent(
+            new CustomEvent('mak-logo-updated', { detail: { logoUrl: dataUrl, headerLogo: dataUrl } })
+          );
+          setSavedHeaderSuccess(true);
+          setTimeout(() => setSavedHeaderSuccess(false), 2500);
+        } catch {
+          setUploadErrorMsg('Image is too large for browser storage. Please choose a smaller logo.');
+        }
       }
     };
     reader.readAsDataURL(file);
@@ -171,21 +217,33 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
     setTimeout(() => setSavedHeaderSuccess(false), 2500);
   };
 
-  // Home Page Logo Upload
   const handlePageFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    setUploadErrorMsg('');
+    if (!file.type.startsWith('image/')) {
+      setUploadErrorMsg('Please select a valid image file (PNG, SVG, JPG, WebP).');
+      return;
+    }
+    if (file.size > 4 * 1024 * 1024) {
+      setUploadErrorMsg('Logo file size must be under 4 MB.');
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (event) => {
       const dataUrl = event.target?.result as string;
-      if (dataUrl) {
-        setPageLogoData(dataUrl);
-        localStorage.setItem('mak_page_logo', dataUrl);
-        window.dispatchEvent(
-          new CustomEvent('mak-page-logo-updated', { detail: { pageLogo: dataUrl } })
-        );
-        setSavedPageSuccess(true);
-        setTimeout(() => setSavedPageSuccess(false), 2500);
+      if (dataUrl && dataUrl.startsWith('data:image/')) {
+        try {
+          localStorage.setItem('mak_page_logo', dataUrl);
+          setPageLogoData(dataUrl);
+          window.dispatchEvent(
+            new CustomEvent('mak-page-logo-updated', { detail: { pageLogo: dataUrl } })
+          );
+          setSavedPageSuccess(true);
+          setTimeout(() => setSavedPageSuccess(false), 2500);
+        } catch {
+          setUploadErrorMsg('Image is too large for browser storage. Please choose a smaller logo.');
+        }
       }
     };
     reader.readAsDataURL(file);
@@ -222,7 +280,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-slate-950/75 backdrop-blur-sm p-2.5 sm:p-4 overflow-y-auto">
+    <div
+      role="dialog"
+      aria-modal="true"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-50 flex items-start sm:items-center justify-center bg-slate-950/75 backdrop-blur-sm p-2.5 sm:p-4 overflow-y-auto"
+    >
       <div className="relative w-full max-h-[92vh] sm:max-w-3xl my-auto bg-[#FAF9F6] rounded-2xl sm:rounded-3xl border border-amber-500/30 shadow-2xl text-slate-900 flex flex-col overflow-hidden">
         
         {/* Luxury Obsidian & Champagne Gold Executive Header */}
@@ -232,12 +297,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
               <ShieldCheck className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div className="min-w-0">
-              <div className="flex items-center gap-1.5">
-                <Sparkles className="w-3 h-3 text-amber-400 shrink-0" />
-                <span className="text-[10px] sm:text-[11px] font-mono uppercase text-amber-400 tracking-[0.2em] block font-bold truncate">
-                  MAK - GROUP EXECUTIVE COMMAND
-                </span>
-              </div>
+              <span className="text-[10px] sm:text-[11px] font-mono uppercase text-amber-400 tracking-[0.2em] block font-bold truncate">
+                MAK - GROUP EXECUTIVE COMMAND
+              </span>
               <h3 className="text-base sm:text-xl font-bold font-serif-luxury text-white truncate">
                 Luxury Administration Suite
               </h3>
@@ -265,7 +327,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
           </div>
         </div>
 
-        {/* 1. LUXURY LOGIN GATE (No Password Hint Exposed) */}
+        {/* 1. LUXURY LOGIN GATE */}
         {!isAuthenticated ? (
           <div className="flex-1 flex flex-col items-center justify-center p-5 sm:p-12 overflow-y-auto">
             <div className="w-full max-w-md bg-white p-7 sm:p-9 rounded-3xl border border-slate-200/90 shadow-xl text-center space-y-6 my-auto">
@@ -322,7 +384,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
           /* 2. UNLOCKED LUXURY ADMIN DASHBOARD */
           <div className="flex-1 flex flex-col overflow-hidden">
             
-            {/* Easy-to-Use 2x2 (Mobile) / 4-Column (Desktop) Navigation Selector */}
+            {/* 2x2 (Mobile) / 4-Column (Desktop) Navigation Selector */}
             <div className="p-3 sm:px-6 sm:py-3.5 bg-white border-b border-slate-200/90 shrink-0">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 <button
@@ -377,167 +439,161 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
 
             {/* Scrollable Luxury Content Area */}
             <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5">
-              
-              {/* Direct Email Routing Banner */}
-              <div className="p-3.5 rounded-2xl bg-gradient-to-r from-amber-50/90 via-white to-amber-50/80 border border-amber-200/90 flex items-center justify-between gap-3 text-xs sm:text-sm text-slate-800 shadow-2xs">
-                <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-8 h-8 rounded-xl bg-amber-100/80 text-[#9A6B16] flex items-center justify-center shrink-0">
-                    <Mail className="w-4 h-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <span className="font-semibold text-slate-900">Direct Email Routing: </span>
-                    <span className="text-slate-600">Quotes & Transporter requests are dispatched directly to </span>
-                    <strong className="font-mono text-[#9A6B16]">Info@mak-group.com.pk</strong>
-                  </div>
-                </div>
-              </div>
 
               {/* TAB 1: LOGOS & BRANDING (Upload Only - No Presets) */}
               {activeTab === 'branding' && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  
-                  {/* 1. Home Page Hero Logo Upload Card */}
-                  <div className="bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 space-y-4 shadow-2xs flex flex-col justify-between">
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                        <div>
-                          <span className="text-[10px] font-mono uppercase text-[#9A6B16] font-bold tracking-wider block">
-                            1. HOME PAGE HERO
-                          </span>
-                          <h4 className="text-base sm:text-lg font-serif-luxury font-bold text-slate-900">
-                            Home Page Logo
-                          </h4>
-                        </div>
-                        <span className={`text-xs font-mono font-semibold ${pageLogoData ? 'text-emerald-700' : 'text-slate-400'}`}>
-                          {pageLogoData ? '● Active' : 'Empty'}
-                        </span>
-                      </div>
-
-                      {pageLogoData ? (
-                        <div className="p-5 rounded-2xl bg-[#FAF9F6] border border-amber-200/80 flex flex-col items-center justify-center gap-2 min-h-[160px]">
-                          <img
-                            src={pageLogoData}
-                            alt="Uploaded Home Page Logo"
-                            className="w-28 h-28 sm:w-32 sm:h-32 object-contain"
-                          />
-                          <span className="text-xs font-semibold text-emerald-700">
-                            ✓ Custom Home Page Logo Live
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="p-6 rounded-2xl bg-[#FAF9F6] border border-dashed border-slate-300 flex flex-col items-center justify-center text-center min-h-[160px] space-y-1.5">
-                          <Image className="w-7 h-7 text-slate-400" />
-                          <p className="text-xs font-medium text-slate-500">
-                            No Home Page logo uploaded. Only your uploaded image will appear on the Home Page.
-                          </p>
-                        </div>
-                      )}
+                <div className="space-y-4">
+                  {uploadErrorMsg && (
+                    <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs sm:text-sm text-rose-700 font-semibold text-center">
+                      {uploadErrorMsg}
                     </div>
+                  )}
 
-                    <div className="space-y-2.5 pt-2">
-                      <div className="flex flex-wrap items-center gap-2.5">
-                        <label className="btn-gold-luxury flex-1 min-h-[44px] px-4 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer">
-                          <Upload className="w-4 h-4 shrink-0" />
-                          <span>Upload Home Logo</span>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handlePageFileUpload}
-                            className="hidden"
-                          />
-                        </label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    
+                    {/* 1. Home Page Hero Logo Upload Card */}
+                    <div className="bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 space-y-4 shadow-2xs flex flex-col justify-between">
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                          <div>
+                            <span className="text-[10px] font-mono uppercase text-[#9A6B16] font-bold tracking-wider block">
+                              1. HOME PAGE HERO
+                            </span>
+                            <h4 className="text-base sm:text-lg font-serif-luxury font-bold text-slate-900">
+                              Home Page Logo
+                            </h4>
+                          </div>
+                          <span className={`text-xs font-mono font-semibold ${pageLogoData ? 'text-emerald-700' : 'text-slate-400'}`}>
+                            {pageLogoData ? 'Active' : 'Empty'}
+                          </span>
+                        </div>
 
-                        {pageLogoData && (
-                          <button
-                            type="button"
-                            onClick={handleRemovePageLogo}
-                            className="min-h-[44px] px-3.5 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                            <span>Remove</span>
-                          </button>
+                        {pageLogoData ? (
+                          <div className="p-5 rounded-2xl bg-[#FAF9F6] border border-amber-200/80 flex flex-col items-center justify-center gap-2 min-h-[160px]">
+                            <img
+                              src={pageLogoData}
+                              alt="Uploaded Home Page Logo"
+                              className="w-28 h-28 sm:w-32 sm:h-32 object-contain"
+                            />
+                            <span className="text-xs font-semibold text-emerald-700">
+                              Custom Home Page Logo Live
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="p-6 rounded-2xl bg-[#FAF9F6] border border-dashed border-slate-300 flex flex-col items-center justify-center text-center min-h-[160px] space-y-1.5">
+                            <Image className="w-7 h-7 text-slate-400" />
+                            <p className="text-xs font-medium text-slate-500">
+                              No Home Page logo uploaded. Only your uploaded image will appear on the Home Page.
+                            </p>
+                          </div>
                         )}
                       </div>
 
-                      {savedPageSuccess && (
-                        <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-center text-xs text-emerald-800 font-semibold">
-                          ✓ Home Page logo updated!
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                      <div className="space-y-2.5 pt-2">
+                        <div className="flex flex-wrap items-center gap-2.5">
+                          <label className="btn-gold-luxury flex-1 min-h-[44px] px-4 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer">
+                            <Upload className="w-4 h-4 shrink-0" />
+                            <span>Upload Home Logo</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={handlePageFileUpload}
+                              className="hidden"
+                            />
+                          </label>
 
-                  {/* 2. Header Bar Logo Upload Card */}
-                  <div className="bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 space-y-4 shadow-2xs flex flex-col justify-between">
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                        <div>
-                          <span className="text-[10px] font-mono uppercase text-[#9A6B16] font-bold tracking-wider block">
-                            2. TOP NAVIGATION BAR
-                          </span>
-                          <h4 className="text-base sm:text-lg font-serif-luxury font-bold text-slate-900">
-                            Header Bar Logo
-                          </h4>
+                          {pageLogoData && (
+                            <button
+                              type="button"
+                              onClick={handleRemovePageLogo}
+                              className="min-h-[44px] px-3.5 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                              <span>Remove</span>
+                            </button>
+                          )}
                         </div>
-                        <span className={`text-xs font-mono font-semibold ${headerLogoData ? 'text-emerald-700' : 'text-slate-400'}`}>
-                          {headerLogoData ? '● Active' : 'Empty'}
-                        </span>
+
+                        {savedPageSuccess && (
+                          <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-center text-xs text-emerald-800 font-semibold">
+                            Home Page logo updated!
+                          </div>
+                        )}
                       </div>
-
-                      {headerLogoData ? (
-                        <div className="p-5 rounded-2xl bg-[#FAF9F6] border border-amber-200/80 flex flex-col items-center justify-center gap-2 min-h-[160px]">
-                          <img
-                            src={headerLogoData}
-                            alt="Uploaded Header Logo"
-                            className="h-20 sm:h-24 w-auto object-contain"
-                          />
-                          <span className="text-xs font-semibold text-emerald-700">
-                            ✓ Custom Header Logo Live
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="p-6 rounded-2xl bg-[#FAF9F6] border border-dashed border-slate-300 flex flex-col items-center justify-center text-center min-h-[160px] space-y-1.5">
-                          <Image className="w-7 h-7 text-slate-400" />
-                          <p className="text-xs font-medium text-slate-500">
-                            No Header logo uploaded. Only your uploaded image will appear in the top navigation bar.
-                          </p>
-                        </div>
-                      )}
                     </div>
 
-                    <div className="space-y-2.5 pt-2">
-                      <div className="flex flex-wrap items-center gap-2.5">
-                        <label className="btn-dark-luxury flex-1 min-h-[44px] px-4 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer">
-                          <Upload className="w-4 h-4 shrink-0" />
-                          <span>Upload Header Logo</span>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleHeaderFileUpload}
-                            className="hidden"
-                          />
-                        </label>
+                    {/* 2. Header Bar Logo Upload Card */}
+                    <div className="bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 space-y-4 shadow-2xs flex flex-col justify-between">
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                          <div>
+                            <span className="text-[10px] font-mono uppercase text-[#9A6B16] font-bold tracking-wider block">
+                              2. TOP NAVIGATION BAR
+                            </span>
+                            <h4 className="text-base sm:text-lg font-serif-luxury font-bold text-slate-900">
+                              Header Bar Logo
+                            </h4>
+                          </div>
+                          <span className={`text-xs font-mono font-semibold ${headerLogoData ? 'text-emerald-700' : 'text-slate-400'}`}>
+                            {headerLogoData ? 'Active' : 'Empty'}
+                          </span>
+                        </div>
 
-                        {headerLogoData && (
-                          <button
-                            type="button"
-                            onClick={handleRemoveHeaderLogo}
-                            className="min-h-[44px] px-3.5 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                            <span>Remove</span>
-                          </button>
+                        {headerLogoData ? (
+                          <div className="p-5 rounded-2xl bg-[#FAF9F6] border border-amber-200/80 flex flex-col items-center justify-center gap-2 min-h-[160px]">
+                            <img
+                              src={headerLogoData}
+                              alt="Uploaded Header Logo"
+                              className="h-20 sm:h-24 w-auto object-contain"
+                            />
+                            <span className="text-xs font-semibold text-emerald-700">
+                              Custom Header Logo Live
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="p-6 rounded-2xl bg-[#FAF9F6] border border-dashed border-slate-300 flex flex-col items-center justify-center text-center min-h-[160px] space-y-1.5">
+                            <Image className="w-7 h-7 text-slate-400" />
+                            <p className="text-xs font-medium text-slate-500">
+                              No Header logo uploaded. Only your uploaded image will appear in the top navigation bar.
+                            </p>
+                          </div>
                         )}
                       </div>
 
-                      {savedHeaderSuccess && (
-                        <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-center text-xs text-emerald-800 font-semibold">
-                          ✓ Header logo updated!
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                      <div className="space-y-2.5 pt-2">
+                        <div className="flex flex-wrap items-center gap-2.5">
+                          <label className="btn-dark-luxury flex-1 min-h-[44px] px-4 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 cursor-pointer">
+                            <Upload className="w-4 h-4 shrink-0" />
+                            <span>Upload Header Logo</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={handleHeaderFileUpload}
+                              className="hidden"
+                            />
+                          </label>
 
+                          {headerLogoData && (
+                            <button
+                              type="button"
+                              onClick={handleRemoveHeaderLogo}
+                              className="min-h-[44px] px-3.5 py-2.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs sm:text-sm font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                              <span>Remove</span>
+                            </button>
+                          )}
+                        </div>
+
+                        {savedHeaderSuccess && (
+                          <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-center text-xs text-emerald-800 font-semibold">
+                            Header logo updated!
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                  </div>
                 </div>
               )}
 
@@ -563,7 +619,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                           </h4>
                         </div>
                         <span className={`text-xs font-mono font-bold ${currentUser ? 'text-emerald-700' : 'text-slate-400'}`}>
-                          {currentUser ? '● Connected' : 'Not Signed In'}
+                          {currentUser ? 'Connected' : 'Not Signed In'}
                         </span>
                       </div>
 
@@ -649,18 +705,20 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                           </h4>
                         </div>
                         <span className="text-xs font-mono font-bold text-emerald-700">
-                          {dbConnected ? '● Active' : '● Standby'}
+                          {dbConnected ? 'Active' : 'Standby'}
                         </span>
                       </div>
 
                       <div className="grid grid-cols-2 gap-2.5 text-xs font-mono">
                         <div className="p-3 rounded-xl bg-[#FAF9F6] border border-slate-200">
                           <span className="text-slate-400 uppercase block font-bold text-[10px]">Project ID</span>
-                          <span className="text-slate-800 font-semibold truncate block">gen-lang-client-0130190709</span>
+                          <span className="text-slate-800 font-semibold truncate block">
+                            {firebaseAppletConfig.projectId || 'Connected'}
+                          </span>
                         </div>
                         <div className="p-3 rounded-xl bg-[#FAF9F6] border border-slate-200">
-                          <span className="text-slate-400 uppercase block font-bold text-[10px]">Region & Rules</span>
-                          <span className="text-slate-800 font-semibold truncate block">asia-southeast1 · Live</span>
+                          <span className="text-slate-400 uppercase block font-bold text-[10px]">Security Rules</span>
+                          <span className="text-slate-800 font-semibold truncate block">Zero-Trust Active</span>
                         </div>
                       </div>
                     </div>
@@ -678,7 +736,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
 
                       {syncSuccessMsg && (
                         <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-center text-xs text-emerald-800 font-semibold">
-                          ✓ Firebase Cloud connection verified!
+                          Firebase Cloud connection verified!
                         </div>
                       )}
                     </div>
@@ -716,6 +774,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
                           type="button"
                           onClick={() => setShowNewPasscode(!showNewPasscode)}
                           className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-700 cursor-pointer"
+                          aria-label="Toggle passcode visibility"
                         >
                           {showNewPasscode ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                         </button>
@@ -749,7 +808,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({ isOpen, onClose }) => 
 
                     {passwordSaved && (
                       <div className="p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl text-center text-xs text-emerald-800 font-semibold">
-                        ✓ Administrator passcode updated!
+                        Administrator passcode updated!
                       </div>
                     )}
                   </form>

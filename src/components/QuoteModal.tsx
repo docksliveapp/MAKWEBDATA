@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Send, CheckCircle, Copy, AlertCircle, Mail } from 'lucide-react';
 import { submitQuoteRequest } from '../firebase';
 import { SERVICE_OPTIONS, CARGO_TYPES } from '../data/consortium';
@@ -9,6 +9,8 @@ interface QuoteModalProps {
   onClose: () => void;
   preselectedService?: string;
 }
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const QuoteModal: React.FC<QuoteModalProps> = ({
   isOpen,
@@ -29,7 +31,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
     destination: 'Upcountry Dry Port / Border Station',
     weightPerUnit: 24,
     totalUnits: 1,
-    metricType: 'Container (TEU)',
+    metricType: 'Container (TEU / 20ft)',
   });
 
   const [loading, setLoading] = useState(false);
@@ -38,15 +40,43 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
   const [mailtoUrl, setMailtoUrl] = useState<string>('');
   const [copied, setCopied] = useState(false);
 
+  // Sync preselectedService and reset submission state whenever modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setError(null);
+      setSubmittedId(null);
+      if (preselectedService && preselectedService.trim()) {
+        setFormData((prev) => ({
+          ...prev,
+          services: [preselectedService.trim()],
+        }));
+      }
+    }
+  }, [isOpen, preselectedService]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
+  const availableServices = preselectedService && !SERVICE_OPTIONS.includes(preselectedService)
+    ? [preselectedService, ...SERVICE_OPTIONS]
+    : SERVICE_OPTIONS;
+
   const handleServiceToggle = (service: string) => {
-    setFormData(prev => {
+    setFormData((prev) => {
       const exists = prev.services.includes(service);
       if (exists) {
         if (prev.services.length === 1) return prev;
-        return { ...prev, services: prev.services.filter(s => s !== service) };
+        return { ...prev, services: prev.services.filter((s) => s !== service) };
       } else {
+        if (prev.services.length >= 20) return prev;
         return { ...prev, services: [...prev.services, service] };
       }
     });
@@ -56,61 +86,72 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
     e.preventDefault();
     setError(null);
 
-    if (!formData.clientName || !formData.companyTitle || !formData.email || !formData.phone) {
+    const clientName = formData.clientName.trim();
+    const companyTitle = formData.companyTitle.trim();
+    const email = formData.email.trim();
+    const phone = formData.phone.trim();
+
+    if (!clientName || !companyTitle || !email || !phone) {
       setError('Please fill out all required corporate contact fields.');
       return;
     }
+
+    if (!EMAIL_REGEX.test(email)) {
+      setError('Please enter a valid corporate email address.');
+      return;
+    }
+
+    const safeWeight = Math.min(Math.max(Number(formData.weightPerUnit) || 0, 0), 100000);
+    const safeUnits = Math.min(Math.max(Number(formData.totalUnits) || 1, 1), 100000);
 
     setLoading(true);
 
     try {
       const payload: Omit<QuoteRequest, 'id' | 'status' | 'createdAt'> = {
-        clientName: formData.clientName.trim(),
-        companyTitle: formData.companyTitle.trim(),
-        designation: formData.designation ? formData.designation.trim() : undefined,
-        email: formData.email.trim(),
-        phone: formData.phone.trim(),
-        whatsapp: formData.whatsapp ? formData.whatsapp.trim() : undefined,
-        cargoType: formData.cargoType,
-        cargoDescription: formData.cargoDescription ? formData.cargoDescription.trim() : undefined,
-        services: formData.services,
-        origin: formData.origin ? formData.origin.trim() : undefined,
-        destination: formData.destination ? formData.destination.trim() : undefined,
-        weightPerUnit: Number(formData.weightPerUnit) || 0,
-        totalUnits: Number(formData.totalUnits) || 1,
-        metricType: formData.metricType,
+        clientName: clientName.slice(0, 150),
+        companyTitle: companyTitle.slice(0, 150),
+        designation: formData.designation ? formData.designation.trim().slice(0, 100) : undefined,
+        email: email.slice(0, 150),
+        phone: phone.slice(0, 50),
+        whatsapp: formData.whatsapp ? formData.whatsapp.trim().slice(0, 50) : undefined,
+        cargoType: formData.cargoType.slice(0, 150),
+        cargoDescription: formData.cargoDescription ? formData.cargoDescription.trim().slice(0, 1500) : undefined,
+        services: formData.services.slice(0, 20),
+        origin: formData.origin ? formData.origin.trim().slice(0, 150) : undefined,
+        destination: formData.destination ? formData.destination.trim().slice(0, 150) : undefined,
+        weightPerUnit: safeWeight,
+        totalUnits: safeUnits,
+        metricType: formData.metricType.slice(0, 50),
         documentNames: ['commercial-freight-manifest.pdf'],
       };
 
       const result = await submitQuoteRequest(payload);
       const refId = result.id;
 
-      // Direct Email Dispatch to Info@mak-group.com.pk
-      const emailSubject = `Logistics Quotation Request [${refId}] - ${formData.companyTitle.trim()}`;
+      const emailSubject = `Logistics Quotation Request [${refId}] - ${companyTitle}`;
       const emailBody = [
         `MAK - GROUP OF COMPANIES | Commercial Quotation Request`,
         `Reference ID: ${refId}`,
         `--------------------------------------------------`,
-        `Client Name: ${formData.clientName.trim()}`,
-        `Company: ${formData.companyTitle.trim()}`,
+        `Client Name: ${clientName}`,
+        `Company: ${companyTitle}`,
         `Designation: ${formData.designation || 'N/A'}`,
-        `Email: ${formData.email.trim()}`,
-        `Phone: ${formData.phone.trim()}`,
+        `Email: ${email}`,
+        `Phone: ${phone}`,
         `WhatsApp: ${formData.whatsapp || 'N/A'}`,
         `--------------------------------------------------`,
         `Required Services: ${formData.services.join(', ')}`,
         `Cargo Type: ${formData.cargoType}`,
         `Origin: ${formData.origin}`,
         `Destination: ${formData.destination}`,
-        `Quantity: ${formData.totalUnits} x ${formData.metricType}`,
-        `Weight Per Unit: ${formData.weightPerUnit} MT`,
+        `Quantity: ${safeUnits} x ${formData.metricType}`,
+        `Weight Per Unit: ${safeWeight} MT`,
         `Specifications / Remarks: ${formData.cargoDescription || 'Standard handling'}`,
       ].join('\n');
 
       const generatedMailto = `mailto:Info@mak-group.com.pk?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
       setMailtoUrl(generatedMailto);
 
-      // Background AJAX email dispatch to Info@mak-group.com.pk
       try {
         await fetch('https://formsubmit.co/ajax/Info@mak-group.com.pk', {
           method: 'POST',
@@ -118,27 +159,25 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
           body: JSON.stringify({
             _subject: emailSubject,
             referenceId: refId,
-            clientName: formData.clientName.trim(),
-            company: formData.companyTitle.trim(),
+            clientName,
+            company: companyTitle,
             designation: formData.designation || 'N/A',
-            email: formData.email.trim(),
-            phone: formData.phone.trim(),
+            email,
+            phone,
             whatsapp: formData.whatsapp || 'N/A',
             services: formData.services.join(', '),
             cargoType: formData.cargoType,
             origin: formData.origin,
             destination: formData.destination,
-            quantity: `${formData.totalUnits} x ${formData.metricType}`,
-            weightPerUnitMT: formData.weightPerUnit,
+            quantity: `${safeUnits} x ${formData.metricType}`,
+            weightPerUnitMT: safeWeight,
             remarks: formData.cargoDescription || 'None',
           }),
         });
       } catch {
-        // Fallback mailto link is also triggered below
+        // Fallback mailto button is provided on confirmation screen
       }
 
-      // Trigger direct email link to Info@mak-group.com.pk
-      window.location.href = generatedMailto;
       setSubmittedId(refId);
     } catch (err: any) {
       setError(err?.message || 'An unexpected error occurred.');
@@ -154,7 +193,14 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-2.5 sm:p-4 bg-slate-950/70 backdrop-blur-xs overflow-y-auto">
+    <div
+      role="dialog"
+      aria-modal="true"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-2.5 sm:p-4 bg-slate-950/70 backdrop-blur-xs overflow-y-auto"
+    >
       <div className="relative w-full max-h-[92vh] sm:max-w-2xl my-auto bg-[#FAF9F6] rounded-2xl border border-slate-300 shadow-2xl text-slate-900 flex flex-col overflow-hidden">
         
         {/* Compact Sticky Modal Header */}
@@ -169,18 +215,11 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
           </div>
           <button
             onClick={onClose}
+            aria-label="Close modal"
             className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition cursor-pointer shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
-        </div>
-
-        {/* Direct Email Dispatch Notice */}
-        <div className="px-4 py-2.5 sm:px-6 bg-amber-50/90 border-b border-amber-200/80 flex items-center gap-2 text-xs text-amber-950 font-medium shrink-0">
-          <Mail className="w-4 h-4 text-[#9A6B16] shrink-0" />
-          <span>
-            Sent directly to official email: <strong className="font-mono text-[#9A6B16]">Info@mak-group.com.pk</strong>
-          </span>
         </div>
 
         {/* Scrollable Content Body */}
@@ -193,11 +232,10 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
 
               <div className="space-y-1.5">
                 <h4 className="text-xl sm:text-2xl font-bold text-slate-900 font-serif-luxury">
-                  Quotation Sent to Email
+                  Quotation Request Submitted
                 </h4>
                 <p className="text-sm text-slate-600 leading-relaxed">
-                  Your commercial quotation request has been routed directly to{' '}
-                  <strong className="font-mono text-slate-900">Info@mak-group.com.pk</strong>.
+                  Your commercial quotation request has been recorded and routed to our operations desk.
                 </p>
               </div>
 
@@ -228,7 +266,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                     className="btn-gold-luxury min-h-[44px] px-5 py-2.5 rounded-xl text-white font-semibold text-sm flex items-center justify-center gap-2"
                   >
                     <Mail className="w-4 h-4" />
-                    <span>Send via Email App</span>
+                    <span>Open in Email App</span>
                   </a>
                 )}
                 <button
@@ -264,8 +302,9 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                     <input
                       type="text"
                       required
+                      maxLength={150}
                       value={formData.clientName}
-                      onChange={e => setFormData({ ...formData, clientName: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
                       placeholder="e.g. Tariq Mansoor"
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     />
@@ -277,8 +316,9 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                     <input
                       type="text"
                       required
+                      maxLength={150}
                       value={formData.companyTitle}
-                      onChange={e => setFormData({ ...formData, companyTitle: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, companyTitle: e.target.value })}
                       placeholder="e.g. Apex Industrial Trade Ltd"
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     />
@@ -289,8 +329,9 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                     </label>
                     <input
                       type="text"
+                      maxLength={100}
                       value={formData.designation}
-                      onChange={e => setFormData({ ...formData, designation: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
                       placeholder="e.g. Supply Chain Manager"
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     />
@@ -302,8 +343,9 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                     <input
                       type="email"
                       required
+                      maxLength={150}
                       value={formData.email}
-                      onChange={e => setFormData({ ...formData, email: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="tariq@apexcorp.com"
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     />
@@ -313,10 +355,11 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                       Mobile / Phone *
                     </label>
                     <input
-                      type="text"
+                      type="tel"
                       required
+                      maxLength={50}
                       value={formData.phone}
-                      onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="+92 300 1234567"
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     />
@@ -326,9 +369,10 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                       WhatsApp Line
                     </label>
                     <input
-                      type="text"
+                      type="tel"
+                      maxLength={50}
                       value={formData.whatsapp}
-                      onChange={e => setFormData({ ...formData, whatsapp: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
                       placeholder="+92 300 1234567"
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     />
@@ -342,7 +386,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                   2. Required Consortium Services *
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  {SERVICE_OPTIONS.map((srv) => {
+                  {availableServices.map((srv) => {
                     const isChecked = formData.services.includes(srv);
                     return (
                       <div
@@ -379,10 +423,10 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                     </label>
                     <select
                       value={formData.cargoType}
-                      onChange={e => setFormData({ ...formData, cargoType: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, cargoType: e.target.value })}
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     >
-                      {CARGO_TYPES.map(c => (
+                      {CARGO_TYPES.map((c) => (
                         <option key={c} value={c}>{c}</option>
                       ))}
                     </select>
@@ -393,7 +437,7 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                     </label>
                     <select
                       value={formData.metricType}
-                      onChange={e => setFormData({ ...formData, metricType: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, metricType: e.target.value })}
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     >
                       <option value="Container (TEU / 20ft)">Container (TEU / 20ft)</option>
@@ -408,8 +452,9 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                     </label>
                     <input
                       type="text"
+                      maxLength={150}
                       value={formData.origin}
-                      onChange={e => setFormData({ ...formData, origin: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, origin: e.target.value })}
                       placeholder="e.g. Karachi Port Trust (KPT)"
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     />
@@ -420,8 +465,9 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                     </label>
                     <input
                       type="text"
+                      maxLength={150}
                       value={formData.destination}
-                      onChange={e => setFormData({ ...formData, destination: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, destination: e.target.value })}
                       placeholder="e.g. Kabul Customs / Tashkent TIR"
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     />
@@ -433,8 +479,9 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                     <input
                       type="number"
                       min={1}
+                      max={100000}
                       value={formData.totalUnits}
-                      onChange={e => setFormData({ ...formData, totalUnits: Number(e.target.value) })}
+                      onChange={(e) => setFormData({ ...formData, totalUnits: Number(e.target.value) })}
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     />
                   </div>
@@ -446,8 +493,9 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                       type="number"
                       step="0.1"
                       min={0}
+                      max={100000}
                       value={formData.weightPerUnit}
-                      onChange={e => setFormData({ ...formData, weightPerUnit: Number(e.target.value) })}
+                      onChange={(e) => setFormData({ ...formData, weightPerUnit: Number(e.target.value) })}
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     />
                   </div>
@@ -459,8 +507,9 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                   </label>
                   <textarea
                     rows={2}
+                    maxLength={1500}
                     value={formData.cargoDescription}
-                    onChange={e => setFormData({ ...formData, cargoDescription: e.target.value })}
+                    onChange={(e) => setFormData({ ...formData, cargoDescription: e.target.value })}
                     placeholder="Provide temperature, IMO hazardous class, or special transit requests..."
                     className="w-full px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                   />
@@ -482,10 +531,10 @@ export const QuoteModal: React.FC<QuoteModalProps> = ({
                   className="btn-gold-luxury min-h-[44px] px-6 py-2.5 rounded-xl text-white font-semibold text-sm transition disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {loading ? (
-                    <span>Sending to Info@mak-group.com.pk...</span>
+                    <span>Submitting Request...</span>
                   ) : (
                     <>
-                      <span>Send Quote to Info@mak-group.com.pk</span>
+                      <span>Submit Quotation Request</span>
                       <Send className="w-4 h-4" />
                     </>
                   )}

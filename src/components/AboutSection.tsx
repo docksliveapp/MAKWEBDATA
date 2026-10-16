@@ -1,13 +1,17 @@
 import React from 'react';
-import { NATIONWIDE_STATIONS, CONSORTIUM_ENTITIES } from '../data/consortium';
+import { CONSORTIUM_ENTITIES } from '../data/consortium';
 import { CorporateClientPortfolio } from './CorporateClientPortfolio';
-import { MapPin, CheckCircle2, Phone, ArrowRight } from 'lucide-react';
+import { CheckCircle2, ArrowRight, ArrowLeft } from 'lucide-react';
 
 interface AboutSectionProps {
   onSelectServiceForQuote?: (service: string) => void;
+  onBack?: () => void;
 }
 
-export const AboutSection: React.FC<AboutSectionProps> = ({ onSelectServiceForQuote }) => {
+export const AboutSection: React.FC<AboutSectionProps> = ({
+  onSelectServiceForQuote,
+  onBack,
+}) => {
   const galleryImages = [
     {
       url: 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=1200&q=80',
@@ -32,32 +36,46 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onSelectServiceForQu
   ];
 
   return (
-    <section id="about" className="py-12 sm:py-20 bg-[#FAF9F6] text-slate-900 border-b border-slate-200">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
+    <section id="about" className="py-8 sm:py-14 lg:py-18 bg-[#FAF9F6] text-slate-900 border-b border-slate-200">
+      <div className="container-luxury space-y-10 sm:space-y-14 animate-fade-up">
         
+        {/* Small Icon-Only Back Arrow */}
+        {onBack && (
+          <div>
+            <button
+              onClick={onBack}
+              aria-label="Go Back"
+              title="Back"
+              className="w-9 h-9 rounded-full bg-white hover:bg-[#FAF9F6] border border-slate-200/90 hover:border-[#B8860B] text-slate-700 hover:text-[#9A6B16] shadow-2xs flex items-center justify-center transition-all hover:-translate-x-0.5 cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3">
-          <span className="text-xs font-mono font-bold uppercase tracking-[0.16em] text-[#9A6B16] block">
+          <span className="text-xs font-mono font-bold uppercase tracking-[0.18em] text-[#9A6B16] block">
             PREMIER MULTIMODAL LOGISTICS, MARITIME & TRANSSHIPMENT GROUP
           </span>
 
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold font-serif-luxury text-slate-900 leading-tight">
+          <h2 className="text-2xl sm:text-4xl lg:text-[44px] font-bold font-serif-luxury text-slate-900 leading-tight">
             About MAK - GROUP OF COMPANIES
           </h2>
 
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+          <p className="text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed">
             MAK - GROUP OF COMPANIES stands at the vanguard of Pakistan and regional international trade, operating as a unified single-window organization orchestrating comprehensive bonded transit, customs brokerage, heavy road haulage, and international maritime logistics.
           </p>
         </div>
 
         {/* Corporate Profile & Strategic Overview */}
-        <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-xs">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="bg-white rounded-3xl p-6 sm:p-10 lg:p-12 border border-slate-200/90 shadow-sm">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
             
             {/* Left Big Highlight */}
             <div className="lg:col-span-5 space-y-4 border-b lg:border-b-0 lg:border-r border-slate-200 pb-6 lg:pb-0 lg:pr-8 text-center lg:text-left">
               <div className="space-y-1.5">
-                <span className="text-xs font-bold font-mono uppercase text-[#9A6B16] block">
+                <span className="text-xs font-bold font-mono uppercase text-[#9A6B16] tracking-wider block">
                   STATUTORY CORPORATE ARCHITECTURE
                 </span>
                 <h3 className="text-2xl sm:text-3xl font-bold font-serif-luxury text-slate-900">
@@ -82,61 +100,61 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onSelectServiceForQu
 
             {/* Right Metrics Grid */}
             <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-3.5 sm:gap-4">
-              <div className="p-4 rounded-2xl bg-[#FAF9F6] border border-slate-200/90 text-center">
+              <div className="card-luxury p-4 sm:p-5 rounded-2xl text-center">
                 <span className="text-2xl sm:text-3xl font-bold font-serif-luxury text-slate-900 block">
                   1,000+
                 </span>
-                <span className="text-xs font-mono uppercase text-slate-700 font-bold mt-1 block">
+                <span className="text-xs font-mono uppercase text-[#9A6B16] font-bold mt-1 block">
                   Monthly Containers
                 </span>
                 <span className="text-xs text-slate-500 mt-0.5 block">Bonded Dry Ports</span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#FAF9F6] border border-slate-200/90 text-center">
+              <div className="card-luxury p-4 sm:p-5 rounded-2xl text-center">
                 <span className="text-2xl sm:text-3xl font-bold font-serif-luxury text-slate-900 block">
                   2,000+
                 </span>
-                <span className="text-xs font-mono uppercase text-slate-700 font-bold mt-1 block">
+                <span className="text-xs font-mono uppercase text-[#9A6B16] font-bold mt-1 block">
                   Registered Fleet
                 </span>
                 <span className="text-xs text-slate-500 mt-0.5 block">Customs-Bonded</span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#FAF9F6] border border-slate-200/90 text-center">
+              <div className="card-luxury p-4 sm:p-5 rounded-2xl text-center">
                 <span className="text-2xl sm:text-3xl font-bold font-serif-luxury text-slate-900 block">
                   60,000+
                 </span>
-                <span className="text-xs font-mono uppercase text-slate-700 font-bold mt-1 block">
+                <span className="text-xs font-mono uppercase text-[#9A6B16] font-bold mt-1 block">
                   Afghan TEUs Moved
                 </span>
                 <span className="text-xs text-slate-500 mt-0.5 block">Torkham & Chaman</span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#FAF9F6] border border-slate-200/90 text-center">
+              <div className="card-luxury p-4 sm:p-5 rounded-2xl text-center">
                 <span className="text-2xl sm:text-3xl font-bold font-serif-luxury text-slate-900 block">
                   200+
                 </span>
-                <span className="text-xs font-mono uppercase text-slate-700 font-bold mt-1 block">
+                <span className="text-xs font-mono uppercase text-[#9A6B16] font-bold mt-1 block">
                   Reefer Gensets
                 </span>
                 <span className="text-xs text-slate-500 mt-0.5 block">-25°C Cold Chain</span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#FAF9F6] border border-slate-200/90 text-center">
+              <div className="card-luxury p-4 sm:p-5 rounded-2xl text-center">
                 <span className="text-2xl sm:text-3xl font-bold font-serif-luxury text-slate-900 block">
                   600+
                 </span>
-                <span className="text-xs font-mono uppercase text-slate-700 font-bold mt-1 block">
+                <span className="text-xs font-mono uppercase text-[#9A6B16] font-bold mt-1 block">
                   Corporate Clients
                 </span>
                 <span className="text-xs text-slate-500 mt-0.5 block">Multinational & CPEC</span>
               </div>
 
-              <div className="p-4 rounded-2xl bg-[#FAF9F6] border border-slate-200/90 text-center">
+              <div className="card-luxury p-4 sm:p-5 rounded-2xl text-center">
                 <span className="text-2xl sm:text-3xl font-bold font-serif-luxury text-slate-900 block">
                   100%
                 </span>
-                <span className="text-xs font-mono uppercase text-slate-700 font-bold mt-1 block">
+                <span className="text-xs font-mono uppercase text-[#9A6B16] font-bold mt-1 block">
                   Bonded Compliance
                 </span>
                 <span className="text-xs text-slate-500 mt-0.5 block">Statutory Escort</span>
@@ -147,21 +165,21 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onSelectServiceForQu
         </div>
 
         {/* Complete Profile Data: The 4 Operating Consortium Companies */}
-        <div className="space-y-6">
-          <div className="text-center space-y-1">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#9A6B16] block font-mono">
+        <div className="space-y-6 sm:space-y-8">
+          <div className="text-center space-y-1.5">
+            <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#9A6B16] block font-mono">
               THE 4 STRATEGIC DIVISIONS OF MAK - GROUP OF COMPANIES
             </span>
-            <h3 className="text-2xl sm:text-3xl font-bold font-serif-luxury text-slate-900">
+            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-serif-luxury text-slate-900">
               Core Operational Divisions & Capabilities
             </h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 2xl:gap-7">
             {CONSORTIUM_ENTITIES.map((company) => (
               <div
                 key={company.id}
-                className="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/90 shadow-xs space-y-5 flex flex-col justify-between"
+                className="card-luxury rounded-2xl p-6 sm:p-7 2xl:p-8 space-y-5 flex flex-col justify-between"
               >
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-xs font-mono font-bold">
@@ -173,13 +191,13 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onSelectServiceForQu
                     </span>
                   </div>
 
-                  <h4 className="text-xl font-bold font-serif-luxury text-slate-900">
+                  <h4 className="text-xl sm:text-2xl font-bold font-serif-luxury text-slate-900">
                     {company.name}
                   </h4>
                   <p className="text-xs sm:text-sm font-semibold text-[#9A6B16] font-mono">
                     {company.brandTag}
                   </p>
-                  <p className="text-sm text-slate-600 leading-relaxed">
+                  <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
                     {company.description}
                   </p>
 
@@ -198,21 +216,22 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onSelectServiceForQu
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex flex-wrap gap-2 text-xs font-mono text-slate-600">
+                <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-mono text-slate-600 font-semibold">
                     {company.keyHighlights.map((kh, khIdx) => (
-                      <span key={khIdx} className="px-2.5 py-1 rounded-lg bg-[#FAF9F6] border border-slate-200 font-semibold">
-                        {kh}
-                      </span>
+                      <React.Fragment key={khIdx}>
+                        {khIdx > 0 && <span className="text-slate-300">·</span>}
+                        <span>{kh}</span>
+                      </React.Fragment>
                     ))}
                   </div>
                   {onSelectServiceForQuote && (
                     <button
                       onClick={() => onSelectServiceForQuote(company.name)}
-                      className="min-h-[38px] px-3.5 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-[#9A6B16] text-xs font-bold flex items-center gap-1 cursor-pointer transition"
+                      className="group btn-gold-luxury min-h-[40px] px-4 py-2 rounded-xl text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 cursor-pointer"
                     >
                       <span>Inquire Now</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
+                      <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
                     </button>
                   )}
                 </div>
@@ -222,21 +241,21 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onSelectServiceForQu
         </div>
 
         {/* High-Fidelity Visual Photo Gallery */}
-        <div id="gallery" className="space-y-6">
-          <div className="text-center space-y-1">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#9A6B16] block font-mono">
+        <div id="gallery" className="space-y-6 sm:space-y-8">
+          <div className="text-center space-y-1.5">
+            <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#9A6B16] block font-mono">
               OPERATIONAL GROUND ASSETS & FACILITIES
             </span>
-            <h3 className="text-2xl sm:text-3xl font-bold font-serif-luxury text-slate-900">
+            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-serif-luxury text-slate-900">
               Visual Overview of MAK Operations
             </h3>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {galleryImages.map((img, idx) => (
               <div
                 key={idx}
-                className="group relative rounded-2xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 border border-slate-200/90 bg-white"
+                className="group card-luxury rounded-2xl overflow-hidden flex flex-col"
               >
                 <div className="aspect-[16/10] overflow-hidden bg-slate-200">
                   <img
@@ -246,56 +265,13 @@ export const AboutSection: React.FC<AboutSectionProps> = ({ onSelectServiceForQu
                     loading="lazy"
                   />
                 </div>
-                <div className="p-4 bg-white">
-                  <h4 className="text-sm font-bold text-slate-900 leading-snug font-serif-luxury">
+                <div className="p-4 sm:p-5 bg-white flex-1">
+                  <h4 className="text-sm sm:text-base font-bold text-slate-900 leading-snug font-serif-luxury">
                     {img.title}
                   </h4>
-                  <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-slate-500 mt-1 leading-relaxed">
                     {img.subtitle}
                   </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Strategic Office Locations */}
-        <div id="stations" className="bg-white rounded-3xl p-6 sm:p-9 border border-slate-200/90 shadow-xs space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-4">
-            <div>
-              <span className="text-xs font-mono font-bold uppercase text-[#9A6B16] block">
-                STRATEGIC CORPORATE LOCATIONS & LOGISTICS HUBS
-              </span>
-              <h3 className="text-2xl font-bold font-serif-luxury text-slate-900">
-                Official Corporate Office Locations
-              </h3>
-            </div>
-            <span className="text-xs sm:text-sm font-mono text-slate-500">
-              Karachi (Head Office) & Dubai (International Hub)
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {NATIONWIDE_STATIONS.map((station, idx) => (
-              <div
-                key={idx}
-                className="p-4 rounded-2xl bg-[#FAF9F6] border border-slate-200/90 hover:border-amber-300 transition space-y-1.5"
-              >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-sm font-bold text-slate-900 flex items-center gap-1.5">
-                    <MapPin className="w-4 h-4 text-[#9A6B16] shrink-0" />
-                    {station.name}
-                  </span>
-                  <span className="text-xs font-mono px-2.5 py-0.5 rounded-lg bg-white border border-slate-200 text-slate-600 font-semibold">
-                    {station.role}
-                  </span>
-                </div>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  {station.address}
-                </p>
-                <div className="text-xs font-mono text-slate-700 font-semibold flex items-center gap-2 pt-0.5">
-                  <Phone className="w-3.5 h-3.5 text-[#9A6B16]" />
-                  <span>{station.phone}</span>
                 </div>
               </div>
             ))}

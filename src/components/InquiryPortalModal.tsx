@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Package, Truck, ExternalLink, X, ArrowRight, ShieldCheck } from 'lucide-react';
 
 interface InquiryPortalModalProps {
@@ -12,17 +12,29 @@ export const InquiryPortalModal: React.FC<InquiryPortalModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
     <div
       role="dialog"
       aria-modal="true"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
       className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-3 sm:p-4 bg-slate-900/65 backdrop-blur-xs overflow-y-auto"
     >
       <div className="relative w-full max-w-2xl max-h-[90vh] my-auto bg-[#FAF9F6] rounded-2xl border border-slate-300 shadow-2xl text-slate-900 flex flex-col overflow-hidden">
         
-        {/* Sticky Top Header (Never cuts off at top on mobile) */}
+        {/* Sticky Top Header */}
         <div className="px-4 py-3.5 sm:px-6 sm:py-4 bg-white border-b border-slate-200 flex items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200/80 text-[#9A6B16] flex items-center justify-center shrink-0">
@@ -47,13 +59,8 @@ export const InquiryPortalModal: React.FC<InquiryPortalModalProps> = ({
           </button>
         </div>
 
-        {/* Scrollable Body with ONLY the 2 Status Options */}
+        {/* Scrollable Body with the 2 Status Options */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5">
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            Select an option below to check your Consignment Status or Vehicle Status:
-          </p>
-
-          {/* 2 Options Grid: Consignment Status & Vehicle Status */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             
             {/* 1. Consignment Status */}
@@ -117,10 +124,7 @@ export const InquiryPortalModal: React.FC<InquiryPortalModalProps> = ({
           </div>
 
           {/* Footer Bar */}
-          <div className="pt-3 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-600 gap-2.5">
-            <span>
-              Central Operations Desk: <strong className="text-slate-900">+92-21-32330103 / 0104</strong>
-            </span>
+          <div className="pt-3 border-t border-slate-200 flex items-center justify-end">
             <button
               onClick={onClose}
               className="w-full sm:w-auto min-h-[38px] px-5 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold cursor-pointer text-xs"

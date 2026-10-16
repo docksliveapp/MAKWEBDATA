@@ -6,7 +6,7 @@ import {
   MapPin,
   Award,
   ArrowRight,
-  MessageCircle,
+  ChevronRight,
 } from 'lucide-react';
 import type { ComprehensiveService } from '../data/consortium';
 
@@ -26,26 +26,23 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
   }, [service]);
 
   return (
-    <div className="min-h-screen py-8 sm:py-12 bg-[#FAF9F6] text-slate-900 animate-in fade-in duration-200">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
+    <div className="min-h-screen py-6 sm:py-10 bg-[#FAF9F6] text-slate-900 animate-fade-up">
+      <div className="container-luxury max-w-5xl space-y-4 sm:space-y-6">
         
-        {/* Navigation Breadcrumb Bar */}
-        <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-200">
+        {/* Small Icon-Only Back Arrow Button */}
+        <div>
           <button
             onClick={onBack}
-            className="min-h-[40px] inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-300 text-xs sm:text-sm font-semibold text-slate-800 transition shadow-2xs cursor-pointer"
+            aria-label="Go Back"
+            title="Back"
+            className="w-9 h-9 rounded-full bg-white hover:bg-[#FAF9F6] border border-slate-200/90 hover:border-[#B8860B] text-slate-700 hover:text-[#9A6B16] shadow-2xs flex items-center justify-center transition-all hover:-translate-x-0.5 cursor-pointer"
           >
-            <ArrowLeft className="w-4 h-4 text-[#9A6B16]" />
-            <span>Back to All Services</span>
+            <ArrowLeft className="w-4 h-4" />
           </button>
-
-          <span className="text-xs font-mono font-bold text-slate-500 uppercase tracking-wider truncate">
-            {service.category} · MAK - GROUP
-          </span>
         </div>
 
         {/* Main Service Card */}
-        <div className="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 border border-slate-200/90 shadow-xs space-y-6 sm:space-y-7">
+        <div className="bg-white rounded-3xl p-5 sm:p-9 lg:p-11 border border-slate-200/90 shadow-sm space-y-6 sm:space-y-8">
           
           {/* Header Title & Unboxed Metadata */}
           <div className="space-y-2">
@@ -55,7 +52,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
               <span className="text-slate-600">{service.managingEntity}</span>
             </div>
 
-            <h1 className="text-xl sm:text-3xl lg:text-4xl font-bold font-serif-luxury text-slate-900 leading-snug">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold font-serif-luxury text-slate-900 leading-snug">
               {service.title}
             </h1>
 
@@ -65,7 +62,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
           </div>
 
           {/* Statutory Authority Callout */}
-          <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200/90 flex items-start gap-3">
+          <div className="p-4 sm:p-5 rounded-2xl bg-amber-50/70 border border-amber-200/90 flex items-start gap-3">
             <ShieldCheck className="w-5 h-5 text-[#9A6B16] shrink-0 mt-0.5" />
             <div className="text-xs sm:text-sm text-slate-800">
               <span className="font-bold uppercase tracking-wider font-mono block text-xs text-[#9A6B16] mb-0.5">
@@ -86,16 +83,16 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
           </div>
 
           {/* Operational Metrics Bar */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-1">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 pt-1">
             {service.operationalMetrics.map((metric, idx) => (
               <div
                 key={idx}
-                className="p-3.5 sm:p-4 rounded-xl bg-[#FAF9F6] border border-slate-200/90 text-center space-y-1"
+                className="card-luxury p-4 rounded-xl text-center space-y-1"
               >
-                <span className="text-base sm:text-xl font-bold font-serif-luxury text-slate-900 block leading-tight">
+                <span className="text-lg sm:text-xl font-bold font-serif-luxury text-slate-900 block leading-tight">
                   {metric.value}
                 </span>
-                <span className="text-xs font-mono uppercase text-slate-500 font-semibold block leading-tight">
+                <span className="text-xs font-mono uppercase text-[#9A6B16] font-semibold block leading-tight">
                   {metric.label}
                 </span>
               </div>
@@ -107,7 +104,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
             <span className="text-xs font-mono font-bold uppercase text-slate-500 tracking-wider block">
               Core Capabilities & Execution Specs
             </span>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {service.coreHighlights.map((hl, idx) => (
                 <div
                   key={idx}
@@ -130,7 +127,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
               <ul className="space-y-2 text-xs sm:text-sm text-slate-600">
                 {service.technicalSpecs.map((spec, idx) => (
                   <li key={idx} className="flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#9A6B16] shrink-0 mt-2" />
+                    <ChevronRight className="w-4 h-4 text-[#9A6B16] shrink-0 mt-0.5" />
                     <span className="leading-relaxed">{spec}</span>
                   </li>
                 ))}
@@ -145,7 +142,7 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
               <ul className="space-y-2 text-xs sm:text-sm text-slate-600">
                 {service.activeHubs.map((hub, idx) => (
                   <li key={idx} className="flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0 mt-2" />
+                    <ChevronRight className="w-4 h-4 text-blue-700 shrink-0 mt-0.5" />
                     <span className="leading-relaxed">{hub}</span>
                   </li>
                 ))}
@@ -153,36 +150,15 @@ export const ServiceDetailPage: React.FC<ServiceDetailPageProps> = ({
             </div>
           </div>
 
-          {/* Booking & Rate Quote CTA Ribbon */}
-          <div className="p-5 sm:p-6 rounded-2xl bg-slate-900 text-white flex flex-col md:flex-row items-center justify-between gap-4 shadow-md">
-            <div className="space-y-1 text-center md:text-left">
-              <span className="text-xs font-mono uppercase tracking-wider text-amber-400 block font-bold">
-                Direct Dispatch & Rate Booking
-              </span>
-              <p className="text-xs sm:text-sm text-slate-300">
-                Email: <strong className="text-white font-mono">Info@mak-group.com.pk</strong> · Tel: <strong className="text-white">+92-21-32330103</strong>
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto justify-center">
-              <a
-                href="https://wa.me/923218496006"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="min-h-[42px] px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-semibold flex items-center gap-1.5 transition cursor-pointer"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span>WhatsApp</span>
-              </a>
-
-              <button
-                onClick={() => onBookService(service.title)}
-                className="btn-gold-luxury min-h-[42px] px-5 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold flex items-center gap-2 cursor-pointer"
-              >
-                <span>Request Rate Quote</span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
+          {/* Clean Rate Quote Action Bar (No duplicate contact details) */}
+          <div className="pt-4 border-t border-slate-200 flex items-center justify-end">
+            <button
+              onClick={() => onBookService(service.title)}
+              className="group btn-gold-luxury min-h-[44px] px-6 py-2.5 rounded-xl text-white text-xs sm:text-sm font-semibold flex items-center gap-2 cursor-pointer"
+            >
+              <span>Request Rate Quote</span>
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </button>
           </div>
 
         </div>

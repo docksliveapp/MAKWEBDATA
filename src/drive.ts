@@ -106,12 +106,13 @@ export async function listDriveFiles(options: {
 
   const { folderId, searchQuery, pageSize = 30, pageToken } = options;
 
-  let qParts: string[] = ['trashed = false'];
-  if (folderId) {
-    qParts.push(`'${folderId}' in parents`);
+  const qParts: string[] = ['trashed = false'];
+  if (folderId && folderId.trim()) {
+    const safeFolderId = folderId.trim().replace(/\\/g, '').replace(/'/g, '');
+    qParts.push(`'${safeFolderId}' in parents`);
   }
   if (searchQuery && searchQuery.trim()) {
-    const escaped = searchQuery.replace(/'/g, "\\'");
+    const escaped = searchQuery.trim().replace(/\\/g, '\\\\').replace(/'/g, "\\'");
     qParts.push(`name contains '${escaped}'`);
   }
 
@@ -213,7 +214,7 @@ export async function deleteDriveFile(fileId: string): Promise<void> {
   const token = getDriveAccessToken();
   if (!token) throw new Error('Not authenticated with Google Drive.');
 
-  const res = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}`, {
+  const res = await fetch(`https://www.googleapis.com/drive/v3/files/${encodeURIComponent(fileId)}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` },
   });

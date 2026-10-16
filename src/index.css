@@ -8,54 +8,47 @@
   --ink-primary: #0F172A;
   --ink-secondary: #334155;
   --ink-muted: #64748B;
-  --accent-bronze: #9A6B16;
-  --accent-gold: #B8860B;
-}
-
-html, body {
-  background-color: #FAF9F6 !important;
-  color: #0F172A !important;
-  color-scheme: light only !important;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root, html, body {
-    color-scheme: light only !important;
-    background-color: #FAF9F6 !important;
-    color: #0F172A !important;
-  }
+  --accent-gold: #9A6B16;
+  --accent-gold-bright: #B8860B;
+  --border-hairline: #E2E8F0;
 }
 
 @layer base {
+  html {
+    background-color: var(--surface-canvas) !important;
+    color: var(--ink-primary) !important;
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
   body {
-    background: #FAF9F6;
-    color: #0F172A;
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-    font-size: 16px;
+    background-color: var(--surface-canvas) !important;
+    color: var(--ink-primary) !important;
+    overflow-x: hidden;
     line-height: 1.65;
-    min-height: 100vh;
+    font-size: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
   }
 
   p {
-    line-height: 1.68;
+    color: var(--ink-secondary);
   }
 
-  h1, h2, h3, .font-heading {
-    font-family: 'Cinzel', serif;
-    letter-spacing: -0.01em;
-    color: #0F172A;
-  }
-
-  .font-cinzel, .font-serif-luxury {
-    font-family: 'Cinzel', serif;
-  }
-
-  .font-mono-code {
-    font-family: 'JetBrains Mono', monospace;
-    font-variant-numeric: tabular-nums;
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   button:focus-visible,
@@ -63,75 +56,198 @@ html, body {
   input:focus-visible,
   select:focus-visible,
   textarea:focus-visible {
-    outline: 2px solid #B8860B;
+    outline: 2px solid var(--accent-gold-bright);
     outline-offset: 2px;
   }
 }
 
-/* Eye-Friendly Pearl & Warm Alabaster Surface Utilities */
+.font-serif-luxury {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Fluid Responsive Container for Mobile, Tablet, Laptop, Desktop & Big Screens */
+.container-luxury {
+  width: 100%;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(1rem, 3vw, 3.5rem);
+  padding-right: clamp(1rem, 3vw, 3.5rem);
+}
+
+/* Eye-friendly elevated pearl surface */
 .glass-pearl {
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(226, 232, 240, 0.95);
-  box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-hairline);
+  box-shadow: 0 8px 30px -6px rgba(15, 23, 42, 0.06), 0 2px 8px -2px rgba(15, 23, 42, 0.03);
 }
 
-.glass-pearl-card {
+/* Interactive Luxury Card with Smooth Hover Lift */
+.card-luxury {
   background: #FFFFFF;
-  border: 1px solid #E2E8F0;
-  box-shadow: 0 6px 20px -4px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+  box-shadow: 0 4px 18px -4px rgba(15, 23, 42, 0.05);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.glass-pearl-subtle {
-  background: #F4F6F9;
-  border: 1px solid #E2E8F0;
+.card-luxury:hover {
+  transform: translateY(-4px);
+  border-color: rgba(184, 134, 11, 0.45);
+  box-shadow: 0 18px 36px -10px rgba(15, 23, 42, 0.1), 0 4px 12px -2px rgba(154, 107, 22, 0.08);
 }
 
-/* Decent, Balanced Executive Button Styles */
+/* Executive Gold CTA Button with Animated Liquid Shimmer */
 .btn-gold-luxury {
-  background: linear-gradient(135deg, #9A6B16 0%, #B8860B 55%, #8C5E12 100%);
-  color: #FFFFFF;
   position: relative;
   overflow: hidden;
-  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 3px 10px rgba(154, 107, 22, 0.22);
+  background: linear-gradient(135deg, #8B5E14 0%, #B8860B 50%, #9A6B16 100%);
+  background-size: 200% 200%;
+  color: #FFFFFF;
+  box-shadow: 0 6px 18px -3px rgba(154, 107, 22, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+              background-position 0.45s ease;
+}
+
+.btn-gold-luxury::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 65%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.26),
+    transparent
+  );
+  transform: skewX(-22deg);
+  transition: left 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
 }
 
 .btn-gold-luxury:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(154, 107, 22, 0.30);
-  background: linear-gradient(135deg, #AA781B 0%, #C49214 55%, #9A6B16 100%);
+  background-position: 100% 50%;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px -4px rgba(154, 107, 22, 0.44), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 
+.btn-gold-luxury:hover::after {
+  left: 140%;
+}
+
+.btn-gold-luxury:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Executive Dark Slate Button with Animated Shimmer */
 .btn-dark-luxury {
-  background: #0F172A;
-  color: #FFFFFF;
   position: relative;
   overflow: hidden;
-  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.16);
+  background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+  background-size: 200% 200%;
+  color: #FFFFFF;
+  box-shadow: 0 6px 18px -3px rgba(15, 23, 42, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+              background-position 0.45s ease;
+}
+
+.btn-dark-luxury::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 65%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.16),
+    transparent
+  );
+  transform: skewX(-22deg);
+  transition: left 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
 }
 
 .btn-dark-luxury:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.24);
-  background: #1E293B;
+  background-position: 100% 50%;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -4px rgba(15, 23, 42, 0.34);
 }
 
-.btn-pill-interactive {
-  transition: all 0.2s ease;
-  position: relative;
-  overflow: hidden;
+.btn-dark-luxury:hover::after {
+  left: 140%;
 }
 
-.btn-pill-interactive:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(100, 116, 139, 0.14);
+.btn-dark-luxury:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Interactive Secondary Surface Button */
+.btn-surface-luxury {
+  background: #FFFFFF;
+  color: #0F172A;
+  border: 1px solid #CBD5E1;
+  box-shadow: 0 2px 8px -2px rgba(15, 23, 42, 0.05);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.28s ease,
+              background-color 0.28s ease;
+}
+
+.btn-surface-luxury:hover {
+  background: #FAF9F6;
   border-color: #B8860B;
+  color: #9A6B16;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px -6px rgba(154, 107, 22, 0.15);
 }
 
-/* Light theme scrollbars */
+.btn-surface-luxury:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Smooth Entrance Animation */
+@keyframes fadeUpSmooth {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUpSmooth 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .card-luxury,
+  .btn-gold-luxury,
+  .btn-dark-luxury,
+  .btn-surface-luxury {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* Custom Clean Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

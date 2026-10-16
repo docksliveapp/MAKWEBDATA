@@ -189,7 +189,6 @@ export async function ensureInitialFirestoreCollections(): Promise<{ quoteReady:
 export async function testConnection(): Promise<boolean> {
   try {
     await getDocFromServer(doc(db, 'test', 'connection'));
-    await ensureInitialFirestoreCollections();
     return true;
   } catch (error) {
     if (error instanceof Error && error.message.includes('the client is offline')) {

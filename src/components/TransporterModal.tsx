@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, Plus, Trash2, Send, CheckCircle, Copy, AlertCircle, Mail } from 'lucide-react';
 import { submitVehicleRegistration } from '../firebase';
 import type { VehicleRegistration, VehicleItem } from '../types';
@@ -7,6 +7,8 @@ interface TransporterModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -36,10 +38,27 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
   const [mailtoUrl, setMailtoUrl] = useState<string>('');
   const [copied, setCopied] = useState(false);
 
+  useEffect(() => {
+    if (isOpen) {
+      setError(null);
+      setSubmittedId(null);
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleAddVehicle = () => {
-    setVehicles(prev => [
+    if (vehicles.length >= 50) return;
+    setVehicles((prev) => [
       ...prev,
       {
         plateNumber: '',
@@ -53,11 +72,11 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
 
   const handleRemoveVehicle = (index: number) => {
     if (vehicles.length === 1) return;
-    setVehicles(prev => prev.filter((_, i) => i !== index));
+    setVehicles((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleVehicleChange = (index: number, field: keyof VehicleItem, value: any) => {
-    setVehicles(prev => {
+    setVehicles((prev) => {
       const copy = [...prev];
       copy[index] = { ...copy[index], [field]: value };
       return copy;
@@ -68,8 +87,18 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
     e.preventDefault();
     setError(null);
 
-    if (!formData.fullName || !formData.companyName || !formData.email || !formData.phone) {
+    const fullName = formData.fullName.trim();
+    const companyName = formData.companyName.trim();
+    const email = formData.email.trim();
+    const phone = formData.phone.trim();
+
+    if (!fullName || !companyName || !email || !phone) {
       setError('Please provide all required transport firm details.');
+      return;
+    }
+
+    if (!EMAIL_REGEX.test(email)) {
+      setError('Please enter a valid email address.');
       return;
     }
 
@@ -80,22 +109,24 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
       }
     }
 
+    const safeMaxPayload = Math.min(Math.max(Number(formData.maxPayloadTons) || 50, 1), 10000);
+
     setLoading(true);
 
     try {
       const payload: Omit<VehicleRegistration, 'id' | 'status' | 'createdAt'> = {
-        fullName: formData.fullName.trim(),
-        companyName: formData.companyName.trim(),
-        designation: formData.designation ? formData.designation.trim() : undefined,
-        email: formData.email.trim(),
-        phone: formData.phone.trim(),
-        whatsapp: formData.whatsapp ? formData.whatsapp.trim() : undefined,
-        primaryCargoType: formData.primaryCargoType,
-        maxPayloadTons: Number(formData.maxPayloadTons) || 50,
-        vehicles: vehicles.map(v => ({
-          plateNumber: v.plateNumber.trim(),
+        fullName: fullName.slice(0, 150),
+        companyName: companyName.slice(0, 150),
+        designation: formData.designation ? formData.designation.trim().slice(0, 100) : undefined,
+        email: email.slice(0, 150),
+        phone: phone.slice(0, 50),
+        whatsapp: formData.whatsapp ? formData.whatsapp.trim().slice(0, 50) : undefined,
+        primaryCargoType: formData.primaryCargoType.slice(0, 150),
+        maxPayloadTons: safeMaxPayload,
+        vehicles: vehicles.slice(0, 50).map((v) => ({
+          plateNumber: v.plateNumber.trim().slice(0, 40),
           vehicleType: v.vehicleType,
-          payloadCapacityTons: Number(v.payloadCapacityTons) || 30,
+          payloadCapacityTons: Math.min(Math.max(Number(v.payloadCapacityTons) || 30, 1), 500),
           province: v.province,
           year: v.year,
         })),
@@ -111,21 +142,20 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
         )
         .join('\n');
 
-      // Direct Email Dispatch to Info@mak-group.com.pk
-      const emailSubject = `Vehicle Registration Request [${refId}] - ${formData.companyName.trim()}`;
+      const emailSubject = `Vehicle Registration Request [${refId}] - ${companyName}`;
       const emailBody = [
         `MAK - GROUP OF COMPANIES | Transporter Vehicle Registration`,
         `Reference ID: ${refId}`,
         `--------------------------------------------------`,
-        `Operator / Owner Name: ${formData.fullName.trim()}`,
-        `Transport Company: ${formData.companyName.trim()}`,
+        `Operator / Owner Name: ${fullName}`,
+        `Transport Company: ${companyName}`,
         `Designation: ${formData.designation || 'N/A'}`,
-        `Email: ${formData.email.trim()}`,
-        `Phone: ${formData.phone.trim()}`,
+        `Email: ${email}`,
+        `Phone: ${phone}`,
         `WhatsApp: ${formData.whatsapp || 'N/A'}`,
         `--------------------------------------------------`,
         `Primary Operating Sector: ${formData.primaryCargoType}`,
-        `Max Fleet Payload Capacity: ${formData.maxPayloadTons} MT`,
+        `Max Fleet Payload Capacity: ${safeMaxPayload} MT`,
         `Registered Vehicles (${vehicles.length} Units):`,
         vehicleSummary,
       ].join('\n');
@@ -133,7 +163,6 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
       const generatedMailto = `mailto:Info@mak-group.com.pk?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
       setMailtoUrl(generatedMailto);
 
-      // Background AJAX email dispatch to Info@mak-group.com.pk
       try {
         await fetch('https://formsubmit.co/ajax/Info@mak-group.com.pk', {
           method: 'POST',
@@ -141,22 +170,21 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
           body: JSON.stringify({
             _subject: emailSubject,
             referenceId: refId,
-            operatorName: formData.fullName.trim(),
-            companyName: formData.companyName.trim(),
+            operatorName: fullName,
+            companyName,
             designation: formData.designation || 'N/A',
-            email: formData.email.trim(),
-            phone: formData.phone.trim(),
+            email,
+            phone,
             whatsapp: formData.whatsapp || 'N/A',
             primarySector: formData.primaryCargoType,
-            maxPayloadTons: formData.maxPayloadTons,
+            maxPayloadTons: safeMaxPayload,
             vehiclesManifest: vehicleSummary,
           }),
         });
       } catch {
-        // Fallback mailto link is also triggered below
+        // Fallback mailto button is provided on confirmation screen
       }
 
-      window.location.href = generatedMailto;
       setSubmittedId(refId);
     } catch (err: any) {
       setError(err?.message || 'An unexpected error occurred.');
@@ -172,7 +200,14 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-2.5 sm:p-4 bg-slate-950/70 backdrop-blur-xs overflow-y-auto">
+    <div
+      role="dialog"
+      aria-modal="true"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+      className="fixed inset-0 z-50 flex items-start sm:items-center justify-center p-2.5 sm:p-4 bg-slate-950/70 backdrop-blur-xs overflow-y-auto"
+    >
       <div className="relative w-full max-h-[92vh] sm:max-w-2xl my-auto bg-[#FAF9F6] rounded-2xl border border-slate-300 shadow-2xl text-slate-900 flex flex-col overflow-hidden">
         
         {/* Compact Sticky Header */}
@@ -187,18 +222,11 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
           </div>
           <button
             onClick={onClose}
+            aria-label="Close modal"
             className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition cursor-pointer shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
-        </div>
-
-        {/* Direct Email Dispatch Notice */}
-        <div className="px-4 py-2.5 sm:px-6 bg-amber-50/90 border-b border-amber-200/80 flex items-center gap-2 text-xs text-amber-950 font-medium shrink-0">
-          <Mail className="w-4 h-4 text-[#9A6B16] shrink-0" />
-          <span>
-            Sent directly to official email: <strong className="font-mono text-[#9A6B16]">Info@mak-group.com.pk</strong>
-          </span>
         </div>
 
         {/* Scrollable Body */}
@@ -211,11 +239,10 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
 
               <div className="space-y-1.5">
                 <h4 className="text-xl sm:text-2xl font-bold text-slate-900 font-serif-luxury">
-                  Registration Sent to Email
+                  Registration Request Submitted
                 </h4>
                 <p className="text-sm text-slate-600 leading-relaxed">
-                  Your vehicle registration request has been dispatched directly to{' '}
-                  <strong className="font-mono text-slate-900">Info@mak-group.com.pk</strong>.
+                  Your fleet and vehicle registration details have been recorded for verification.
                 </p>
               </div>
 
@@ -246,7 +273,7 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                     className="btn-gold-luxury min-h-[44px] px-5 py-2.5 rounded-xl text-white font-semibold text-sm flex items-center justify-center gap-2"
                   >
                     <Mail className="w-4 h-4" />
-                    <span>Send via Email App</span>
+                    <span>Open in Email App</span>
                   </a>
                 )}
                 <button
@@ -282,8 +309,9 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                     <input
                       type="text"
                       required
+                      maxLength={150}
                       value={formData.fullName}
-                      onChange={e => setFormData({ ...formData, fullName: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                       placeholder="e.g. Haji Gulzar Khan"
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     />
@@ -295,8 +323,9 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                     <input
                       type="text"
                       required
+                      maxLength={150}
                       value={formData.companyName}
-                      onChange={e => setFormData({ ...formData, companyName: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                       placeholder="e.g. Khyber Bolan Goods Transport Co."
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     />
@@ -307,8 +336,9 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                     </label>
                     <input
                       type="text"
+                      maxLength={100}
                       value={formData.designation}
-                      onChange={e => setFormData({ ...formData, designation: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     />
                   </div>
@@ -319,8 +349,9 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                     <input
                       type="email"
                       required
+                      maxLength={150}
                       value={formData.email}
-                      onChange={e => setFormData({ ...formData, email: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="operations@khyberbolan.com"
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     />
@@ -330,10 +361,11 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                       Phone Number *
                     </label>
                     <input
-                      type="text"
+                      type="tel"
                       required
+                      maxLength={50}
                       value={formData.phone}
-                      onChange={e => setFormData({ ...formData, phone: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="+92 321 9876543"
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     />
@@ -343,9 +375,10 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                       WhatsApp Dispatch Line
                     </label>
                     <input
-                      type="text"
+                      type="tel"
+                      maxLength={50}
                       value={formData.whatsapp}
-                      onChange={e => setFormData({ ...formData, whatsapp: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
                       placeholder="+92 321 9876543"
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     />
@@ -365,7 +398,7 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                     </label>
                     <select
                       value={formData.primaryCargoType}
-                      onChange={e => setFormData({ ...formData, primaryCargoType: e.target.value })}
+                      onChange={(e) => setFormData({ ...formData, primaryCargoType: e.target.value })}
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     >
                       <option value="Afghan Transit Trade (ATT)">Afghan Transit Trade (ATT)</option>
@@ -382,9 +415,10 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                     </label>
                     <input
                       type="number"
-                      min={10}
+                      min={1}
+                      max={10000}
                       value={formData.maxPayloadTons}
-                      onChange={e => setFormData({ ...formData, maxPayloadTons: Number(e.target.value) })}
+                      onChange={(e) => setFormData({ ...formData, maxPayloadTons: Number(e.target.value) })}
                       className="w-full min-h-[42px] px-3.5 py-2 rounded-xl bg-[#FAF9F6] border border-slate-300 text-sm focus:border-[#B8860B] focus:outline-none"
                     />
                   </div>
@@ -422,6 +456,7 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                             type="button"
                             onClick={() => handleRemoveVehicle(index)}
                             className="text-rose-500 hover:text-rose-700 p-1 cursor-pointer"
+                            aria-label={`Remove Unit #${index + 1}`}
                           >
                             <Trash2 className="w-4 h-4" />
                           </button>
@@ -434,9 +469,10 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                           <input
                             type="text"
                             required
+                            maxLength={40}
                             placeholder="TL-1234-KHI"
                             value={v.plateNumber}
-                            onChange={e => handleVehicleChange(index, 'plateNumber', e.target.value)}
+                            onChange={(e) => handleVehicleChange(index, 'plateNumber', e.target.value)}
                             className="w-full min-h-[40px] px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs font-mono text-slate-900 focus:border-[#B8860B] focus:outline-none"
                           />
                         </div>
@@ -444,7 +480,7 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                           <label className="text-xs text-slate-600 font-medium block mb-1">Configuration</label>
                           <select
                             value={v.vehicleType}
-                            onChange={e => handleVehicleChange(index, 'vehicleType', e.target.value)}
+                            onChange={(e) => handleVehicleChange(index, 'vehicleType', e.target.value)}
                             className="w-full min-h-[40px] px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 focus:border-[#B8860B] focus:outline-none"
                           >
                             <option value="40ft Multi-Axle Flatbed">40ft Flatbed</option>
@@ -458,9 +494,10 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                           <label className="text-xs text-slate-600 font-medium block mb-1">Capacity (MT)</label>
                           <input
                             type="number"
-                            min={5}
+                            min={1}
+                            max={500}
                             value={v.payloadCapacityTons}
-                            onChange={e => handleVehicleChange(index, 'payloadCapacityTons', Number(e.target.value))}
+                            onChange={(e) => handleVehicleChange(index, 'payloadCapacityTons', Number(e.target.value))}
                             className="w-full min-h-[40px] px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 focus:border-[#B8860B] focus:outline-none"
                           />
                         </div>
@@ -468,7 +505,7 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                           <label className="text-xs text-slate-600 font-medium block mb-1">Province</label>
                           <select
                             value={v.province}
-                            onChange={e => handleVehicleChange(index, 'province', e.target.value)}
+                            onChange={(e) => handleVehicleChange(index, 'province', e.target.value)}
                             className="w-full min-h-[40px] px-2.5 py-1.5 rounded-lg bg-white border border-slate-300 text-xs text-slate-900 focus:border-[#B8860B] focus:outline-none"
                           >
                             <option value="Sindh">Sindh</option>
@@ -499,10 +536,10 @@ export const TransporterModal: React.FC<TransporterModalProps> = ({ isOpen, onCl
                   className="btn-dark-luxury min-h-[44px] px-6 py-2.5 rounded-xl text-white font-semibold text-sm transition disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer"
                 >
                   {loading ? (
-                    <span>Sending to Info@mak-group.com.pk...</span>
+                    <span>Submitting Registration...</span>
                   ) : (
                     <>
-                      <span>Send Registration to Info@mak-group.com.pk</span>
+                      <span>Submit Vehicle Registration</span>
                       <Send className="w-4 h-4" />
                     </>
                   )}

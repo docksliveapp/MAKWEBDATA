@@ -16,7 +16,13 @@ const PRESET_PATHS = [
 
 function isUploadedLogo(url: string | null | undefined): url is string {
   if (!url || !url.trim()) return false;
-  return !PRESET_PATHS.includes(url.trim());
+  const trimmed = url.trim();
+  if (PRESET_PATHS.includes(trimmed)) return false;
+  return (
+    trimmed.startsWith('data:image/') ||
+    trimmed.startsWith('https://') ||
+    trimmed.startsWith('blob:')
+  );
 }
 
 export const MakOfficialLogo: React.FC<MakOfficialLogoProps> = ({

@@ -9,7 +9,6 @@ import { CorridorRoutes } from './components/CorridorRoutes';
 import { ContactSection } from './components/ContactSection';
 import { QuoteModal } from './components/QuoteModal';
 import { TransporterModal } from './components/TransporterModal';
-import { TrackInquiryModal } from './components/TrackInquiryModal';
 import { InquiryPortalModal } from './components/InquiryPortalModal';
 import { AdminPortal } from './components/AdminPortal';
 import { WhatsAppFloating } from './components/WhatsAppFloating';
@@ -20,7 +19,6 @@ export function App() {
   const [currentPage, setCurrentPage] = useState<AppPage>('home');
   const [quoteOpen, setQuoteOpen] = useState(false);
   const [transporterOpen, setTransporterOpen] = useState(false);
-  const [trackerOpen, setTrackerOpen] = useState(false);
   const [inquiryOpen, setInquiryOpen] = useState(false);
   const [adminOpen, setAdminOpen] = useState(false);
   const [preselectedService, setPreselectedService] = useState<string | undefined>(undefined);
@@ -63,11 +61,11 @@ export function App() {
         onSelectServiceDetail={handleOpenServiceDetail}
       />
 
-      {/* Distinct Separate Pages (No single endless scrolling page, No popups for service pages) */}
+      {/* Distinct Separate Pages */}
       <main className="flex-1">
         {/* 1. HOME PAGE */}
         {currentPage === 'home' && (
-          <div className="animate-in fade-in duration-300">
+          <div className="animate-fade-up">
             <Hero
               onOpenQuote={handleOpenQuote}
               onOpenTransporter={() => setTransporterOpen(true)}
@@ -79,7 +77,7 @@ export function App() {
 
         {/* 2. SERVICES PAGE / SERVICE DETAIL FULL PAGE */}
         {currentPage === 'services' && (
-          <div className="animate-in fade-in duration-300">
+          <div className="animate-fade-up">
             {selectedServiceDetail ? (
               <ServiceDetailPage
                 service={selectedServiceDetail}
@@ -93,6 +91,7 @@ export function App() {
               <ServicesSection
                 onSelectServiceDetail={handleOpenServiceDetail}
                 onRequestQuote={handleOpenQuoteWithService}
+                onBack={() => handleNavigate('home')}
               />
             )}
           </div>
@@ -100,27 +99,37 @@ export function App() {
 
         {/* 3. ABOUT US PAGE */}
         {currentPage === 'about' && (
-          <div className="animate-in fade-in duration-300">
-            <AboutSection onSelectServiceForQuote={handleOpenQuoteWithService} />
+          <div className="animate-fade-up">
+            <AboutSection
+              onSelectServiceForQuote={handleOpenQuoteWithService}
+              onBack={() => handleNavigate('home')}
+            />
           </div>
         )}
 
         {/* 4. CORRIDORS PAGE */}
         {currentPage === 'corridors' && (
-          <div className="animate-in fade-in duration-300">
-            <CorridorRoutes onQuoteCorridor={handleOpenQuoteWithService} />
+          <div className="animate-fade-up">
+            <CorridorRoutes
+              onQuoteCorridor={handleOpenQuoteWithService}
+              onBack={() => handleNavigate('home')}
+            />
           </div>
         )}
 
         {/* 5. CONTACT US PAGE */}
         {currentPage === 'contact' && (
-          <div className="animate-in fade-in duration-300">
-            <ContactSection />
+          <div className="animate-fade-up">
+            <ContactSection
+              onOpenQuote={handleOpenQuote}
+              onOpenTransporter={() => setTransporterOpen(true)}
+              onBack={() => handleNavigate('home')}
+            />
           </div>
         )}
       </main>
 
-      {/* Floating WhatsApp Contact Button (Direct WhatsApp chat target wa.me/923218496006) */}
+      {/* Floating WhatsApp Contact Button */}
       <WhatsAppFloating />
 
       {/* Footer with Page Navigation */}
@@ -149,11 +158,6 @@ export function App() {
       <TransporterModal
         isOpen={transporterOpen}
         onClose={() => setTransporterOpen(false)}
-      />
-
-      <TrackInquiryModal
-        isOpen={trackerOpen}
-        onClose={() => setTrackerOpen(false)}
       />
 
       <AdminPortal

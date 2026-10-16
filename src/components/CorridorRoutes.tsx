@@ -1,35 +1,53 @@
 import React, { useState } from 'react';
 import { TRADE_CORRIDORS } from '../data/consortium';
-import { Navigation, Clock, ArrowRight } from 'lucide-react';
+import { Navigation, Clock, ArrowRight, ArrowLeft } from 'lucide-react';
 
 interface CorridorRoutesProps {
   onQuoteCorridor: (corridorName: string) => void;
+  onBack?: () => void;
 }
 
-export const CorridorRoutes: React.FC<CorridorRoutesProps> = ({ onQuoteCorridor }) => {
+export const CorridorRoutes: React.FC<CorridorRoutesProps> = ({
+  onQuoteCorridor,
+  onBack,
+}) => {
   const [selectedCorridorId, setSelectedCorridorId] = useState<string>(TRADE_CORRIDORS[0].id);
 
-  const selectedCorridor = TRADE_CORRIDORS.find(c => c.id === selectedCorridorId) || TRADE_CORRIDORS[0];
+  const selectedCorridor = TRADE_CORRIDORS.find((c) => c.id === selectedCorridorId) || TRADE_CORRIDORS[0];
 
   return (
-    <section id="corridors" className="py-16 md:py-22 bg-[#FAF9F6] text-slate-900 border-b border-slate-200">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <section id="corridors" className="py-8 sm:py-14 lg:py-18 bg-[#FAF9F6] text-slate-900 border-b border-slate-200">
+      <div className="container-luxury space-y-8 sm:space-y-10 animate-fade-up">
+        
+        {/* Small Icon-Only Back Arrow */}
+        {onBack && (
+          <div>
+            <button
+              onClick={onBack}
+              aria-label="Go Back"
+              title="Back"
+              className="w-9 h-9 rounded-full bg-white hover:bg-[#FAF9F6] border border-slate-200/90 hover:border-[#B8860B] text-slate-700 hover:text-[#9A6B16] shadow-2xs flex items-center justify-center transition-all hover:-translate-x-0.5 cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4" />
+            </button>
+          </div>
+        )}
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-2.5">
-          <span className="text-xs sm:text-sm font-bold uppercase tracking-[0.16em] text-[#9A6B16] block font-mono">
+          <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#9A6B16] block font-mono">
             TRANSCONTINENTAL ARTERIES & STATUTORY GATES
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold font-serif-luxury text-slate-900">
+          <h2 className="text-2xl sm:text-4xl lg:text-[42px] font-bold font-serif-luxury text-slate-900">
             Strategic Cross-Border Trade Corridors
           </h2>
-          <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+          <p className="text-sm sm:text-base lg:text-lg text-slate-600 leading-relaxed">
             Direct bonded multimodal passage from Pakistan deep-sea terminals across Afghanistan (Torkham & Chaman), regional Gulf feeders, and transcontinental TIR routes to Central Asia.
           </p>
         </div>
 
         {/* Corridor Selection & Details */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
           
           {/* Left: Corridor List Selector */}
           <div className="lg:col-span-5 space-y-3">
@@ -42,8 +60,8 @@ export const CorridorRoutes: React.FC<CorridorRoutesProps> = ({ onQuoteCorridor 
                   onClick={() => setSelectedCorridorId(corridor.id)}
                   className={`w-full text-left p-5 rounded-2xl cursor-pointer border transition-all ${
                     isSelected
-                      ? 'bg-white border-[#B8860B] shadow-md ring-1 ring-[#B8860B]/30'
-                      : 'bg-white/80 border-slate-200/90 hover:border-slate-300 hover:bg-white'
+                      ? 'bg-white border-[#B8860B] shadow-lg ring-1 ring-[#B8860B]/30 -translate-y-0.5'
+                      : 'bg-white/90 border-slate-200/90 hover:border-amber-300 hover:bg-white'
                   }`}
                 >
                   <div className="flex items-center justify-between text-xs mb-1.5 font-mono">
@@ -58,7 +76,7 @@ export const CorridorRoutes: React.FC<CorridorRoutesProps> = ({ onQuoteCorridor 
                   <h3 className="text-base font-bold text-slate-900 leading-snug">
                     {corridor.name}
                   </h3>
-                  <div className="mt-2.5 text-xs text-slate-500 font-mono truncate">
+                  <div className="mt-2 text-xs text-slate-500 font-mono truncate">
                     {corridor.operatingEntity}
                   </div>
                 </button>
@@ -67,7 +85,7 @@ export const CorridorRoutes: React.FC<CorridorRoutesProps> = ({ onQuoteCorridor 
           </div>
 
           {/* Right: Selected Corridor Route Visualizer */}
-          <div className="lg:col-span-7 bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-9 shadow-sm space-y-6">
+          <div className="lg:col-span-7 bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-9 shadow-sm space-y-6">
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
               <div>
                 <span className="text-xs font-mono text-[#9A6B16] uppercase tracking-wider font-bold">
@@ -77,7 +95,7 @@ export const CorridorRoutes: React.FC<CorridorRoutesProps> = ({ onQuoteCorridor 
                   {selectedCorridor.name}
                 </h3>
               </div>
-              <div className="px-4 py-2 rounded-xl bg-[#F4F6F9] border border-slate-200 text-right">
+              <div className="px-4 py-2 rounded-xl bg-[#FAF9F6] border border-slate-200 text-right">
                 <span className="text-xs text-slate-500 block uppercase font-mono">Transit Est.</span>
                 <span className="text-base font-bold text-slate-900 font-mono">{selectedCorridor.transitTime}</span>
               </div>
@@ -89,11 +107,11 @@ export const CorridorRoutes: React.FC<CorridorRoutesProps> = ({ onQuoteCorridor 
 
             {/* Origin & Destination */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="p-4 rounded-xl bg-[#F8FAFC] border border-slate-200/80">
+              <div className="p-4 rounded-2xl bg-[#FAF9F6] border border-slate-200/80">
                 <span className="text-xs font-mono uppercase text-slate-500 block mb-1">Origin Port / Point</span>
                 <span className="text-base font-bold text-slate-900">{selectedCorridor.origin}</span>
               </div>
-              <div className="p-4 rounded-xl bg-[#F8FAFC] border border-slate-200/80">
+              <div className="p-4 rounded-2xl bg-[#FAF9F6] border border-slate-200/80">
                 <span className="text-xs font-mono uppercase text-slate-500 block mb-1">Destination Gateway</span>
                 <span className="text-base font-bold text-emerald-800">{selectedCorridor.destination}</span>
               </div>
@@ -115,18 +133,18 @@ export const CorridorRoutes: React.FC<CorridorRoutesProps> = ({ onQuoteCorridor 
               </div>
             </div>
 
-            {/* Operating Entity & CTA */}
+            {/* Operating Entity & Animated CTA */}
             <div className="pt-5 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
               <div className="text-sm text-slate-600">
-                <span className="block font-medium text-slate-500 text-xs">Managing Consortium:</span>
+                <span className="block font-medium text-slate-500 text-xs">Managing Command:</span>
                 <span className="font-mono text-slate-900 font-bold">{selectedCorridor.operatingEntity}</span>
               </div>
               <button
                 onClick={() => onQuoteCorridor(selectedCorridor.name)}
-                className="btn-gold-luxury min-h-[44px] px-6 py-3 rounded-xl text-white font-semibold text-sm tracking-wide transition flex items-center gap-2 cursor-pointer"
+                className="group btn-gold-luxury min-h-[46px] px-6 py-3 rounded-xl text-white font-semibold text-sm tracking-wide flex items-center gap-2 cursor-pointer"
               >
                 <span>Request Corridor Rate</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
               </button>
             </div>
           </div>
